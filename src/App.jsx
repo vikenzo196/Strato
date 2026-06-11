@@ -416,7 +416,6 @@ const CSS = `
 .dockwrap{bottom:calc(18px + env(safe-area-inset-bottom))}
 .fab{bottom:calc(96px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
-.detail{padding-top:env(safe-area-inset-top)}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
 /* ---- card: tile piu' compatta, testo piu' leggibile ---- */
@@ -515,10 +514,6 @@ button:active{transform:scale(.93)}
 .herorow.single .herocard{flex:0 0 100%}
 
 /* ---- transizione apertura/chiusura dettaglio ---- */
-.detail.on{animation:detailIn .32s cubic-bezier(.2,.8,.25,1) both}
-.detail.on.closing{animation:detailOut .24s ease both}
-@keyframes detailIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
-@keyframes detailOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(16px) scale(.985)}}
 
 /* ---- galleria foto (fino a 5 per colore) ---- */
 .dgallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;-webkit-overflow-scrolling:touch}
@@ -538,6 +533,14 @@ button:active{transform:scale(.93)}
 .colphmain{position:absolute;bottom:0;left:0;right:0;font-size:8.5px;font-weight:600;text-align:center;background:rgba(0,0,0,.55);color:#fff;padding:1px 0}
 .coladd{width:60px;height:60px;border-radius:11px;border:1.5px dashed var(--strokeSoft);display:grid;place-items:center;cursor:pointer;color:var(--soft);background:var(--glassDock)}
 .colhint{font-size:11px;color:var(--faint);margin-top:7px}
+
+/* ---- dettaglio come popup a foglio (stile carrello) ---- */
+:root{--sheetbg:#f6f1ea}
+body.dark{--sheetbg:#1f1b17}
+.sheet.detailsheet{position:relative;background:var(--sheetbg);-webkit-backdrop-filter:none;backdrop-filter:none;max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -16px 50px rgba(0,0,0,.4)}
+.detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
+.detailsheet .dgrid{margin-top:6px}
+.detailsheet .dreco{margin-top:26px}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1174,7 +1177,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [cable, setCable] = useState("Normale");
   const photoInput = useRef(null);
   const [closing, setClosing] = useState(false);
-  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 240); };
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   const [bulb, setBulb] = useState(1);
   const [holder, setHolder] = useState(1);
   const [editP, setEditP] = useState(false);
@@ -1205,9 +1208,10 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className={"detail on" + (closing ? " closing" : "")}>
-      <div className="dwrap">
-        <div className="dback"><button onClick={doClose} aria-label="Indietro"><ChevronLeft /></button><span className="dbacklbl">Dettaglio</span>{isAdmin && onEdit && <button className="dedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}</div>
+    <div className={"ipick on detailpop" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
+      <div className="sheet detailsheet">
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronDown /></button>
+        {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
             <div className="dgallery">
