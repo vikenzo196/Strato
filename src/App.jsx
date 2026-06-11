@@ -567,26 +567,23 @@ body.dark{
   --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
 }
 
-/* ---- SFONDO premium: base fissa + livello parallasse (gradienti materici) ---- */
+/* ---- SFONDO: base fissa + livello parallasse con gradiente vetro-opaco ---- */
 .blob{display:none!important}
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg);transition:background-color .45s ease}
-.bg-layer{position:absolute;inset:-14vmax;transform:translate3d(0,var(--bgpar,0px),0);transition:transform .55s cubic-bezier(.2,.7,.2,1);
+.bg-layer{position:absolute;inset:-16vmax;transform:translate3d(0,var(--bgpar,0px),0);transition:transform .55s cubic-bezier(.2,.7,.2,1);
   background:
-    radial-gradient(58% 50% at 16% 10%, rgba(191,107,74,.10), transparent 60%),
-    radial-gradient(54% 48% at 80% 20%, rgba(214,184,155,.13), transparent 62%),
-    radial-gradient(74% 66% at 50% 56%, rgba(241,232,220,.55), transparent 72%),
-    radial-gradient(58% 54% at 90% 92%, rgba(156,92,67,.09), transparent 62%),
-    radial-gradient(50% 46% at 6% 88%, rgba(214,184,155,.11), transparent 60%)}
-.bg-layer::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");background-size:cover;background-position:center;opacity:.05}
-.bg-layer::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27240%27%20height%3D%27240%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27/%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27/%3E%3C/filter%3E%3Crect%20width%3D%27240%27%20height%3D%27240%27%20filter%3D%27url%28%23n%29%27%20opacity%3D%270.5%27/%3E%3C/svg%3E");background-size:300px 300px;opacity:.05;mix-blend-mode:soft-light;pointer-events:none}
-body.dark .bg-layer{background:
-    radial-gradient(58% 50% at 16% 10%, rgba(209,124,86,.16), transparent 60%),
-    radial-gradient(54% 48% at 80% 22%, rgba(182,154,130,.09), transparent 62%),
-    radial-gradient(74% 66% at 50% 58%, rgba(36,30,26,.62), transparent 72%),
-    radial-gradient(58% 54% at 90% 92%, rgba(209,124,86,.12), transparent 62%),
-    radial-gradient(50% 46% at 6% 88%, rgba(182,154,130,.07), transparent 60%)}
-body.dark .bg-layer::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");opacity:.07}
-body.dark .bg-layer::after{opacity:.06;mix-blend-mode:overlay}
+    radial-gradient(135% 100% at 12% 4%, rgba(191,107,74,.13), rgba(191,107,74,0) 56%),
+    radial-gradient(120% 95% at 92% 14%, rgba(214,184,155,.20), rgba(214,184,155,0) 58%),
+    radial-gradient(150% 115% at 80% 98%, rgba(156,92,67,.13), rgba(156,92,67,0) 60%),
+    radial-gradient(130% 100% at 4% 96%, rgba(214,184,155,.15), rgba(214,184,155,0) 58%),
+    linear-gradient(155deg, rgba(247,242,235,0) 30%, rgba(241,232,220,.6) 100%)}
+body.dark .bg-layer{
+  background:
+    radial-gradient(135% 100% at 12% 4%, rgba(209,124,86,.20), rgba(209,124,86,0) 56%),
+    radial-gradient(120% 95% at 92% 14%, rgba(182,154,130,.13), rgba(182,154,130,0) 58%),
+    radial-gradient(150% 115% at 80% 98%, rgba(209,124,86,.16), rgba(209,124,86,0) 60%),
+    radial-gradient(130% 100% at 4% 96%, rgba(182,154,130,.09), rgba(182,154,130,0) 58%),
+    linear-gradient(155deg, rgba(24,20,17,0) 30%, rgba(35,29,25,.62) 100%)}
 
 /* ---- vetro: frosted ceramic ---- */
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
@@ -686,6 +683,17 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .ofocus{animation:ofocusPulse 2.4s cubic-bezier(.4,0,.2,1)}
 @keyframes ofocusPulse{0%{box-shadow:0 0 0 0 rgba(191,107,74,0)}22%{box-shadow:0 0 0 3px rgba(191,107,74,.55),0 8px 24px rgba(191,107,74,.2)}100%{box-shadow:0 0 0 0 rgba(191,107,74,0)}}
 .badge.br{background:rgba(176,106,82,.16);color:#b06a52}
+
+/* ---- dock: tab ordini ---- */
+.dnav.orders{position:relative}
+.dnav.orders svg{stroke:var(--icon)}
+.dnav.orders.act svg{stroke:var(--accent)}
+.dnav.orders .orddot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
+
+/* ---- detail: colori in sola lettura ---- */
+.dswatches.readonly{pointer-events:none}
+.dswbox.ro{cursor:default}
+.dcolnote{font-size:12px;color:var(--soft);margin:6px 2px 4px;line-height:1.45}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1138,8 +1146,8 @@ export default function App() {
   const unread = notifs.filter((n) => !notifSeen.includes(notifSig(n))).length;
   const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen(all); try { localStorage.setItem("strato_notif_seen", JSON.stringify(all)); } catch (e) {} };
   const openNotifs = () => { setNotifOpen(true); markNotifsSeen(); };
-  const onNotifClick = (id) => { setNotifOpen(false); setTab("profile"); setOrderFocus(id); window.scrollTo(0, 0); };
-  const openDetail = (id) => { setDetailId(id); window.scrollTo(0, 0); };
+  const onNotifClick = (id) => { setNotifOpen(false); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
+  const openDetail = (id) => { setDetailId(id); };
   const byId = (id) => prints.find((p) => p.id === id);
 
   if (!ready) {
@@ -1233,12 +1241,15 @@ export default function App() {
             )}
           </Screen>
         )}
+        {tab === "orders" && (
+          <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
+            onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)} />
+        )}
         {tab === "profile" && (
           <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
             isAdmin={isAdmin} onNewProduct={() => setEditing({})}
-            likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
-            orders={orders} onOpenOrder={(id) => setInvId(id)} onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
-            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)} />
+            likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit} />
         )}
       </main>
 
@@ -1248,7 +1259,7 @@ export default function App() {
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
           <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
-          <button className={"dnav profile" + (tab === "profile" ? " act" : "")} onClick={() => open("profile")} aria-label="Profilo"><User /></button>
+          <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
 
@@ -1378,8 +1389,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const doAdd = (e) => {
     if (e && e.currentTarget) confetti(e.currentTarget);
     onAdd({
-      key: p.id + "|" + c.name + (optLabel ? "|" + optLabel : ""),
-      pid: p.id, t: p.title, col: c.name, opt: optLabel, base: p.price, adds, price: unit,
+      key: p.id + (optLabel ? "|" + optLabel : ""),
+      pid: p.id, t: p.title, col: "", opt: optLabel, base: p.price, adds, price: unit,
       qty, img: c.img || "",
     });
   };
@@ -1411,15 +1422,16 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             <div className="dttl">{p.title}</div>
             <div className="dprice">{eur(p.price)}</div>
             <div className="dmat">{p.material}</div>
-            <div className="dlabel dcolor">Colore</div>
-            <div className="dswatches">
+            <div className="dlabel dcolor">Colori disponibili</div>
+            <div className="dswatches readonly">
               {p.cols.map((cc, k) => (
-                <button key={k} className={"dswbox" + (k === ci ? " on" : "")} onClick={() => setCi(k)}>
+                <div key={k} className="dswbox ro">
                   <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 50%," + cc.b + " 50%," + cc.b + " 100%)" }} />
                   <span className="dswn">{cc.name}</span>
-                </button>
+                </div>
               ))}
             </div>
+            <p className="dcolnote">Il colore finale verrà impostato dall'artigiano.</p>
             {p.isElectrical && (
               <div>
                 <div className="dlabel">Cavo</div>
@@ -1571,7 +1583,7 @@ function InvoiceSheet({ o, isAdmin, onClose }) {
 }
 
 /* ---- PROFILO ---- */
-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, likedPrints, onOpenProduct, onLike, onEditProduct, orders, onOpenOrder, onConfirm, onReject, orderFocus, clearFocus }) {
+function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, orderFocus, clearFocus }) {
   const orderRefs = useRef({});
   useEffect(() => {
     if (orderFocus && orderRefs.current[orderFocus]) {
@@ -1580,30 +1592,14 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, likedP
       return () => clearTimeout(t);
     }
   }, [orderFocus]);
-
   const oTitle = (o) => o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
   const pend = orders.filter((o) => o.status === "pending");
   const done = orders.filter((o) => o.status === "confirmed");
   const rej = orders.filter((o) => o.status === "rejected");
   const setRef = (id) => (el) => { orderRefs.current[id] = el; };
-
   return (
     <section className="screen on">
-      <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
-      <div className="pcard glass">
-        <img className="pav" src={user.avatar || avatarURI(user.name)} alt="" />
-        <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
-      </div>
-      {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
-
-      {likedPrints && likedPrints.length > 0 && (
-        <>
-          <div className="psec">Preferiti</div>
-          <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpenProduct(p.id)} onEdit={onEditProduct} />)}</Grid>
-        </>
-      )}
-
-      <div className="psec">I miei ordini</div>
+      <h2 className="title px"><span className="ticon"><OrdersI /></span>I miei ordini</h2>
       {orders.length === 0 && <p className="empty">Nessun ordine ancora.</p>}
       {pend.length > 0 && <h3 className="osec">In attesa</h3>}
       {pend.map((o) => (
@@ -1639,7 +1635,25 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, likedP
           <span className="badge br">Rifiutato</span>
         </div>
       ))}
+    </section>
+  );
+}
 
+function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, likedPrints, onOpenProduct, onLike, onEditProduct }) {
+  return (
+    <section className="screen on">
+      <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
+      <div className="pcard glass">
+        <img className="pav" src={user.avatar || avatarURI(user.name)} alt="" />
+        <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
+      </div>
+      {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
+      {likedPrints && likedPrints.length > 0 && (
+        <>
+          <div className="psec">Preferiti</div>
+          <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpenProduct(p.id)} onEdit={onEditProduct} />)}</Grid>
+        </>
+      )}
       <div className="psec">Tema</div>
       <div className="prefrow">
         <div className="themeseg compact">
