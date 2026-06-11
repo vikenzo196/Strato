@@ -322,7 +322,7 @@ const CSS = `
 .boot{min-height:100vh;display:grid;place-items:center;color:var(--soft);font-weight:600}
 .wrap{max-width:680px;margin:0 auto;padding:62px 0 132px}
 .wrap .grid{padding:0 18px}
-.grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.grid{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px}
 .grid .card{opacity:1}
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
@@ -420,24 +420,26 @@ const CSS = `
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
 /* ---- card: tile piu' compatta, testo piu' leggibile ---- */
-.card .ph{aspect-ratio:1.06}
-.cbody{padding:11px 13px 13px;display:flex;flex-direction:column;gap:7px}
-.cbody .cardcat{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:12px;font-weight:600;color:var(--soft)}
-.cbody .cardcat .gico{width:15px;height:15px;flex:none}
+.card{min-width:0}
+.card .ph{aspect-ratio:1.1}
+.cbody{padding:10px 11px 11px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cbody .cardcat{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:11.5px;font-weight:600;color:var(--soft);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cbody .cardcat .gico{width:14px;height:14px;flex:none}
 .cbody .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:16px;color:var(--text);line-height:1.15}
-.cbody .cp{font-weight:700;font-size:16px;white-space:nowrap;color:var(--text)}
-.cbody .mat{font-size:12.5px;color:var(--soft)}
-.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:14px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:13.5px;cursor:pointer}
-.cbody .addcart svg{width:20px;height:20px;display:block}
+.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:15px;color:var(--text);line-height:1.15;min-width:0}
+.cbody .cp{font-weight:700;font-size:15px;white-space:nowrap;color:var(--text)}
+.cbody .mat{font-size:11.5px;color:var(--soft)}
+.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px;border-radius:13px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:12.5px;cursor:pointer}
+.cbody .addcart svg{width:18px;height:18px;display:block}
 .cbody .addcart .gico{width:16px;height:16px}
 
 /* ---- sezione colore dettaglio ---- */
 .dlabel.dcolor{font-size:13.2px;margin-bottom:16px}
 .dswatches{gap:18px}
-.dsw{width:44px;height:44px;border:1.5px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 2px rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.18)}
-.dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.96),0 0 16px 4px rgba(255,255,255,.7),inset 0 1px 2px rgba(255,255,255,.6);transform:scale(1.12)}
-body.dark .dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 5px rgba(255,255,255,.45),inset 0 1px 2px rgba(255,255,255,.4)}
+.dsw{width:46px;height:46px;border:2.5px solid rgba(255,255,255,.92);box-shadow:0 0 0 1px rgba(0,0,0,.28),0 2px 7px rgba(0,0,0,.3),inset 0 1px 3px rgba(255,255,255,.55)}
+.dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--text),0 0 14px 3px rgba(255,255,255,.6),inset 0 1px 3px rgba(255,255,255,.55);transform:scale(1.12)}
+body.dark .dsw{border-color:rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 2px 7px rgba(0,0,0,.45),inset 0 1px 3px rgba(255,255,255,.4)}
+body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4.5px #fff,0 0 16px 4px rgba(255,255,255,.5),inset 0 1px 3px rgba(255,255,255,.4)}
 
 /* ---- pulsante cambia foto (admin) sul dettaglio ---- */
 .dphoto{position:relative}
@@ -494,12 +496,18 @@ body.dark{--scrim:rgba(26,23,20,.9);--scrim2:rgba(26,23,20,.5)}
 /* ---- feedback "press" su tutti i pulsanti ---- */
 button{transition:transform .14s cubic-bezier(.22,.7,.28,1.5)}
 button:active{transform:scale(.93)}
-.card,.cat,.herocard{transition:transform .15s cubic-bezier(.22,.7,.28,1)}
-.card:active,.cat:active,.herocard:active{transform:scale(.97)}
+.card,.cat,.herocard{transition:transform .16s cubic-bezier(.22,.7,.28,1.4);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.card:active,.cat:active,.herocard:active{transform:scale(.94)}
 
 /* ---- nascondi scrollbar (scroll resta attivo) ---- */
 *{scrollbar-width:none;-ms-overflow-style:none}
 *::-webkit-scrollbar{width:0;height:0;display:none}
+
+/* ---- chiusura carrello (slide-down + fade scrim) ---- */
+.ipick.on.closing .sheet{animation:sheetDown .34s cubic-bezier(.4,0,.7,.4) both}
+.ipick.on.closing{animation:scrimOut .34s ease both}
+@keyframes sheetDown{from{transform:translateY(0)}to{transform:translateY(100%)}}
+@keyframes scrimOut{from{background:rgba(0,0,0,.4)}to{background:rgba(0,0,0,0)}}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1173,7 +1181,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             <div className="dswatches">
               {p.cols.map((cc, k) => (
                 <button key={k} className={"dswbox" + (k === ci ? " on" : "")} onClick={() => setCi(k)}>
-                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 42%," + cc.b + " 58%," + cc.b + " 100%)" }} />
+                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 50%," + cc.b + " 50%," + cc.b + " 100%)" }} />
                   <span className="dswn">{cc.name}</span>
                 </button>
               ))}
@@ -1230,10 +1238,12 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
 
 /* ---- CARRELLO ---- */
 function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   return (
-    <div className="ipick on" onClick={(e) => { if (e.target.classList.contains("ipick")) onClose(); }}>
+    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
       <div className="sheet">
-        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
+        <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
         <h4><CartIcon /> Carrello</h4>
         <div className="cartitems">
           {cart.length === 0 && <div className="cempty">Il carrello è vuoto</div>}
