@@ -321,7 +321,9 @@ const CSS = `
 /* ---- supplemento React (login, hero, admin, stati vuoti) ---- */
 .boot{min-height:100vh;display:grid;place-items:center;color:var(--soft);font-weight:600}
 .wrap{max-width:680px;margin:0 auto;padding:62px 0 132px}
-.wrap .grid{padding:0 16px}
+.wrap .grid{padding:0 18px}
+.grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.grid .card{opacity:1}
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
 .hero{font-size:40px;line-height:1.04;font-weight:800;color:var(--text);margin:0 0 18px}
@@ -332,8 +334,10 @@ const CSS = `
 .herotag .hp{font-size:13px;color:var(--soft)}
 .searchbox{width:calc(100% - 36px);margin:0 18px 16px;padding:13px 16px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-family:inherit;font-size:15px}
 .empty{color:var(--faint);font-size:14px;padding:6px 18px}
-.cat{display:flex;align-items:center;gap:14px;width:calc(100% - 36px);margin:0 18px 12px;padding:14px;border-radius:20px;text-align:left;cursor:pointer}
-.cat .ci{width:50px;height:50px;display:grid;place-items:center;flex:none}
+.catgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 18px}
+.cat{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px 18px;border-radius:22px;text-align:center;cursor:pointer}
+.cat .ci{display:grid;place-items:center}
+.cat .ci .gico{width:54px;height:54px}
 .cat .catn{font-weight:700;font-size:18px;color:var(--text)}
 .heartred svg{stroke:#F0231A;fill:rgba(240,35,26,.18)}
 .cempty{text-align:center;color:var(--soft);padding:42px 0 16px;font-size:19px;font-weight:600}
@@ -400,6 +404,67 @@ const CSS = `
 .cedit svg{width:16px;height:16px}
 .cedit.hero{top:14px;left:14px;width:38px;height:38px}
 .brand2 .mk svg{width:18px;height:18px}
+
+/* ---- title icon sizing ---- */
+.title .ticon{display:grid;place-items:center}
+.title .ticon svg{width:26px;height:26px;display:block;stroke:var(--text);fill:none}
+.title .ticon.heartred svg{stroke:#F0231A;fill:rgba(240,35,26,.16)}
+.title .ticon.heartred svg,.heartred svg{width:26px;height:26px}
+/* ---- safe-area / full screen ---- */
+.topbar{padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
+.wrap{padding-top:calc(62px + env(safe-area-inset-top))}
+.dockwrap{bottom:calc(18px + env(safe-area-inset-bottom))}
+.fab{bottom:calc(96px + env(safe-area-inset-bottom))}
+#toast{bottom:calc(120px + env(safe-area-inset-bottom))}
+.detail{padding-top:env(safe-area-inset-top)}
+.sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+
+/* ---- card body ridotto ~15% (foto e pulsanti superiori invariati) ---- */
+.cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px}
+.cbody .cardcat{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:10.8px;font-weight:600;color:var(--soft)}
+.cbody .cardcat .gico{width:14px;height:14px;flex:none}
+.cbody .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:14.5px;color:var(--text);line-height:1.15}
+.cbody .cp{font-weight:700;font-size:14.5px;white-space:nowrap;color:var(--text)}
+.cbody .mat{font-size:10.6px;color:var(--soft)}
+.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:8.5px;border-radius:13px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:11.6px;cursor:pointer}
+.cbody .addcart svg{width:18px;height:18px;display:block}
+.cbody .addcart .gico{width:15px;height:15px}
+
+/* ---- sezione colore dettaglio ---- */
+.dlabel.dcolor{font-size:13.2px;margin-bottom:16px}
+.dswatches{gap:18px}
+.dsw{width:44px;height:44px;border:1.5px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 2px rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.18)}
+.dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.96),0 0 16px 4px rgba(255,255,255,.7),inset 0 1px 2px rgba(255,255,255,.6);transform:scale(1.12)}
+body.dark .dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 5px rgba(255,255,255,.45),inset 0 1px 2px rgba(255,255,255,.4)}
+
+/* ---- pulsante cambia foto (admin) sul dettaglio ---- */
+.dphoto{position:relative}
+.dphotobtn{position:absolute;right:12px;bottom:12px;width:44px;height:44px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;place-items:center;color:var(--text);cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);z-index:3}
+
+/* ---- topbar: back + carrello accanto al profilo ---- */
+.topbar{pointer-events:none}
+.topbar button,.topbar .tb-right{pointer-events:auto}
+.tb-back{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;place-items:center;color:var(--text);cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
+.tb-back svg{width:22px;height:22px;stroke:var(--text)}
+.tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
+.tb-btn.cart svg{width:23px;height:23px;stroke:var(--text);fill:none}
+.tb-btn.cart .cbadge{display:grid}
+
+/* ---- parallasse su scroll ---- */
+.bg{will-change:transform;transform:translate3d(0,calc(var(--par,0) * -0.045px),0)}
+.herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
+
+/* ---- scrim sfumato in alto (home, primi ~125px) allo scroll ---- */
+.topscrim{position:fixed;top:0;left:0;right:0;height:calc(125px + env(safe-area-inset-top));z-index:49;pointer-events:none;background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim2) 52%,transparent 100%);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask:linear-gradient(180deg,#000 0%,#000 52%,transparent 100%);mask:linear-gradient(180deg,#000 0%,#000 52%,transparent 100%);opacity:min(1,calc(var(--par,0) / 60));transition:opacity .08s linear}
+:root{--scrim:rgba(236,226,214,.9);--scrim2:rgba(236,226,214,.5)}
+body.dark{--scrim:rgba(26,23,20,.9);--scrim2:rgba(26,23,20,.5)}
+
+/* ---- animazione apertura carrello dal basso ---- */
+.ipick.on .sheet{animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ipick.on{animation:scrimIn .32s ease both}
+@keyframes scrimIn{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,.4)}}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -453,9 +518,9 @@ const ICONS={
     c_portapenne:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M7.5 9h9l-1 11a1.5 1.5 0 0 1-1.5 1.4h-4A1.5 1.5 0 0 1 8.5 20z"/><path d="M11 9 12 3M14.2 9 15.6 3.4"/>`},
     c_ciotola:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<path d="M3.5 11h17a8.5 8.5 0 0 1-17 0z"/><path d="M9 21h6"/>`}
   };
-function glassIcon(k, s = 24) {
-  const inner = ICONS[k] || ICONS["v_classico"] || "";
-  return `<svg class="gico" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="url(#g_clay)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+function glassIcon(k, s = 26) {
+  const ic = ICONS[k] || ICONS.vaso;
+  return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="${ic.f}" stroke="url(#${ic.g})" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
 }
 
 /* ============================ HELPERS ================================= */
@@ -490,14 +555,14 @@ function compressImage(file) {
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        const max = 1200;
+        const max = 2400;
         let w = img.width, h = img.height;
         if (w >= h && w > max) { h = Math.round((h * max) / w); w = max; }
         else if (h > w && h > max) { w = Math.round((w * max) / h); h = max; }
         const cv = document.createElement("canvas");
         cv.width = w; cv.height = h;
         cv.getContext("2d").drawImage(img, 0, 0, w, h);
-        cv.toBlob((blob) => resolve(blob), "image/jpeg", 0.82);
+        cv.toBlob((blob) => resolve(blob), "image/jpeg", 0.9);
       };
       img.src = reader.result;
     };
@@ -510,7 +575,7 @@ function mapPrint(r) {
   const cols = (r.print_colors || [])
     .slice()
     .sort((a, b) => (a.position || 0) - (b.position || 0))
-    .map((c) => ({ name: c.name, a: c.color_a, b: c.color_b, img: c.image_url || "" }));
+    .map((c) => ({ id: c.id, name: c.name, a: c.color_a, b: c.color_b, img: c.image_url || "" }));
   if (!cols.length) {
     const img0 = r.images && r.images.length ? r.images[0] : "";
     cols.push({ name: "Unico", a: "#cfc4b4", b: "#9a8d79", img: img0 });
@@ -525,6 +590,7 @@ function mapPrint(r) {
     category_id: r.category_id || "",
     isElectrical: !!r.is_electrical,
     addons: { braided: Number(r.addon_braided) || 0, bulb: Number(r.addon_bulb) || 0, holder: Number(r.addon_holder) || 0 },
+    allowBraided: r.allow_braided !== false,
     categoryName: r.categories ? r.categories.name : "",
     categoryIcon: r.categories ? r.categories.icon : "v_classico",
     cols,
@@ -684,6 +750,35 @@ export default function App() {
     return () => { sub && sub.unsubscribe(); };
   }, []);
 
+  // parallax + scrim su scroll
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        document.documentElement.style.setProperty("--par", String(window.scrollY || 0));
+        raf = 0;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [tab, detailId]);
+
+  const changeColorPhoto = async (printId, colorId, file) => {
+    if (!file) return;
+    try {
+      const blob = await compressImage(file);
+      const path = user.id + "/" + Date.now() + "-" + Math.random().toString(36).slice(2) + ".jpg";
+      const up = await supabase.storage.from("prints").upload(path, blob, { contentType: "image/jpeg" });
+      if (up.error) throw up.error;
+      const url = supabase.storage.from("prints").getPublicUrl(path).data.publicUrl;
+      await supabase.from("print_colors").update({ image_url: url }).eq("id", colorId);
+      await loadPrints();
+      toast("Foto aggiornata");
+    } catch (e) { toast("Errore upload foto"); }
+  };
+
   const loginGoogle = async () => {
     await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } });
   };
@@ -768,10 +863,16 @@ export default function App() {
       <Bg />
       <Raw html={GRADS_SVG} />
 
+      <div className="topscrim" aria-hidden="true" />
       <header className="topbar">
-        <div className="tb-spacer" />
+        {tab !== "home"
+          ? <button className="tb-btn left tb-back" onClick={() => open("home")} aria-label="Home"><ChevronLeft /></button>
+          : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
+          <button className="tb-btn cart" onClick={() => setCartOpen(true)} aria-label="Carrello">
+            <CartIcon />{cartCount > 0 && <span className="cbadge">{cartCount}</span>}
+          </button>
           <button className="tb-btn right" onClick={() => open("profile")}>
             <img className="av" src={user.avatar || avatarURI(user.name)} alt="" />
           </button>
@@ -783,7 +884,7 @@ export default function App() {
           <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} />
         )}
         {tab === "search" && (
-          <Screen title={<><SearchI className="ticon" /> Cerca</>} icon={<SearchI />}>
+          <Screen title="Cerca" icon={<SearchI />}>
             <input className="searchbox" placeholder="Cerca per nome, materiale, categoria…" value={q} onChange={(e) => setQ(e.target.value)} />
             <Grid>
               {prints.filter((p) => matchQ(p, q)).map((p) => (
@@ -796,12 +897,14 @@ export default function App() {
         {tab === "cats" && (
           <Screen title="Categorie" icon={<CatsI />}>
             {cats.length === 0 && <p className="empty">Nessuna categoria. {isAdmin ? "Aggiungile dal pannello prodotti." : ""}</p>}
+            <div className="catgrid">
             {cats.map((c) => (
               <button key={c.id} className="cat glass" onClick={() => { setQ(c.name); open("search"); }}>
                 <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
                 <span className="catn">{c.name}</span>
               </button>
             ))}
+            </div>
           </Screen>
         )}
         {tab === "like" && (
@@ -835,18 +938,11 @@ export default function App() {
         </div>
       </div>
 
-      {/* FAB CARRELLO */}
-      <div className="fab">
-        <button className="fbtn cart" onClick={() => setCartOpen(true)} aria-label="Carrello">
-          <CartIcon />{cartCount > 0 && <span className="cbadge">{cartCount}</span>}
-        </button>
-      </div>
-
       {detail && (
         <Detail
           key={detail.id} p={detail} cats={cats} prints={prints}
           onClose={() => setDetailId(null)} onOpen={openDetail}
-          onAdd={addToCart} isAdmin={isAdmin} onEdit={adminEdit}
+          onAdd={addToCart} isAdmin={isAdmin} onEdit={adminEdit} onColorPhoto={changeColorPhoto}
           onSaveAddons={async (patch) => { await supabase.from("prints").update(patch).eq("id", detail.id); await loadPrints(); toast("Prezzi aggiornati"); }}
         />
       )}
@@ -922,10 +1018,11 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
 }
 
 /* ---- DETTAGLIO ---- */
-function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEdit }) {
+function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEdit, onColorPhoto }) {
   const [ci, setCi] = useState(0);
   const [qty, setQty] = useState(1);
   const [cable, setCable] = useState("Normale");
+  const photoInput = useRef(null);
   const [bulb, setBulb] = useState(1);
   const [holder, setHolder] = useState(1);
   const [editP, setEditP] = useState(false);
@@ -959,16 +1056,24 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
       <div className="dwrap">
         <div className="dback"><button onClick={onClose} aria-label="Indietro"><ChevronLeft /></button><span className="dbacklbl">Dettaglio</span>{isAdmin && onEdit && <button className="dedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}</div>
         <div className="dgrid">
-          <div className="dphoto"><img className="dimg" src={colImg(c)} alt="" /></div>
+          <div className="dphoto">
+            <img className="dimg" src={colImg(c)} alt="" />
+            {isAdmin && onColorPhoto && (
+              <>
+                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Cambia foto"><Camera /></button>
+                <input ref={photoInput} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { onColorPhoto(p.id, c.id, e.target.files[0]); e.target.value = ""; }} />
+              </>
+            )}
+          </div>
           <div className="dopts">
             <div className="dttl">{p.title}</div>
             <div className="dprice">{eur(p.price)}</div>
             <div className="dmat">{p.material}</div>
-            <div className="dlabel">Colore</div>
+            <div className="dlabel dcolor">Colore</div>
             <div className="dswatches">
               {p.cols.map((cc, k) => (
                 <button key={k} className={"dswbox" + (k === ci ? " on" : "")} onClick={() => setCi(k)}>
-                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + "," + cc.b + ")" }} />
+                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 42%," + cc.b + " 58%," + cc.b + " 100%)" }} />
                   <span className="dswn">{cc.name}</span>
                 </button>
               ))}
@@ -978,17 +1083,17 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                 <div className="dlabel">Cavo</div>
                 <div className="seg">
                   <button className={cable === "Normale" ? "on" : ""} onClick={() => setCable("Normale")}>Normale <i>incluso</i></button>
-                  <button className={cable === "Intrecciato" ? "on" : ""} onClick={() => setCable("Intrecciato")}>Intrecciato <i>+{eur(ad.braided)}</i></button>
+                  {p.allowBraided && <button className={cable === "Intrecciato" ? "on" : ""} onClick={() => setCable("Intrecciato")}>Intrecciato <i>+{eur(ad.braided)}</i></button>}
                 </div>
                 <div className="dlabel">Lampadina</div>
                 <div className="seg">
-                  <button className={bulb ? "on" : ""} onClick={() => setBulb(1)}>Sì <i>+{eur(ad.bulb)}</i></button>
                   <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)}>No</button>
+                  <button className={bulb ? "on" : ""} onClick={() => setBulb(1)}>Sì <i>+{eur(ad.bulb)}</i></button>
                 </div>
                 <div className="dlabel">Portalampada</div>
                 <div className="seg">
-                  <button className={holder ? "on" : ""} onClick={() => setHolder(1)}>Sì <i>+{eur(ad.holder)}</i></button>
                   <button className={!holder ? "on" : ""} onClick={() => setHolder(0)}>No</button>
+                  <button className={holder ? "on" : ""} onClick={() => setHolder(1)}>Sì <i>+{eur(ad.holder)}</i></button>
                 </div>
                 {isAdmin && (
                   <>
@@ -1180,7 +1285,8 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
     title: editing.title, price: editing.price, material: editing.material, desc: editing.desc,
     category_id: editing.category_id || "", is_electrical: editing.isElectrical,
     addon_braided: editing.addons.braided, addon_bulb: editing.addons.bulb, addon_holder: editing.addons.holder,
-  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8 });
+    allow_braided: editing.allowBraided !== false,
+  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8, allow_braided: true });
   const [colors, setColors] = useState(editing ? editing.cols.map((c) => ({ name: c.name, color_a: c.a, color_b: c.b, image_url: c.img || "", file: null, preview: c.img || "" })) : [{ name: "Naturale", color_a: "#cfc4b4", color_b: "#9a8d79", image_url: "", file: null, preview: "" }]);
   const [busy, setBusy] = useState(false);
 
@@ -1208,7 +1314,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
     try {
       const payload = {
         title: f.title, price: Number(f.price) || 0, material: f.material, description: f.desc,
-        category_id: f.category_id || null, is_electrical: !!f.is_electrical,
+        category_id: f.category_id || null, is_electrical: !!f.is_electrical, allow_braided: !!f.allow_braided,
         addon_braided: Number(f.addon_braided) || 0, addon_bulb: Number(f.addon_bulb) || 0, addon_holder: Number(f.addon_holder) || 0,
       };
       let printId = editing ? editing.id : null;
@@ -1256,11 +1362,14 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
         <div className="afield"><label>Descrizione</label><textarea rows="2" value={f.desc} onChange={(e) => upd("desc", e.target.value)} /></div>
         <label className="achk"><input type="checkbox" checked={f.is_electrical} onChange={(e) => upd("is_electrical", e.target.checked)} /> Articolo a corrente (aggiunte elettriche)</label>
         {f.is_electrical && (
-          <div className="afrow3">
-            <div className="afield"><label>Cavo intrecciato +€</label><input type="number" step="0.5" value={f.addon_braided} onChange={(e) => upd("addon_braided", e.target.value)} /></div>
-            <div className="afield"><label>Lampadina +€</label><input type="number" step="0.5" value={f.addon_bulb} onChange={(e) => upd("addon_bulb", e.target.value)} /></div>
-            <div className="afield"><label>Portalampada +€</label><input type="number" step="0.5" value={f.addon_holder} onChange={(e) => upd("addon_holder", e.target.value)} /></div>
-          </div>
+          <>
+            <label className="achk"><input type="checkbox" checked={f.allow_braided} onChange={(e) => upd("allow_braided", e.target.checked)} /> Permetti cavo intrecciato (altrimenti solo Normale)</label>
+            <div className="afrow3">
+              {f.allow_braided && <div className="afield"><label>Cavo intrecciato +€</label><input type="number" step="0.5" value={f.addon_braided} onChange={(e) => upd("addon_braided", e.target.value)} /></div>}
+              <div className="afield"><label>Lampadina +€</label><input type="number" step="0.5" value={f.addon_bulb} onChange={(e) => upd("addon_bulb", e.target.value)} /></div>
+              <div className="afield"><label>Portalampada +€</label><input type="number" step="0.5" value={f.addon_holder} onChange={(e) => upd("addon_holder", e.target.value)} /></div>
+            </div>
+          </>
         )}
         <div className="psec">Colori / foto</div>
         {colors.map((c, i) => (
@@ -1294,3 +1403,4 @@ const Plus = () => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" 
 const Pencil = () => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>);
 const Trash2 = () => (<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /></svg>);
 const Upload = () => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M17 8l-5-5-5 5" /><path d="M12 3v12" /></svg>);
+const Camera = () => (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3l2-3h8l2 3h3a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>);
