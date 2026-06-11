@@ -2,7 +2,7 @@
 
 > Aggiornamento: nuovo design "Liquid Glass", login solo Google, carrello e ordini su Supabase (niente piu' WhatsApp), prodotti con palette colori + foto per colore, aggiunte elettriche con prezzi admin, categorie, riepilogo ordine scomposto, preferenze tema/sfondo per utente.
 >
-> **Prima del deploy esegui** `supabase/schema_v2.sql` e poi `supabase/schema_v3.sql` nel SQL Editor di Supabase.
+> **Prima del deploy esegui** `supabase/schema_v2.sql` poi `supabase/schema_v3.sql` e infine `supabase/schema_v4.sql` nel SQL Editor di Supabase.
 
 ---
 

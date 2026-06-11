@@ -322,7 +322,7 @@ const CSS = `
 .boot{min-height:100vh;display:grid;place-items:center;color:var(--soft);font-weight:600}
 .wrap{max-width:680px;margin:0 auto;padding:62px 0 132px}
 .wrap .grid{padding:0 18px}
-.grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+.grid{grid-template-columns:repeat(2,1fr);gap:12px}
 .grid .card{opacity:1}
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
@@ -416,27 +416,29 @@ const CSS = `
 .dockwrap{bottom:calc(18px + env(safe-area-inset-bottom))}
 .fab{bottom:calc(96px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
-.detail{padding-top:env(safe-area-inset-top)}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
-/* ---- card body ridotto ~15% (foto e pulsanti superiori invariati) ---- */
-.cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px}
-.cbody .cardcat{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:10.8px;font-weight:600;color:var(--soft)}
+/* ---- card: tile piu' compatta, testo piu' leggibile ---- */
+.card{min-width:0}
+.card .ph{aspect-ratio:1.1}
+.cbody{padding:10px 11px 11px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.cbody .cardcat{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:11.5px;font-weight:600;color:var(--soft);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .cbody .cardcat .gico{width:14px;height:14px;flex:none}
 .cbody .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:14.5px;color:var(--text);line-height:1.15}
-.cbody .cp{font-weight:700;font-size:14.5px;white-space:nowrap;color:var(--text)}
-.cbody .mat{font-size:10.6px;color:var(--soft)}
-.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:8.5px;border-radius:13px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:11.6px;cursor:pointer}
+.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:15px;color:var(--text);line-height:1.15;min-width:0}
+.cbody .cp{font-weight:700;font-size:15px;white-space:nowrap;color:var(--text)}
+.cbody .mat{font-size:11.5px;color:var(--soft)}
+.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px;border-radius:13px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:12.5px;cursor:pointer}
 .cbody .addcart svg{width:18px;height:18px;display:block}
-.cbody .addcart .gico{width:15px;height:15px}
+.cbody .addcart .gico{width:16px;height:16px}
 
 /* ---- sezione colore dettaglio ---- */
 .dlabel.dcolor{font-size:13.2px;margin-bottom:16px}
 .dswatches{gap:18px}
-.dsw{width:44px;height:44px;border:1.5px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 2px rgba(255,255,255,.6),0 2px 6px rgba(0,0,0,.18)}
-.dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.96),0 0 16px 4px rgba(255,255,255,.7),inset 0 1px 2px rgba(255,255,255,.6);transform:scale(1.12)}
-body.dark .dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 5px rgba(255,255,255,.45),inset 0 1px 2px rgba(255,255,255,.4)}
+.dsw{width:46px;height:46px;border:2.5px solid rgba(255,255,255,.92);box-shadow:0 0 0 1px rgba(0,0,0,.28),0 2px 7px rgba(0,0,0,.3),inset 0 1px 3px rgba(255,255,255,.55)}
+.dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 4.5px var(--text),0 0 14px 3px rgba(255,255,255,.6),inset 0 1px 3px rgba(255,255,255,.55);transform:scale(1.12)}
+body.dark .dsw{border-color:rgba(255,255,255,.85);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 2px 7px rgba(0,0,0,.45),inset 0 1px 3px rgba(255,255,255,.4)}
+body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4.5px #fff,0 0 16px 4px rgba(255,255,255,.5),inset 0 1px 3px rgba(255,255,255,.4)}
 
 /* ---- pulsante cambia foto (admin) sul dettaglio ---- */
 .dphoto{position:relative}
@@ -450,9 +452,11 @@ body.dark .dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 5px
 .tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
 .tb-btn.cart svg{width:23px;height:23px;stroke:var(--text);fill:none}
 .tb-btn.cart .cbadge{display:grid}
+.tb-right{gap:10px}
 
 /* ---- parallasse su scroll ---- */
-.bg{will-change:transform;transform:translate3d(0,calc(var(--par,0) * -0.045px),0)}
+/* sfondo statico (no transform su fixed: evita il taglio in overscroll iOS) */
+.bg{transform:none}
 .herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
 
 /* ---- scrim sfumato in alto (home, primi ~125px) allo scroll ---- */
@@ -465,6 +469,141 @@ body.dark{--scrim:rgba(26,23,20,.9);--scrim2:rgba(26,23,20,.5)}
 @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .ipick.on{animation:scrimIn .32s ease both}
 @keyframes scrimIn{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,.4)}}
+
+/* ---- ordini: margine laterale (~3mm) ---- */
+.banner{margin-left:12px;margin-right:12px}
+.ord{margin-left:12px;margin-right:12px}
+.osec{margin-left:14px;margin-right:14px}
+
+/* ---- titolo con azione (es. + categorie) ---- */
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.titlerow .title{margin:10px 0 16px}
+.tb-back.addnew{flex:none}
+
+/* ---- pencil di modifica sulle tile categoria ---- */
+.catedit2{left:auto;right:8px;top:8px}
+
+/* ---- icon picker categorie ---- */
+.iggroup{font-size:12px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.04em;margin:14px 2px 8px}
+.ig{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.ib{aspect-ratio:1;border:1px solid var(--strokeSoft);background:var(--glass2);border-radius:14px;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.ib.on{box-shadow:0 0 0 2px var(--text);background:var(--glassDock)}
+
+/* ---- pulsante elimina ---- */
+.delbtn{width:calc(100% - 36px);display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 18px 0;padding:13px;border-radius:15px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.1);color:#c0392b;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.delbtn svg{width:18px;height:18px}
+
+/* ---- feedback "press" su tutti i pulsanti ---- */
+button{transition:transform .14s cubic-bezier(.22,.7,.28,1.5)}
+button:active{transform:scale(.93)}
+.card,.cat,.herocard{transition:transform .16s cubic-bezier(.22,.7,.28,1.4);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.card:active,.cat:active,.herocard:active{transform:scale(.94)}
+
+/* ---- nascondi scrollbar (scroll resta attivo) ---- */
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
+
+/* ---- chiusura carrello (slide-down + fade scrim) ---- */
+.ipick.on.closing .sheet{animation:sheetDown .34s cubic-bezier(.4,0,.7,.4) both}
+.ipick.on.closing{animation:scrimOut .34s ease both}
+@keyframes sheetDown{from{transform:translateY(0)}to{transform:translateY(100%)}}
+@keyframes scrimOut{from{background:rgba(0,0,0,.4)}to{background:rgba(0,0,0,0)}}
+
+/* ---- carosello in evidenza (scorrevole) ---- */
+.herorow{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 18px 4px;margin-bottom:18px;-webkit-overflow-scrolling:touch}
+.herorow .herocard{flex:0 0 86%;scroll-snap-align:center;margin:0}
+.herorow.single .herocard{flex:0 0 100%}
+
+/* ---- transizione apertura/chiusura dettaglio ---- */
+
+/* ---- galleria foto (fino a 5 per colore) ---- */
+.dgallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;-webkit-overflow-scrolling:touch}
+.dgallery .dimg{flex:0 0 100%;scroll-snap-align:center;width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:24px}
+.gdots{display:flex;justify-content:center;gap:6px;margin-top:9px}
+.gdot{width:6px;height:6px;border-radius:50%;background:var(--faint)}
+
+/* ---- editor: righe colore con 5 foto ---- */
+.colrow2{background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:15px;padding:11px;margin-bottom:10px}
+.colhead{display:flex;align-items:center;gap:8px}
+.colname{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--strokeSoft);background:var(--glassDock);color:var(--text);font-family:inherit;font-size:14px}
+.colhead input[type=color]{width:34px;height:34px;border:none;border-radius:9px;background:none;cursor:pointer;flex:none}
+.colphotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.colph{position:relative;width:60px;height:60px;border-radius:11px;overflow:hidden;border:1px solid var(--strokeSoft)}
+.colph img{width:100%;height:100%;object-fit:cover;display:block}
+.colphdel{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.colphmain{position:absolute;bottom:0;left:0;right:0;font-size:8.5px;font-weight:600;text-align:center;background:rgba(0,0,0,.55);color:#fff;padding:1px 0}
+.coladd{width:60px;height:60px;border-radius:11px;border:1.5px dashed var(--strokeSoft);display:grid;place-items:center;cursor:pointer;color:var(--soft);background:var(--glassDock)}
+.colhint{font-size:11px;color:var(--faint);margin-top:7px}
+
+/* ---- dettaglio come popup a foglio (stile carrello) ---- */
+:root{--sheetbg:#f6f1ea}
+body.dark{--sheetbg:#1f1b17}
+.sheet.detailsheet{position:relative;background:var(--sheetbg);-webkit-backdrop-filter:none;backdrop-filter:none;max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -16px 50px rgba(0,0,0,.4)}
+.detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
+.detailsheet .dgrid{margin-top:6px}
+.detailsheet .dreco{margin-top:26px}
+
+/* ================= DESIGN SYSTEM — premium warm (light/dark auto) ============= */
+:root{
+  --text:#2D2621; --soft:#6E6257; --faint:rgba(110,98,87,.55);
+  --glass:rgba(255,255,255,.45); --glass2:rgba(255,255,255,.58);
+  --strokeSoft:rgba(191,107,74,.12); --hi:rgba(255,255,255,.5); --glassDock:rgba(247,242,235,.70);
+  --bg:#F7F2EB; --bg2:#F1E8DC;
+  --accent:#BF6B4A; --accent2:#D6B89B; --accentDark:#9C5C43;
+  --icon:#8A7C70; --heart:#BF6B4A; --success:#6E8B69; --warning:#C89C5B;
+  --txtShadow:rgba(70,45,30,.14); --shcol:rgba(120,80,55,.12); --shblur:42px; --shy:12px;
+  --card:rgba(255,255,255,.5); --sheetbg:#F7F2EB;
+  --scrim:rgba(247,242,235,.9); --scrim2:rgba(247,242,235,.5);
+}
+body.dark{
+  --text:#F2E5D5; --soft:#B9A897; --faint:rgba(185,168,151,.5);
+  --glass:rgba(255,255,255,.05); --glass2:rgba(255,255,255,.085);
+  --strokeSoft:rgba(209,124,86,.14); --hi:rgba(255,255,255,.1); --glassDock:rgba(24,20,17,.72);
+  --bg:#181411; --bg2:#231D19;
+  --accent:#D17C56; --accent2:#B69A82; --accentDark:#B69A82;
+  --icon:#8A7C70; --heart:#D17C56; --success:#7A9774; --warning:#D1A366;
+  --txtShadow:rgba(0,0,0,.5); --shcol:rgba(0,0,0,.5);
+  --card:rgba(40,32,26,.5); --sheetbg:#231D19;
+  --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
+}
+
+/* ---- sfondo atmosferico: niente forme, solo glow radiali + linee topografiche ---- */
+.blob{display:none!important}
+.bg{position:fixed;inset:0;z-index:-1;background:var(--bg)}
+.bg::before{content:"";position:absolute;inset:-12%;background:
+  radial-gradient(42% 36% at 12% 6%, rgba(191,107,74,.07), transparent 70%),
+  radial-gradient(52% 46% at 52% 52%, rgba(214,184,155,.06), transparent 72%),
+  radial-gradient(46% 42% at 90% 94%, rgba(156,92,67,.06), transparent 70%)}
+body.dark .bg::before{background:
+  radial-gradient(42% 36% at 12% 6%, rgba(209,124,86,.11), transparent 70%),
+  radial-gradient(52% 46% at 52% 52%, rgba(182,154,130,.05), transparent 72%),
+  radial-gradient(46% 42% at 90% 94%, rgba(156,92,67,.12), transparent 70%)}
+.bg::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");background-size:cover;background-position:center;opacity:.06}
+body.dark .bg::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");opacity:.09}
+
+/* ---- vetro: frosted ceramic ---- */
+.glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
+
+/* ---- icone monocromatiche (famiglia terracotta) ---- */
+.gico{stroke:var(--accent);fill:rgba(191,107,74,.10)}
+body.dark .gico{fill:rgba(209,124,86,.12)}
+.dock .dnav svg{stroke:var(--icon)!important;fill:none}
+.dock .dnav.act svg{stroke:var(--accent)!important}
+.heart.liked svg{stroke:var(--heart)!important;fill:rgba(191,107,74,.16)!important}
+body.dark .heart.liked svg{fill:rgba(209,124,86,.18)!important}
+.title .ticon.heartred svg,.heartred svg{stroke:var(--heart)!important;fill:rgba(191,107,74,.14)!important}
+
+/* ---- micro-interazioni: morbide, senza rimbalzo ---- */
+button{transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .22s ease,background .22s ease}
+button:active{transform:scale(.97)}
+.card,.cat,.herocard{transition:transform .24s cubic-bezier(.4,0,.2,1)}
+.card:active,.cat:active,.herocard:active{transform:scale(.985)}
+
+/* ---- dock sempre ancorata al bordo visibile (no jitter con barra Safari) ---- */
+.dockwrap{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom) + var(--vvb,0px))}
+
+/* ---- testo aspetto profilo ---- */
+.paspect{color:var(--soft);font-size:13.5px;margin:2px 2px 18px;line-height:1.5}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -520,8 +659,39 @@ const ICONS={
   };
 function glassIcon(k, s = 26) {
   const ic = ICONS[k] || ICONS.vaso;
-  return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="${ic.f}" stroke="url(#${ic.g})" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
+  return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
 }
+
+/* coriandoli */
+function confetti(el) {
+  const r = el && el.getBoundingClientRect ? el.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const cols = ["#BF6B4A", "#D6B89B", "#9C5C43", "#C89C5B", "#D17C56", "#B69A82"];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement("div");
+    const sz = 8 + Math.random() * 7;
+    p.style.cssText = "position:fixed;left:" + cx + "px;top:" + cy + "px;width:" + sz + "px;height:" + sz + "px;border-radius:2px;background:" + cols[i % cols.length] + ";z-index:200;pointer-events:none;will-change:transform,opacity";
+    document.body.appendChild(p);
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 60 + Math.random() * 120;
+    const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 30;
+    const rot = Math.random() * 720 - 360;
+    p.animate(
+      [{ transform: "translate(-50%,-50%) rotate(0) scale(1)", opacity: 1 },
+       { transform: "translate(" + dx + "px," + (dy + 150) + "px) rotate(" + rot + "deg) scale(.5)", opacity: 0 }],
+      { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.18,.7,.3,1)" }
+    ).onfinish = () => p.remove();
+  }
+}
+
+const ICON_GROUPS = [
+  { t: "Lampade", keys: ["l_tavolo", "l_sospensione", "l_piantana", "l_comodino", "l_lampadina"] },
+  { t: "Vasi", keys: ["v_classico", "v_ampolla", "v_tubo", "v_anfora", "v_conico"] },
+  { t: "Arredo", keys: ["a_sedia", "a_poltrona", "a_tavolo", "a_libreria", "a_armadio"] },
+  { t: "Decorazioni", keys: ["d_stella", "d_cuore", "d_fiocco", "d_fiore", "d_cornice"] },
+  { t: "Contenitori", keys: ["c_scatola", "c_cestino", "c_barattolo", "c_portapenne", "c_ciotola"] },
+  { t: "Altre", keys: ["vaso", "lampada", "scatola", "gemma", "stella", "fulmine", "regalo", "fiore", "tazza", "borsa"] },
+];
 
 /* ============================ HELPERS ================================= */
 const eur = (n) => (Number(n) || 0).toFixed(2).replace(".", ",") + " €";
@@ -575,10 +745,13 @@ function mapPrint(r) {
   const cols = (r.print_colors || [])
     .slice()
     .sort((a, b) => (a.position || 0) - (b.position || 0))
-    .map((c) => ({ id: c.id, name: c.name, a: c.color_a, b: c.color_b, img: c.image_url || "" }));
+    .map((c) => {
+      const imgs = (c.images && c.images.length) ? c.images : (c.image_url ? [c.image_url] : []);
+      return { id: c.id, name: c.name, a: c.color_a, b: c.color_b, img: imgs[0] || "", imgs };
+    });
   if (!cols.length) {
     const img0 = r.images && r.images.length ? r.images[0] : "";
-    cols.push({ name: "Unico", a: "#cfc4b4", b: "#9a8d79", img: img0 });
+    cols.push({ id: null, name: "Unico", a: "#cfc4b4", b: "#9a8d79", img: img0, imgs: img0 ? [img0] : [] });
   }
   return {
     id: r.id,
@@ -591,6 +764,7 @@ function mapPrint(r) {
     isElectrical: !!r.is_electrical,
     addons: { braided: Number(r.addon_braided) || 0, bulb: Number(r.addon_bulb) || 0, holder: Number(r.addon_holder) || 0 },
     allowBraided: r.allow_braided !== false,
+    featured: !!r.featured,
     categoryName: r.categories ? r.categories.name : "",
     categoryIcon: r.categories ? r.categories.icon : "v_classico",
     cols,
@@ -598,7 +772,7 @@ function mapPrint(r) {
   };
 }
 
-function Bg(){return <div className="bg" aria-hidden="true"><div className="blob b1" /><div className="blob b2" /><div className="blob b3" /><div className="blob b4" /></div>;}
+function Bg(){return <div className="bg" aria-hidden="true" />;}
 
 /* HTML grezzo (icone glass) reso in modo sicuro */
 function Raw({ html, className, style }) {
@@ -654,8 +828,8 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [invId, setInvId] = useState(null);
   const [editing, setEditing] = useState(null); // {} nuovo, {id..} modifica, null chiuso
-  const [theme, setTheme] = useState("auto");
-  const [bg, setBg] = useState("");
+  const [editingCat, setEditingCat] = useState(null);
+  const theme = "auto"; // chiaro/scuro automatico obbligatorio
   const [toasts, setToasts] = useState([]);
   const [q, setQ] = useState("");
 
@@ -672,10 +846,28 @@ export default function App() {
     const dark = t === "dark" || (t === "auto" && mq && mq.matches);
     document.body.classList.toggle("dark", !!dark);
   };
-  useEffect(() => { applyTheme(theme); }, [theme]);
+  // tieni la dock ancorata al bordo visibile (compensa la barra di Safari)
   useEffect(() => {
-    if (bg) document.body.dataset.bg = bg; else document.body.removeAttribute("data-bg");
-  }, [bg]);
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      const gap = document.documentElement.clientHeight - vv.height - vv.offsetTop;
+      document.documentElement.style.setProperty("--vvb", Math.max(0, Math.round(gap)) + "px");
+    };
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    update();
+    return () => { vv.removeEventListener("resize", update); vv.removeEventListener("scroll", update); };
+  }, []);
+
+  const syncBackstop = () => {
+    try {
+      const c = getComputedStyle(document.body).getPropertyValue("--bg").trim();
+      if (c) { document.documentElement.style.background = c; document.body.style.background = c; }
+    } catch (e) {}
+  };
+  useEffect(() => { applyTheme(theme); syncBackstop(); }, [theme]);
+  useEffect(() => { document.body.removeAttribute("data-bg"); }, []);
   useEffect(() => {
     if (!mq) return;
     const h = () => { if (theme === "auto") applyTheme("auto"); };
@@ -731,8 +923,6 @@ export default function App() {
       avatar: prof?.avatar_url || meta.avatar_url || meta.picture || "",
       is_admin: !!prof?.is_admin,
     });
-    if (prof?.pref_theme) setTheme(prof.pref_theme);
-    if (prof?.pref_bg !== undefined && prof?.pref_bg !== null) setBg(prof.pref_bg);
     const { data: l } = await supabase.from("likes").select("print_id").eq("user_id", au.id);
     setLikes((l || []).map((r) => r.print_id));
     await loadOrders();
@@ -773,9 +963,13 @@ export default function App() {
       const up = await supabase.storage.from("prints").upload(path, blob, { contentType: "image/jpeg" });
       if (up.error) throw up.error;
       const url = supabase.storage.from("prints").getPublicUrl(path).data.publicUrl;
-      await supabase.from("print_colors").update({ image_url: url }).eq("id", colorId);
+      const pr = prints.find((p) => p.id === printId);
+      const col = pr && pr.cols.find((c) => c.id === colorId);
+      const cur = col && col.imgs ? col.imgs.slice(0, 5) : [];
+      const next = [...cur, url].slice(0, 5);
+      await supabase.from("print_colors").update({ images: next, image_url: next[0] }).eq("id", colorId);
       await loadPrints();
-      toast("Foto aggiornata");
+      toast("Foto aggiunta");
     } catch (e) { toast("Errore upload foto"); }
   };
 
@@ -788,8 +982,6 @@ export default function App() {
     if (!user) return;
     await supabase.from("profiles").update(patch).eq("id", user.id);
   };
-  const pickTheme = (t) => { setTheme(t); savePrefs({ pref_theme: t }); };
-  const pickBg = (b) => { setBg(b); savePrefs({ pref_bg: b }); };
 
   const toggleLike = async (id) => {
     if (!user) { toast("Accedi per mettere mi piace"); return; }
@@ -853,6 +1045,29 @@ export default function App() {
   }
 
   const adminEdit = isAdmin ? (prod) => { setDetailId(null); setEditing(prod); } : undefined;
+  const deletePrint = async (id) => {
+    try {
+      await supabase.from("print_colors").delete().eq("print_id", id);
+      const { error } = await supabase.from("prints").delete().eq("id", id);
+      if (error) throw error;
+      await Promise.all([loadPrints(), loadCats()]);
+      setEditing(null); setDetailId(null);
+      toast("Prodotto eliminato");
+    } catch (e) { toast("Errore eliminazione"); }
+  };
+  const saveCategory = async (data) => {
+    try {
+      if (editingCat && editingCat.id) await supabase.from("categories").update(data).eq("id", editingCat.id);
+      else await supabase.from("categories").insert({ ...data, position: cats.length });
+      await loadCats(); setEditingCat(null); toast("Categoria salvata");
+    } catch (e) { toast("Errore categoria"); }
+  };
+  const deleteCategory = async (id) => {
+    try {
+      await supabase.from("categories").delete().eq("id", id);
+      await loadCats(); setEditingCat(null); toast("Categoria eliminata");
+    } catch (e) { toast("Errore eliminazione"); }
+  };
   const liked = (id) => likes.includes(id);
   const detail = detailId ? byId(detailId) : null;
   const inv = invId ? orders.find((o) => o.id === invId) : null;
@@ -895,11 +1110,12 @@ export default function App() {
           </Screen>
         )}
         {tab === "cats" && (
-          <Screen title="Categorie" icon={<CatsI />}>
-            {cats.length === 0 && <p className="empty">Nessuna categoria. {isAdmin ? "Aggiungile dal pannello prodotti." : ""}</p>}
+          <Screen title="Categorie" icon={<CatsI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
+            {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
             <div className="catgrid">
             {cats.map((c) => (
               <button key={c.id} className="cat glass" onClick={() => { setQ(c.name); open("search"); }}>
+                {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
                 <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
                 <span className="catn">{c.name}</span>
               </button>
@@ -920,7 +1136,7 @@ export default function App() {
           <OrdersScreen orders={orders} isAdmin={isAdmin} onOpen={(id) => setInvId(id)} onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")} />
         )}
         {tab === "profile" && (
-          <Profile user={user} theme={theme} bg={bg} onTheme={pickTheme} onBg={pickBg} onLogout={logout}
+          <Profile user={user} onLogout={logout}
             isAdmin={isAdmin} onNewProduct={() => setEditing({})} />
         )}
       </main>
@@ -960,8 +1176,13 @@ export default function App() {
           editing={editing.id ? editing : null} cats={cats}
           onClose={() => setEditing(null)}
           onSaved={async () => { await Promise.all([loadPrints(), loadCats()]); setEditing(null); toast("Salvato"); }}
+          onDelete={deletePrint}
           user={user} toast={toast}
         />
+      )}
+
+      {editingCat && (
+        <CategoryEditor cat={editingCat.id ? editingCat : null} onClose={() => setEditingCat(null)} onSave={saveCategory} onDelete={deleteCategory} />
       )}
 
       <div id="toast">{toasts.map((t) => <div className="tt" key={t.id}>{t.m}</div>)}</div>
@@ -980,10 +1201,13 @@ function Box() {
 }
 
 /* ============================ SCHERMATE ============================== */
-function Screen({ title, icon, children, heart }) {
+function Screen({ title, icon, children, heart, action }) {
   return (
     <section className="screen on">
-      <h2 className="title px">{icon && <span className={"ticon" + (heart ? " heartred" : "")}>{icon}</span>}{title}</h2>
+      <div className="titlerow px">
+        <h2 className="title">{icon && <span className={"ticon" + (heart ? " heartred" : "")}>{icon}</span>}{title}</h2>
+        {action}
+      </div>
       {children}
     </section>
   );
@@ -991,21 +1215,26 @@ function Screen({ title, icon, children, heart }) {
 function Grid({ children }) { return <div className="grid">{children}</div>; }
 
 function Home({ prints, liked, onLike, onOpen, onEdit }) {
-  const hero = prints[0];
+  const featured = prints.filter((p) => p.featured);
+  const heroes = featured.length ? featured : (prints[0] ? [prints[0]] : []);
   return (
     <section className="screen on">
       <div className="px">
         <div className="kick">ULTIME CREAZIONI</div>
         <h1 className="hero">Stampe fresche di piatto.</h1>
       </div>
-      {hero && (
-        <div className="herocard" onClick={() => onOpen(hero.id)}>
-          <img src={colImg(hero.cols[0])} alt="" />
-          <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(hero.id); }}>
-            <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
-          </button>
-          <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
-          {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
+      {heroes.length > 0 && (
+        <div className={"herorow" + (heroes.length === 1 ? " single" : "")}>
+          {heroes.map((h) => (
+            <div className="herocard" key={h.id} onClick={() => onOpen(h.id)}>
+              <img src={colImg(h.cols[0])} alt="" />
+              <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(h.id); }} aria-label="Mi piace">
+                <span className={"heart" + (liked(h.id) ? " liked" : "")}><HeartI /></span>
+              </button>
+              <div className="herotag"><div className="ht">{h.title}</div><div className="hp">{eur(h.price)}</div></div>
+              {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(h); }} aria-label="Modifica"><Pencil /></button>}
+            </div>
+          ))}
         </div>
       )}
       <h2 className="title px">Catalogo</h2>
@@ -1023,6 +1252,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [qty, setQty] = useState(1);
   const [cable, setCable] = useState("Normale");
   const photoInput = useRef(null);
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   const [bulb, setBulb] = useState(1);
   const [holder, setHolder] = useState(1);
   const [editP, setEditP] = useState(false);
@@ -1042,7 +1273,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
 
   const reco = prints.filter((x) => x.id !== p.id).sort((a, b) => b.likeCount - a.likeCount).slice(0, 3);
 
-  const doAdd = () => {
+  const doAdd = (e) => {
+    if (e && e.currentTarget) confetti(e.currentTarget);
     onAdd({
       key: p.id + "|" + c.name + (optLabel ? "|" + optLabel : ""),
       pid: p.id, t: p.title, col: c.name, opt: optLabel, base: p.price, adds, price: unit,
@@ -1052,15 +1284,23 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className="detail on">
-      <div className="dwrap">
-        <div className="dback"><button onClick={onClose} aria-label="Indietro"><ChevronLeft /></button><span className="dbacklbl">Dettaglio</span>{isAdmin && onEdit && <button className="dedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}</div>
+    <div className={"ipick on detailpop" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
+      <div className="sheet detailsheet">
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronDown /></button>
+        {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
-            <img className="dimg" src={colImg(c)} alt="" />
+            <div className="dgallery">
+              {(c.imgs && c.imgs.length ? c.imgs : [colImg(c)]).map((src, gi) => (
+                <img key={gi} className="dimg" src={src || colImg(c)} alt="" />
+              ))}
+            </div>
+            {c.imgs && c.imgs.length > 1 && (
+              <div className="gdots">{c.imgs.map((_, gi) => <span key={gi} className="gdot" />)}</div>
+            )}
             {isAdmin && onColorPhoto && (
               <>
-                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Cambia foto"><Camera /></button>
+                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Aggiungi foto"><Camera /></button>
                 <input ref={photoInput} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { onColorPhoto(p.id, c.id, e.target.files[0]); e.target.value = ""; }} />
               </>
             )}
@@ -1073,7 +1313,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             <div className="dswatches">
               {p.cols.map((cc, k) => (
                 <button key={k} className={"dswbox" + (k === ci ? " on" : "")} onClick={() => setCi(k)}>
-                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 42%," + cc.b + " 58%," + cc.b + " 100%)" }} />
+                  <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 50%," + cc.b + " 50%," + cc.b + " 100%)" }} />
                   <span className="dswn">{cc.name}</span>
                 </button>
               ))}
@@ -1130,10 +1370,12 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
 
 /* ---- CARRELLO ---- */
 function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   return (
-    <div className="ipick on" onClick={(e) => { if (e.target.classList.contains("ipick")) onClose(); }}>
+    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
       <div className="sheet">
-        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
+        <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
         <h4><CartIcon /> Carrello</h4>
         <div className="cartitems">
           {cart.length === 0 && <div className="cempty">Il carrello è vuoto</div>}
@@ -1227,7 +1469,7 @@ function InvoiceSheet({ o, isAdmin, onClose }) {
 }
 
 /* ---- PROFILO ---- */
-function Profile({ user, theme, bg, onTheme, onBg, onLogout, isAdmin, onNewProduct }) {
+function Profile({ user, onLogout, isAdmin, onNewProduct }) {
   const BGS = [
     { k: "", n: "Default", g: "linear-gradient(135deg,#edc9b2,#bcd1ad)" },
     { k: "sabbia", n: "Sabbia", g: "linear-gradient(135deg,#e7e0d4,#d3cabb)" },
@@ -1244,20 +1486,8 @@ function Profile({ user, theme, bg, onTheme, onBg, onLogout, isAdmin, onNewProdu
         <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
       </div>
       {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
-      <div className="psec">Tema</div>
-      <div className="throw">
-        {["light", "dark", "auto"].map((t) => (
-          <button key={t} className={"thopt" + (theme === t ? " on" : "")} onClick={() => onTheme(t)}>{t === "light" ? "Chiaro" : t === "dark" ? "Scuro" : "Auto"}</button>
-        ))}
-      </div>
-      <div className="psec">Sfondo</div>
-      <div className="bgpick">
-        {BGS.map((b) => (
-          <button key={b.k || "def"} className={"bgsw" + (bg === b.k ? " act" : "")} onClick={() => onBg(b.k)}>
-            <span className="sw" style={{ background: b.g }} />{b.n}
-          </button>
-        ))}
-      </div>
+      <div className="psec">Aspetto</div>
+      <p className="paspect">Chiaro o scuro automatico, in base alle impostazioni del telefono.</p>
       <button className="logout" onClick={onLogout}><LogOut /> Esci</button>
     </section>
   );
@@ -1280,26 +1510,26 @@ const GoogleIcon = () => (
 );
 
 /* ---- ADMIN: editor prodotto (con colori) ---- */
-function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
+function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }) {
   const [f, setF] = useState(editing ? {
     title: editing.title, price: editing.price, material: editing.material, desc: editing.desc,
     category_id: editing.category_id || "", is_electrical: editing.isElectrical,
     addon_braided: editing.addons.braided, addon_bulb: editing.addons.bulb, addon_holder: editing.addons.holder,
-    allow_braided: editing.allowBraided !== false,
-  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8, allow_braided: true });
-  const [colors, setColors] = useState(editing ? editing.cols.map((c) => ({ name: c.name, color_a: c.a, color_b: c.b, image_url: c.img || "", file: null, preview: c.img || "" })) : [{ name: "Naturale", color_a: "#cfc4b4", color_b: "#9a8d79", image_url: "", file: null, preview: "" }]);
+    allow_braided: editing.allowBraided !== false, featured: !!editing.featured,
+  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8, allow_braided: true, featured: false });
+  const [colors, setColors] = useState(editing ? editing.cols.map((c) => ({ name: c.name, color_a: c.a, color_b: c.b, imgs: (c.imgs || []).map((u) => ({ url: u, file: null, preview: u })) })) : [{ name: "Naturale", color_a: "#cfc4b4", color_b: "#9a8d79", imgs: [] }]);
   const [busy, setBusy] = useState(false);
 
   const upd = (k, v) => setF({ ...f, [k]: v });
   const updCol = (i, k, v) => setColors(colors.map((c, j) => j === i ? { ...c, [k]: v } : c));
-  const addCol = () => setColors([...colors, { name: "", color_a: "#cccccc", color_b: "#999999", image_url: "", file: null, preview: "" }]);
+  const addCol = () => setColors([...colors, { name: "", color_a: "#cccccc", color_b: "#999999", imgs: [] }]);
   const delCol = (i) => setColors(colors.filter((_, j) => j !== i));
-  const pickFile = async (i, file) => {
+  const addColImage = async (i, file) => {
     if (!file) return;
     const blob = await compressImage(file);
-    updCol(i, "file", blob);
-    updCol(i, "preview", URL.createObjectURL(blob));
+    setColors((cs) => cs.map((c, j) => j === i ? { ...c, imgs: [...(c.imgs || []), { url: "", file: blob, preview: URL.createObjectURL(blob) }].slice(0, 5) } : c));
   };
+  const delColImage = (i, j) => setColors((cs) => cs.map((c, k) => k === i ? { ...c, imgs: (c.imgs || []).filter((_, m) => m !== j) } : c));
 
   const uploadOne = async (blob) => {
     const path = user.id + "/" + Date.now() + "-" + Math.random().toString(36).slice(2) + ".jpg";
@@ -1314,7 +1544,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
     try {
       const payload = {
         title: f.title, price: Number(f.price) || 0, material: f.material, description: f.desc,
-        category_id: f.category_id || null, is_electrical: !!f.is_electrical, allow_braided: !!f.allow_braided,
+        category_id: f.category_id || null, is_electrical: !!f.is_electrical, allow_braided: !!f.allow_braided, featured: !!f.featured,
         addon_braided: Number(f.addon_braided) || 0, addon_bulb: Number(f.addon_bulb) || 0, addon_holder: Number(f.addon_holder) || 0,
       };
       let printId = editing ? editing.id : null;
@@ -1329,11 +1559,14 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
       await supabase.from("print_colors").delete().eq("print_id", printId);
       let pos = 0;
       for (const c of colors) {
-        let url = c.image_url;
-        if (c.file) url = await uploadOne(c.file);
+        const urls = [];
+        for (const im of (c.imgs || []).slice(0, 5)) {
+          if (im.url) urls.push(im.url);
+          else if (im.file) urls.push(await uploadOne(im.file));
+        }
         await supabase.from("print_colors").insert({
           print_id: printId, name: c.name || "Colore", color_a: c.color_a, color_b: c.color_b,
-          image_url: url || null, position: pos++,
+          images: urls, image_url: urls[0] || null, position: pos++,
         });
       }
       await onSaved();
@@ -1360,6 +1593,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
           </select>
         </div>
         <div className="afield"><label>Descrizione</label><textarea rows="2" value={f.desc} onChange={(e) => upd("desc", e.target.value)} /></div>
+        <label className="achk"><input type="checkbox" checked={f.featured} onChange={(e) => upd("featured", e.target.checked)} /> Mostra nel carosello in evidenza</label>
         <label className="achk"><input type="checkbox" checked={f.is_electrical} onChange={(e) => upd("is_electrical", e.target.checked)} /> Articolo a corrente (aggiunte elettriche)</label>
         {f.is_electrical && (
           <>
@@ -1371,23 +1605,63 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
             </div>
           </>
         )}
-        <div className="psec">Colori / foto</div>
+        <div className="psec">Colori / foto (max 5 per colore)</div>
         {colors.map((c, i) => (
-          <div className="colrow" key={i}>
-            <img className="colthumb" src={c.preview || gimg(c.color_a, c.color_b)} alt="" />
-            <div className="colfields">
-              <input placeholder="Nome colore" value={c.name} onChange={(e) => updCol(i, "name", e.target.value)} />
-              <div className="colpicks">
-                <input type="color" value={c.color_a} onChange={(e) => updCol(i, "color_a", e.target.value)} />
-                <input type="color" value={c.color_b} onChange={(e) => updCol(i, "color_b", e.target.value)} />
-                <label className="upbtn"><Upload /><input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => pickFile(i, e.target.files[0])} /></label>
-                {colors.length > 1 && <button className="coldel" onClick={() => delCol(i)}><Trash2 /></button>}
-              </div>
+          <div className="colrow2" key={i}>
+            <div className="colhead">
+              <input className="colname" placeholder="Nome colore" value={c.name} onChange={(e) => updCol(i, "name", e.target.value)} />
+              <input type="color" value={c.color_a} onChange={(e) => updCol(i, "color_a", e.target.value)} aria-label="Colore 1" />
+              <input type="color" value={c.color_b} onChange={(e) => updCol(i, "color_b", e.target.value)} aria-label="Colore 2" />
+              {colors.length > 1 && <button className="coldel" onClick={() => delCol(i)} aria-label="Rimuovi colore"><Trash2 /></button>}
             </div>
+            <div className="colphotos">
+              {(c.imgs || []).map((im, j) => (
+                <div className="colph" key={j}>
+                  <img src={im.preview || im.url || gimg(c.color_a, c.color_b)} alt="" />
+                  <button className="colphdel" onClick={() => delColImage(i, j)} aria-label="Rimuovi foto">×</button>
+                  {j === 0 && <span className="colphmain">Principale</span>}
+                </div>
+              ))}
+              {(c.imgs || []).length < 5 && (
+                <label className="coladd"><Plus /><input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { addColImage(i, e.target.files[0]); e.target.value = ""; }} /></label>
+              )}
+            </div>
+            <div className="colhint">{(c.imgs || []).length}/5 foto · la prima è la principale</div>
           </div>
         ))}
         <button className="addcolor" onClick={addCol}><Plus /> Aggiungi colore</button>
         <button className="qsend" disabled={busy} onClick={save}>{busy ? "Salvataggio…" : "Salva prodotto"}</button>
+        {editing && onDelete && (
+          <button className="delbtn" onClick={() => { if (window.confirm("Eliminare definitivamente questo prodotto? L'azione è irreversibile.")) onDelete(editing.id); }}><Trash2 /> Elimina prodotto</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CategoryEditor({ cat, onClose, onSave, onDelete }) {
+  const [name, setName] = useState(cat ? cat.name : "");
+  const [icon, setIcon] = useState(cat ? cat.icon : "vaso");
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="ipick on">
+      <div className="sheet admin">
+        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
+        <h4><span className="ticon"><CatsI /></span> {cat ? "Modifica categoria" : "Nuova categoria"}</h4>
+        <div className="afield"><label>Nome</label><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Es. Lampade" /></div>
+        <div className="psec">Icona</div>
+        {ICON_GROUPS.map((g) => (
+          <div key={g.t}>
+            <div className="iggroup">{g.t}</div>
+            <div className="ig">
+              {g.keys.map((k) => (
+                <button key={k} className={"ib" + (icon === k ? " on" : "")} onClick={() => setIcon(k)}><Raw html={glassIcon(k, 30)} /></button>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button className="qsend" disabled={busy || !name.trim()} onClick={async () => { setBusy(true); await onSave({ name: name.trim(), icon }); }}>{cat ? "Salva" : "Crea categoria"}</button>
+        {cat && <button className="delbtn" onClick={() => { if (window.confirm("Eliminare la categoria? Gli articoli resteranno senza categoria.")) onDelete(cat.id); }}><Trash2 /> Elimina categoria</button>}
       </div>
     </div>
   );
