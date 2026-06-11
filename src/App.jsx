@@ -322,7 +322,7 @@ const CSS = `
 .boot{min-height:100vh;display:grid;place-items:center;color:var(--soft);font-weight:600}
 .wrap{max-width:680px;margin:0 auto;padding:62px 0 132px}
 .wrap .grid{padding:0 18px}
-.grid{grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px}
+.grid{grid-template-columns:repeat(2,1fr);gap:12px}
 .grid .card{opacity:1}
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
@@ -508,6 +508,36 @@ button:active{transform:scale(.93)}
 .ipick.on.closing{animation:scrimOut .34s ease both}
 @keyframes sheetDown{from{transform:translateY(0)}to{transform:translateY(100%)}}
 @keyframes scrimOut{from{background:rgba(0,0,0,.4)}to{background:rgba(0,0,0,0)}}
+
+/* ---- carosello in evidenza (scorrevole) ---- */
+.herorow{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 18px 4px;margin-bottom:18px;-webkit-overflow-scrolling:touch}
+.herorow .herocard{flex:0 0 86%;scroll-snap-align:center;margin:0}
+.herorow.single .herocard{flex:0 0 100%}
+
+/* ---- transizione apertura/chiusura dettaglio ---- */
+.detail.on{animation:detailIn .32s cubic-bezier(.2,.8,.25,1) both}
+.detail.on.closing{animation:detailOut .24s ease both}
+@keyframes detailIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes detailOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(16px) scale(.985)}}
+
+/* ---- galleria foto (fino a 5 per colore) ---- */
+.dgallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:24px;-webkit-overflow-scrolling:touch}
+.dgallery .dimg{flex:0 0 100%;scroll-snap-align:center;width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:24px}
+.gdots{display:flex;justify-content:center;gap:6px;margin-top:9px}
+.gdot{width:6px;height:6px;border-radius:50%;background:var(--faint)}
+
+/* ---- editor: righe colore con 5 foto ---- */
+.colrow2{background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:15px;padding:11px;margin-bottom:10px}
+.colhead{display:flex;align-items:center;gap:8px}
+.colname{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--strokeSoft);background:var(--glassDock);color:var(--text);font-family:inherit;font-size:14px}
+.colhead input[type=color]{width:34px;height:34px;border:none;border-radius:9px;background:none;cursor:pointer;flex:none}
+.colphotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.colph{position:relative;width:60px;height:60px;border-radius:11px;overflow:hidden;border:1px solid var(--strokeSoft)}
+.colph img{width:100%;height:100%;object-fit:cover;display:block}
+.colphdel{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.colphmain{position:absolute;bottom:0;left:0;right:0;font-size:8.5px;font-weight:600;text-align:center;background:rgba(0,0,0,.55);color:#fff;padding:1px 0}
+.coladd{width:60px;height:60px;border-radius:11px;border:1.5px dashed var(--strokeSoft);display:grid;place-items:center;cursor:pointer;color:var(--soft);background:var(--glassDock)}
+.colhint{font-size:11px;color:var(--faint);margin-top:7px}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -649,10 +679,13 @@ function mapPrint(r) {
   const cols = (r.print_colors || [])
     .slice()
     .sort((a, b) => (a.position || 0) - (b.position || 0))
-    .map((c) => ({ id: c.id, name: c.name, a: c.color_a, b: c.color_b, img: c.image_url || "" }));
+    .map((c) => {
+      const imgs = (c.images && c.images.length) ? c.images : (c.image_url ? [c.image_url] : []);
+      return { id: c.id, name: c.name, a: c.color_a, b: c.color_b, img: imgs[0] || "", imgs };
+    });
   if (!cols.length) {
     const img0 = r.images && r.images.length ? r.images[0] : "";
-    cols.push({ name: "Unico", a: "#cfc4b4", b: "#9a8d79", img: img0 });
+    cols.push({ id: null, name: "Unico", a: "#cfc4b4", b: "#9a8d79", img: img0, imgs: img0 ? [img0] : [] });
   }
   return {
     id: r.id,
@@ -665,6 +698,7 @@ function mapPrint(r) {
     isElectrical: !!r.is_electrical,
     addons: { braided: Number(r.addon_braided) || 0, bulb: Number(r.addon_bulb) || 0, holder: Number(r.addon_holder) || 0 },
     allowBraided: r.allow_braided !== false,
+    featured: !!r.featured,
     categoryName: r.categories ? r.categories.name : "",
     categoryIcon: r.categories ? r.categories.icon : "v_classico",
     cols,
@@ -848,9 +882,13 @@ export default function App() {
       const up = await supabase.storage.from("prints").upload(path, blob, { contentType: "image/jpeg" });
       if (up.error) throw up.error;
       const url = supabase.storage.from("prints").getPublicUrl(path).data.publicUrl;
-      await supabase.from("print_colors").update({ image_url: url }).eq("id", colorId);
+      const pr = prints.find((p) => p.id === printId);
+      const col = pr && pr.cols.find((c) => c.id === colorId);
+      const cur = col && col.imgs ? col.imgs.slice(0, 5) : [];
+      const next = [...cur, url].slice(0, 5);
+      await supabase.from("print_colors").update({ images: next, image_url: next[0] }).eq("id", colorId);
       await loadPrints();
-      toast("Foto aggiornata");
+      toast("Foto aggiunta");
     } catch (e) { toast("Errore upload foto"); }
   };
 
@@ -1098,21 +1136,26 @@ function Screen({ title, icon, children, heart, action }) {
 function Grid({ children }) { return <div className="grid">{children}</div>; }
 
 function Home({ prints, liked, onLike, onOpen, onEdit }) {
-  const hero = prints[0];
+  const featured = prints.filter((p) => p.featured);
+  const heroes = featured.length ? featured : (prints[0] ? [prints[0]] : []);
   return (
     <section className="screen on">
       <div className="px">
         <div className="kick">ULTIME CREAZIONI</div>
         <h1 className="hero">Stampe fresche di piatto.</h1>
       </div>
-      {hero && (
-        <div className="herocard" onClick={() => onOpen(hero.id)}>
-          <img src={colImg(hero.cols[0])} alt="" />
-          <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(hero.id); }}>
-            <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
-          </button>
-          <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
-          {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
+      {heroes.length > 0 && (
+        <div className={"herorow" + (heroes.length === 1 ? " single" : "")}>
+          {heroes.map((h) => (
+            <div className="herocard" key={h.id} onClick={() => onOpen(h.id)}>
+              <img src={colImg(h.cols[0])} alt="" />
+              <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(h.id); }} aria-label="Mi piace">
+                <span className={"heart" + (liked(h.id) ? " liked" : "")}><HeartI /></span>
+              </button>
+              <div className="herotag"><div className="ht">{h.title}</div><div className="hp">{eur(h.price)}</div></div>
+              {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(h); }} aria-label="Modifica"><Pencil /></button>}
+            </div>
+          ))}
         </div>
       )}
       <h2 className="title px">Catalogo</h2>
@@ -1130,6 +1173,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [qty, setQty] = useState(1);
   const [cable, setCable] = useState("Normale");
   const photoInput = useRef(null);
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 240); };
   const [bulb, setBulb] = useState(1);
   const [holder, setHolder] = useState(1);
   const [editP, setEditP] = useState(false);
@@ -1160,15 +1205,22 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className="detail on">
+    <div className={"detail on" + (closing ? " closing" : "")}>
       <div className="dwrap">
-        <div className="dback"><button onClick={onClose} aria-label="Indietro"><ChevronLeft /></button><span className="dbacklbl">Dettaglio</span>{isAdmin && onEdit && <button className="dedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}</div>
+        <div className="dback"><button onClick={doClose} aria-label="Indietro"><ChevronLeft /></button><span className="dbacklbl">Dettaglio</span>{isAdmin && onEdit && <button className="dedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}</div>
         <div className="dgrid">
           <div className="dphoto">
-            <img className="dimg" src={colImg(c)} alt="" />
+            <div className="dgallery">
+              {(c.imgs && c.imgs.length ? c.imgs : [colImg(c)]).map((src, gi) => (
+                <img key={gi} className="dimg" src={src || colImg(c)} alt="" />
+              ))}
+            </div>
+            {c.imgs && c.imgs.length > 1 && (
+              <div className="gdots">{c.imgs.map((_, gi) => <span key={gi} className="gdot" />)}</div>
+            )}
             {isAdmin && onColorPhoto && (
               <>
-                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Cambia foto"><Camera /></button>
+                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Aggiungi foto"><Camera /></button>
                 <input ref={photoInput} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { onColorPhoto(p.id, c.id, e.target.files[0]); e.target.value = ""; }} />
               </>
             )}
@@ -1395,21 +1447,21 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
     title: editing.title, price: editing.price, material: editing.material, desc: editing.desc,
     category_id: editing.category_id || "", is_electrical: editing.isElectrical,
     addon_braided: editing.addons.braided, addon_bulb: editing.addons.bulb, addon_holder: editing.addons.holder,
-    allow_braided: editing.allowBraided !== false,
-  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8, allow_braided: true });
-  const [colors, setColors] = useState(editing ? editing.cols.map((c) => ({ name: c.name, color_a: c.a, color_b: c.b, image_url: c.img || "", file: null, preview: c.img || "" })) : [{ name: "Naturale", color_a: "#cfc4b4", color_b: "#9a8d79", image_url: "", file: null, preview: "" }]);
+    allow_braided: editing.allowBraided !== false, featured: !!editing.featured,
+  } : { title: "", price: "", material: "", desc: "", category_id: "", is_electrical: false, addon_braided: 6, addon_bulb: 5, addon_holder: 8, allow_braided: true, featured: false });
+  const [colors, setColors] = useState(editing ? editing.cols.map((c) => ({ name: c.name, color_a: c.a, color_b: c.b, imgs: (c.imgs || []).map((u) => ({ url: u, file: null, preview: u })) })) : [{ name: "Naturale", color_a: "#cfc4b4", color_b: "#9a8d79", imgs: [] }]);
   const [busy, setBusy] = useState(false);
 
   const upd = (k, v) => setF({ ...f, [k]: v });
   const updCol = (i, k, v) => setColors(colors.map((c, j) => j === i ? { ...c, [k]: v } : c));
-  const addCol = () => setColors([...colors, { name: "", color_a: "#cccccc", color_b: "#999999", image_url: "", file: null, preview: "" }]);
+  const addCol = () => setColors([...colors, { name: "", color_a: "#cccccc", color_b: "#999999", imgs: [] }]);
   const delCol = (i) => setColors(colors.filter((_, j) => j !== i));
-  const pickFile = async (i, file) => {
+  const addColImage = async (i, file) => {
     if (!file) return;
     const blob = await compressImage(file);
-    updCol(i, "file", blob);
-    updCol(i, "preview", URL.createObjectURL(blob));
+    setColors((cs) => cs.map((c, j) => j === i ? { ...c, imgs: [...(c.imgs || []), { url: "", file: blob, preview: URL.createObjectURL(blob) }].slice(0, 5) } : c));
   };
+  const delColImage = (i, j) => setColors((cs) => cs.map((c, k) => k === i ? { ...c, imgs: (c.imgs || []).filter((_, m) => m !== j) } : c));
 
   const uploadOne = async (blob) => {
     const path = user.id + "/" + Date.now() + "-" + Math.random().toString(36).slice(2) + ".jpg";
@@ -1424,7 +1476,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
     try {
       const payload = {
         title: f.title, price: Number(f.price) || 0, material: f.material, description: f.desc,
-        category_id: f.category_id || null, is_electrical: !!f.is_electrical, allow_braided: !!f.allow_braided,
+        category_id: f.category_id || null, is_electrical: !!f.is_electrical, allow_braided: !!f.allow_braided, featured: !!f.featured,
         addon_braided: Number(f.addon_braided) || 0, addon_bulb: Number(f.addon_bulb) || 0, addon_holder: Number(f.addon_holder) || 0,
       };
       let printId = editing ? editing.id : null;
@@ -1439,11 +1491,14 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
       await supabase.from("print_colors").delete().eq("print_id", printId);
       let pos = 0;
       for (const c of colors) {
-        let url = c.image_url;
-        if (c.file) url = await uploadOne(c.file);
+        const urls = [];
+        for (const im of (c.imgs || []).slice(0, 5)) {
+          if (im.url) urls.push(im.url);
+          else if (im.file) urls.push(await uploadOne(im.file));
+        }
         await supabase.from("print_colors").insert({
           print_id: printId, name: c.name || "Colore", color_a: c.color_a, color_b: c.color_b,
-          image_url: url || null, position: pos++,
+          images: urls, image_url: urls[0] || null, position: pos++,
         });
       }
       await onSaved();
@@ -1470,6 +1525,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
           </select>
         </div>
         <div className="afield"><label>Descrizione</label><textarea rows="2" value={f.desc} onChange={(e) => upd("desc", e.target.value)} /></div>
+        <label className="achk"><input type="checkbox" checked={f.featured} onChange={(e) => upd("featured", e.target.checked)} /> Mostra nel carosello in evidenza</label>
         <label className="achk"><input type="checkbox" checked={f.is_electrical} onChange={(e) => upd("is_electrical", e.target.checked)} /> Articolo a corrente (aggiunte elettriche)</label>
         {f.is_electrical && (
           <>
@@ -1481,19 +1537,28 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
             </div>
           </>
         )}
-        <div className="psec">Colori / foto</div>
+        <div className="psec">Colori / foto (max 5 per colore)</div>
         {colors.map((c, i) => (
-          <div className="colrow" key={i}>
-            <img className="colthumb" src={c.preview || gimg(c.color_a, c.color_b)} alt="" />
-            <div className="colfields">
-              <input placeholder="Nome colore" value={c.name} onChange={(e) => updCol(i, "name", e.target.value)} />
-              <div className="colpicks">
-                <input type="color" value={c.color_a} onChange={(e) => updCol(i, "color_a", e.target.value)} />
-                <input type="color" value={c.color_b} onChange={(e) => updCol(i, "color_b", e.target.value)} />
-                <label className="upbtn"><Upload /><input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => pickFile(i, e.target.files[0])} /></label>
-                {colors.length > 1 && <button className="coldel" onClick={() => delCol(i)}><Trash2 /></button>}
-              </div>
+          <div className="colrow2" key={i}>
+            <div className="colhead">
+              <input className="colname" placeholder="Nome colore" value={c.name} onChange={(e) => updCol(i, "name", e.target.value)} />
+              <input type="color" value={c.color_a} onChange={(e) => updCol(i, "color_a", e.target.value)} aria-label="Colore 1" />
+              <input type="color" value={c.color_b} onChange={(e) => updCol(i, "color_b", e.target.value)} aria-label="Colore 2" />
+              {colors.length > 1 && <button className="coldel" onClick={() => delCol(i)} aria-label="Rimuovi colore"><Trash2 /></button>}
             </div>
+            <div className="colphotos">
+              {(c.imgs || []).map((im, j) => (
+                <div className="colph" key={j}>
+                  <img src={im.preview || im.url || gimg(c.color_a, c.color_b)} alt="" />
+                  <button className="colphdel" onClick={() => delColImage(i, j)} aria-label="Rimuovi foto">×</button>
+                  {j === 0 && <span className="colphmain">Principale</span>}
+                </div>
+              ))}
+              {(c.imgs || []).length < 5 && (
+                <label className="coladd"><Plus /><input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { addColImage(i, e.target.files[0]); e.target.value = ""; }} /></label>
+              )}
+            </div>
+            <div className="colhint">{(c.imgs || []).length}/5 foto · la prima è la principale</div>
           </div>
         ))}
         <button className="addcolor" onClick={addCol}><Plus /> Aggiungi colore</button>
