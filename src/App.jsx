@@ -569,21 +569,26 @@ body.dark{
 
 /* ---- SFONDO: base fissa + livello parallasse con gradiente vetro-opaco ---- */
 .blob{display:none!important}
+/* Base fissa a tutto schermo: copre SEMPRE il viewport (PC + smartphone). */
 .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg);transition:background-color .45s ease}
-.bg-layer{position:absolute;inset:-16vmax;transform:translate3d(0,var(--bgpar,0px),0);transition:transform .55s cubic-bezier(.2,.7,.2,1);
+/* Livello gradiente: inset:0 (copertura garantita) + scale per dare margine alla
+   micro-parallasse, così nessun bordo resta scoperto (niente "rettangolo"). */
+.bg-layer{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%;
+  transform:translate3d(0,var(--bgpar,0px),0) scale(1.08);
+  transition:transform .55s cubic-bezier(.2,.7,.2,1);
   background:
-    radial-gradient(135% 100% at 12% 4%, rgba(191,107,74,.13), rgba(191,107,74,0) 56%),
-    radial-gradient(120% 95% at 92% 14%, rgba(214,184,155,.20), rgba(214,184,155,0) 58%),
-    radial-gradient(150% 115% at 80% 98%, rgba(156,92,67,.13), rgba(156,92,67,0) 60%),
-    radial-gradient(130% 100% at 4% 96%, rgba(214,184,155,.15), rgba(214,184,155,0) 58%),
-    linear-gradient(155deg, rgba(247,242,235,0) 30%, rgba(241,232,220,.6) 100%)}
+    radial-gradient(circle 80vmax at 8% 2%,   rgba(191,107,74,.14), rgba(191,107,74,0) 100%),
+    radial-gradient(circle 76vmax at 96% 8%,  rgba(214,184,155,.24), rgba(214,184,155,0) 100%),
+    radial-gradient(circle 80vmax at 88% 100%,rgba(156,92,67,.13),  rgba(156,92,67,0) 100%),
+    radial-gradient(circle 74vmax at 2% 96%,  rgba(214,184,155,.16), rgba(214,184,155,0) 100%),
+    radial-gradient(circle 66vmax at 50% 16%, rgba(255,255,255,.20), rgba(255,255,255,0) 100%)}
 body.dark .bg-layer{
   background:
-    radial-gradient(135% 100% at 12% 4%, rgba(209,124,86,.20), rgba(209,124,86,0) 56%),
-    radial-gradient(120% 95% at 92% 14%, rgba(182,154,130,.13), rgba(182,154,130,0) 58%),
-    radial-gradient(150% 115% at 80% 98%, rgba(209,124,86,.16), rgba(209,124,86,0) 60%),
-    radial-gradient(130% 100% at 4% 96%, rgba(182,154,130,.09), rgba(182,154,130,0) 58%),
-    linear-gradient(155deg, rgba(24,20,17,0) 30%, rgba(35,29,25,.62) 100%)}
+    radial-gradient(circle 58vmax at 10% 4%,  rgba(209,124,86,.17), rgba(209,124,86,0) 100%),
+    radial-gradient(circle 52vmax at 94% 8%,  rgba(201,169,140,.10),rgba(201,169,140,0) 100%),
+    radial-gradient(circle 58vmax at 90% 99%, rgba(209,124,86,.14), rgba(209,124,86,0) 100%),
+    radial-gradient(circle 52vmax at 4% 97%,  rgba(156,92,67,.11),  rgba(156,92,67,0) 100%),
+    radial-gradient(circle 46vmax at 50% 12%, rgba(232,201,168,.045),rgba(232,201,168,0) 100%)}
 
 /* ---- vetro: frosted ceramic ---- */
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
@@ -1043,7 +1048,7 @@ export default function App() {
         document.documentElement.style.setProperty("--par", String(sy));
         const max = document.documentElement.scrollHeight - window.innerHeight;
         const prog = max > 40 ? sy / max : 0.5;
-        document.documentElement.style.setProperty("--bgpar", ((prog - 0.5) * 24).toFixed(1) + "px");
+        document.documentElement.style.setProperty("--bgpar", ((prog - 0.5) * 16).toFixed(1) + "px");
         raf = 0;
       });
     };
