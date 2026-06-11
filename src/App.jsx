@@ -419,17 +419,18 @@ const CSS = `
 .detail{padding-top:env(safe-area-inset-top)}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
-/* ---- card body ridotto ~15% (foto e pulsanti superiori invariati) ---- */
-.cbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:7px}
-.cbody .cardcat{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:10.8px;font-weight:600;color:var(--soft)}
-.cbody .cardcat .gico{width:14px;height:14px;flex:none}
+/* ---- card: tile piu' compatta, testo piu' leggibile ---- */
+.card .ph{aspect-ratio:1.06}
+.cbody{padding:11px 13px 13px;display:flex;flex-direction:column;gap:7px}
+.cbody .cardcat{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:12px;font-weight:600;color:var(--soft)}
+.cbody .cardcat .gico{width:15px;height:15px;flex:none}
 .cbody .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:14.5px;color:var(--text);line-height:1.15}
-.cbody .cp{font-weight:700;font-size:14.5px;white-space:nowrap;color:var(--text)}
-.cbody .mat{font-size:10.6px;color:var(--soft)}
-.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:8.5px;border-radius:13px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:11.6px;cursor:pointer}
-.cbody .addcart svg{width:18px;height:18px;display:block}
-.cbody .addcart .gico{width:15px;height:15px}
+.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:16px;color:var(--text);line-height:1.15}
+.cbody .cp{font-weight:700;font-size:16px;white-space:nowrap;color:var(--text)}
+.cbody .mat{font-size:12.5px;color:var(--soft)}
+.cbody .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:14px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:13.5px;cursor:pointer}
+.cbody .addcart svg{width:20px;height:20px;display:block}
+.cbody .addcart .gico{width:16px;height:16px}
 
 /* ---- sezione colore dettaglio ---- */
 .dlabel.dcolor{font-size:13.2px;margin-bottom:16px}
@@ -450,6 +451,7 @@ body.dark .dswbox.on .dsw{box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 5px
 .tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
 .tb-btn.cart svg{width:23px;height:23px;stroke:var(--text);fill:none}
 .tb-btn.cart .cbadge{display:grid}
+.tb-right{gap:10px}
 
 /* ---- parallasse su scroll ---- */
 .bg{will-change:transform;transform:translate3d(0,calc(var(--par,0) * -0.045px),0)}
@@ -465,6 +467,39 @@ body.dark{--scrim:rgba(26,23,20,.9);--scrim2:rgba(26,23,20,.5)}
 @keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .ipick.on{animation:scrimIn .32s ease both}
 @keyframes scrimIn{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,.4)}}
+
+/* ---- ordini: margine laterale (~3mm) ---- */
+.banner{margin-left:12px;margin-right:12px}
+.ord{margin-left:12px;margin-right:12px}
+.osec{margin-left:14px;margin-right:14px}
+
+/* ---- titolo con azione (es. + categorie) ---- */
+.titlerow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.titlerow .title{margin:10px 0 16px}
+.tb-back.addnew{flex:none}
+
+/* ---- pencil di modifica sulle tile categoria ---- */
+.catedit2{left:auto;right:8px;top:8px}
+
+/* ---- icon picker categorie ---- */
+.iggroup{font-size:12px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.04em;margin:14px 2px 8px}
+.ig{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.ib{aspect-ratio:1;border:1px solid var(--strokeSoft);background:var(--glass2);border-radius:14px;display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.ib.on{box-shadow:0 0 0 2px var(--text);background:var(--glassDock)}
+
+/* ---- pulsante elimina ---- */
+.delbtn{width:calc(100% - 36px);display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 18px 0;padding:13px;border-radius:15px;border:1px solid rgba(192,57,43,.4);background:rgba(192,57,43,.1);color:#c0392b;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer}
+.delbtn svg{width:18px;height:18px}
+
+/* ---- feedback "press" su tutti i pulsanti ---- */
+button{transition:transform .14s cubic-bezier(.22,.7,.28,1.5)}
+button:active{transform:scale(.93)}
+.card,.cat,.herocard{transition:transform .15s cubic-bezier(.22,.7,.28,1)}
+.card:active,.cat:active,.herocard:active{transform:scale(.97)}
+
+/* ---- nascondi scrollbar (scroll resta attivo) ---- */
+*{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{width:0;height:0;display:none}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -522,6 +557,37 @@ function glassIcon(k, s = 26) {
   const ic = ICONS[k] || ICONS.vaso;
   return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="${ic.f}" stroke="url(#${ic.g})" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
 }
+
+/* coriandoli */
+function confetti(el) {
+  const r = el && el.getBoundingClientRect ? el.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const cols = ["#F2A310", "#E8801C", "#1593EE", "#7C4DE0", "#E0457E", "#0FA68C", "#5BA34D", "#F0231A"];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement("div");
+    const sz = 8 + Math.random() * 7;
+    p.style.cssText = "position:fixed;left:" + cx + "px;top:" + cy + "px;width:" + sz + "px;height:" + sz + "px;border-radius:2px;background:" + cols[i % cols.length] + ";z-index:200;pointer-events:none;will-change:transform,opacity";
+    document.body.appendChild(p);
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 60 + Math.random() * 120;
+    const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 30;
+    const rot = Math.random() * 720 - 360;
+    p.animate(
+      [{ transform: "translate(-50%,-50%) rotate(0) scale(1)", opacity: 1 },
+       { transform: "translate(" + dx + "px," + (dy + 150) + "px) rotate(" + rot + "deg) scale(.5)", opacity: 0 }],
+      { duration: 900 + Math.random() * 500, easing: "cubic-bezier(.18,.7,.3,1)" }
+    ).onfinish = () => p.remove();
+  }
+}
+
+const ICON_GROUPS = [
+  { t: "Lampade", keys: ["l_tavolo", "l_sospensione", "l_piantana", "l_comodino", "l_lampadina"] },
+  { t: "Vasi", keys: ["v_classico", "v_ampolla", "v_tubo", "v_anfora", "v_conico"] },
+  { t: "Arredo", keys: ["a_sedia", "a_poltrona", "a_tavolo", "a_libreria", "a_armadio"] },
+  { t: "Decorazioni", keys: ["d_stella", "d_cuore", "d_fiocco", "d_fiore", "d_cornice"] },
+  { t: "Contenitori", keys: ["c_scatola", "c_cestino", "c_barattolo", "c_portapenne", "c_ciotola"] },
+  { t: "Altre", keys: ["vaso", "lampada", "scatola", "gemma", "stella", "fulmine", "regalo", "fiore", "tazza", "borsa"] },
+];
 
 /* ============================ HELPERS ================================= */
 const eur = (n) => (Number(n) || 0).toFixed(2).replace(".", ",") + " €";
@@ -654,6 +720,7 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [invId, setInvId] = useState(null);
   const [editing, setEditing] = useState(null); // {} nuovo, {id..} modifica, null chiuso
+  const [editingCat, setEditingCat] = useState(null);
   const [theme, setTheme] = useState("auto");
   const [bg, setBg] = useState("");
   const [toasts, setToasts] = useState([]);
@@ -853,6 +920,29 @@ export default function App() {
   }
 
   const adminEdit = isAdmin ? (prod) => { setDetailId(null); setEditing(prod); } : undefined;
+  const deletePrint = async (id) => {
+    try {
+      await supabase.from("print_colors").delete().eq("print_id", id);
+      const { error } = await supabase.from("prints").delete().eq("id", id);
+      if (error) throw error;
+      await Promise.all([loadPrints(), loadCats()]);
+      setEditing(null); setDetailId(null);
+      toast("Prodotto eliminato");
+    } catch (e) { toast("Errore eliminazione"); }
+  };
+  const saveCategory = async (data) => {
+    try {
+      if (editingCat && editingCat.id) await supabase.from("categories").update(data).eq("id", editingCat.id);
+      else await supabase.from("categories").insert({ ...data, position: cats.length });
+      await loadCats(); setEditingCat(null); toast("Categoria salvata");
+    } catch (e) { toast("Errore categoria"); }
+  };
+  const deleteCategory = async (id) => {
+    try {
+      await supabase.from("categories").delete().eq("id", id);
+      await loadCats(); setEditingCat(null); toast("Categoria eliminata");
+    } catch (e) { toast("Errore eliminazione"); }
+  };
   const liked = (id) => likes.includes(id);
   const detail = detailId ? byId(detailId) : null;
   const inv = invId ? orders.find((o) => o.id === invId) : null;
@@ -895,11 +985,12 @@ export default function App() {
           </Screen>
         )}
         {tab === "cats" && (
-          <Screen title="Categorie" icon={<CatsI />}>
-            {cats.length === 0 && <p className="empty">Nessuna categoria. {isAdmin ? "Aggiungile dal pannello prodotti." : ""}</p>}
+          <Screen title="Categorie" icon={<CatsI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
+            {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
             <div className="catgrid">
             {cats.map((c) => (
               <button key={c.id} className="cat glass" onClick={() => { setQ(c.name); open("search"); }}>
+                {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
                 <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
                 <span className="catn">{c.name}</span>
               </button>
@@ -960,8 +1051,13 @@ export default function App() {
           editing={editing.id ? editing : null} cats={cats}
           onClose={() => setEditing(null)}
           onSaved={async () => { await Promise.all([loadPrints(), loadCats()]); setEditing(null); toast("Salvato"); }}
+          onDelete={deletePrint}
           user={user} toast={toast}
         />
+      )}
+
+      {editingCat && (
+        <CategoryEditor cat={editingCat.id ? editingCat : null} onClose={() => setEditingCat(null)} onSave={saveCategory} onDelete={deleteCategory} />
       )}
 
       <div id="toast">{toasts.map((t) => <div className="tt" key={t.id}>{t.m}</div>)}</div>
@@ -980,10 +1076,13 @@ function Box() {
 }
 
 /* ============================ SCHERMATE ============================== */
-function Screen({ title, icon, children, heart }) {
+function Screen({ title, icon, children, heart, action }) {
   return (
     <section className="screen on">
-      <h2 className="title px">{icon && <span className={"ticon" + (heart ? " heartred" : "")}>{icon}</span>}{title}</h2>
+      <div className="titlerow px">
+        <h2 className="title">{icon && <span className={"ticon" + (heart ? " heartred" : "")}>{icon}</span>}{title}</h2>
+        {action}
+      </div>
       {children}
     </section>
   );
@@ -1042,7 +1141,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
 
   const reco = prints.filter((x) => x.id !== p.id).sort((a, b) => b.likeCount - a.likeCount).slice(0, 3);
 
-  const doAdd = () => {
+  const doAdd = (e) => {
+    if (e && e.currentTarget) confetti(e.currentTarget);
     onAdd({
       key: p.id + "|" + c.name + (optLabel ? "|" + optLabel : ""),
       pid: p.id, t: p.title, col: c.name, opt: optLabel, base: p.price, adds, price: unit,
@@ -1280,7 +1380,7 @@ const GoogleIcon = () => (
 );
 
 /* ---- ADMIN: editor prodotto (con colori) ---- */
-function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
+function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }) {
   const [f, setF] = useState(editing ? {
     title: editing.title, price: editing.price, material: editing.material, desc: editing.desc,
     category_id: editing.category_id || "", is_electrical: editing.isElectrical,
@@ -1388,6 +1488,37 @@ function AdminProduct({ editing, cats, onClose, onSaved, user, toast }) {
         ))}
         <button className="addcolor" onClick={addCol}><Plus /> Aggiungi colore</button>
         <button className="qsend" disabled={busy} onClick={save}>{busy ? "Salvataggio…" : "Salva prodotto"}</button>
+        {editing && onDelete && (
+          <button className="delbtn" onClick={() => { if (window.confirm("Eliminare definitivamente questo prodotto? L'azione è irreversibile.")) onDelete(editing.id); }}><Trash2 /> Elimina prodotto</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CategoryEditor({ cat, onClose, onSave, onDelete }) {
+  const [name, setName] = useState(cat ? cat.name : "");
+  const [icon, setIcon] = useState(cat ? cat.icon : "vaso");
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="ipick on">
+      <div className="sheet admin">
+        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
+        <h4><span className="ticon"><CatsI /></span> {cat ? "Modifica categoria" : "Nuova categoria"}</h4>
+        <div className="afield"><label>Nome</label><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Es. Lampade" /></div>
+        <div className="psec">Icona</div>
+        {ICON_GROUPS.map((g) => (
+          <div key={g.t}>
+            <div className="iggroup">{g.t}</div>
+            <div className="ig">
+              {g.keys.map((k) => (
+                <button key={k} className={"ib" + (icon === k ? " on" : "")} onClick={() => setIcon(k)}><Raw html={glassIcon(k, 30)} /></button>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button className="qsend" disabled={busy || !name.trim()} onClick={async () => { setBusy(true); await onSave({ name: name.trim(), icon }); }}>{cat ? "Salva" : "Crea categoria"}</button>
+        {cat && <button className="delbtn" onClick={() => { if (window.confirm("Eliminare la categoria? Gli articoli resteranno senza categoria.")) onDelete(cat.id); }}><Trash2 /> Elimina categoria</button>}
       </div>
     </div>
   );
