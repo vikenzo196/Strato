@@ -567,19 +567,26 @@ body.dark{
   --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
 }
 
-/* ---- sfondo atmosferico: niente forme, solo glow radiali + linee topografiche ---- */
+/* ---- SFONDO premium: base fissa + livello parallasse (gradienti materici) ---- */
 .blob{display:none!important}
-.bg{position:fixed;inset:0;z-index:-1;background:var(--bg)}
-.bg::before{content:"";position:absolute;inset:-12%;background:
-  radial-gradient(42% 36% at 12% 6%, rgba(191,107,74,.07), transparent 70%),
-  radial-gradient(52% 46% at 52% 52%, rgba(214,184,155,.06), transparent 72%),
-  radial-gradient(46% 42% at 90% 94%, rgba(156,92,67,.06), transparent 70%)}
-body.dark .bg::before{background:
-  radial-gradient(42% 36% at 12% 6%, rgba(209,124,86,.11), transparent 70%),
-  radial-gradient(52% 46% at 52% 52%, rgba(182,154,130,.05), transparent 72%),
-  radial-gradient(46% 42% at 90% 94%, rgba(156,92,67,.12), transparent 70%)}
-.bg::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");background-size:cover;background-position:center;opacity:.06}
-body.dark .bg::after{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");opacity:.09}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg);transition:background-color .45s ease}
+.bg-layer{position:absolute;inset:-14vmax;transform:translate3d(0,var(--bgpar,0px),0);transition:transform .55s cubic-bezier(.2,.7,.2,1);
+  background:
+    radial-gradient(58% 50% at 16% 10%, rgba(191,107,74,.10), transparent 60%),
+    radial-gradient(54% 48% at 80% 20%, rgba(214,184,155,.13), transparent 62%),
+    radial-gradient(74% 66% at 50% 56%, rgba(241,232,220,.55), transparent 72%),
+    radial-gradient(58% 54% at 90% 92%, rgba(156,92,67,.09), transparent 62%),
+    radial-gradient(50% 46% at 6% 88%, rgba(214,184,155,.11), transparent 60%)}
+.bg-layer::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28156%2C92%2C67%2C0.6%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");background-size:cover;background-position:center;opacity:.05}
+.bg-layer::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27240%27%20height%3D%27240%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27/%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27/%3E%3C/filter%3E%3Crect%20width%3D%27240%27%20height%3D%27240%27%20filter%3D%27url%28%23n%29%27%20opacity%3D%270.5%27/%3E%3C/svg%3E");background-size:300px 300px;opacity:.05;mix-blend-mode:soft-light;pointer-events:none}
+body.dark .bg-layer{background:
+    radial-gradient(58% 50% at 16% 10%, rgba(209,124,86,.16), transparent 60%),
+    radial-gradient(54% 48% at 80% 22%, rgba(182,154,130,.09), transparent 62%),
+    radial-gradient(74% 66% at 50% 58%, rgba(36,30,26,.62), transparent 72%),
+    radial-gradient(58% 54% at 90% 92%, rgba(209,124,86,.12), transparent 62%),
+    radial-gradient(50% 46% at 6% 88%, rgba(182,154,130,.07), transparent 60%)}
+body.dark .bg-layer::before{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%271440%27%20height%3D%272400%27%20viewBox%3D%270%200%201440%202400%27%3E%3Cpath%20d%3D%22M0%2C90%20L90%2C115%20L180%2C112%20L270%2C99%20L360%2C94%20L450%2C80%20L540%2C61%20L630%2C67%20L720%2C97%20L810%2C111%20L900%2C106%20L990%2C105%20L1080%2C98%20L1170%2C73%20L1260%2C58%20L1350%2C75%20L1440%2C98%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C295%20L90%2C298%20L180%2C270%20L270%2C259%20L360%2C236%20L450%2C214%20L540%2C248%20L630%2C292%20L720%2C290%20L810%2C278%20L900%2C269%20L990%2C231%20L1080%2C212%20L1170%2C252%20L1260%2C284%20L1350%2C283%20L1440%2C289%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C451%20L90%2C416%20L180%2C395%20L270%2C377%20L360%2C354%20L450%2C394%20L540%2C443%20L630%2C429%20L720%2C413%20L810%2C394%20L900%2C353%20L990%2C369%20L1080%2C424%20L1170%2C430%20L1260%2C427%20L1350%2C416%20L1440%2C364%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C531%20L90%2C501%20L180%2C493%20L270%2C475%20L360%2C492%20L450%2C538%20L540%2C534%20L630%2C513%20L720%2C502%20L810%2C472%20L900%2C481%20L990%2C527%20L1080%2C532%20L1170%2C524%20L1260%2C514%20L1350%2C475%20L1440%2C474%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C640%20L90%2C632%20L180%2C627%20L270%2C625%20L360%2C647%20L450%2C661%20L540%2C647%20L630%2C639%20L720%2C630%20L810%2C620%20L900%2C638%20L990%2C658%20L1080%2C651%20L1170%2C646%20L1260%2C636%20L1350%2C618%20L1440%2C630%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C809%20L90%2C808%20L180%2C807%20L270%2C810%20L360%2C822%20L450%2C823%20L540%2C815%20L630%2C811%20L720%2C808%20L810%2C804%20L900%2C813%20L990%2C823%20L1080%2C820%20L1170%2C816%20L1260%2C813%20L1350%2C805%20L1440%2C805%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C934%20L90%2C935%20L180%2C934%20L270%2C944%20L360%2C957%20L450%2C954%20L540%2C942%20L630%2C938%20L720%2C935%20L810%2C930%20L900%2C936%20L990%2C952%20L1080%2C956%20L1170%2C948%20L1260%2C943%20L1350%2C939%20L1440%2C930%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1035%20L90%2C1035%20L180%2C1043%20L270%2C1066%20L360%2C1083%20L450%2C1071%20L540%2C1047%20L630%2C1037%20L720%2C1035%20L810%2C1030%20L900%2C1030%20L990%2C1052%20L1080%2C1077%20L1170%2C1078%20L1260%2C1059%20L1350%2C1048%20L1440%2C1043%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1174%20L90%2C1179%20L180%2C1202%20L270%2C1232%20L360%2C1238%20L450%2C1212%20L540%2C1178%20L630%2C1166%20L720%2C1167%20L810%2C1165%20L900%2C1163%20L990%2C1181%20L1080%2C1217%20L1170%2C1239%20L1260%2C1227%20L1350%2C1198%20L1440%2C1181%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1357%20L90%2C1374%20L180%2C1402%20L270%2C1417%20L360%2C1399%20L450%2C1361%20L540%2C1336%20L630%2C1333%20L720%2C1339%20L810%2C1339%20L900%2C1341%20L990%2C1363%20L1080%2C1398%20L1170%2C1418%20L1260%2C1404%20L1350%2C1373%20L1440%2C1350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1493%20L90%2C1512%20L180%2C1522%20L270%2C1508%20L360%2C1478%20L450%2C1457%20L540%2C1456%20L630%2C1464%20L720%2C1467%20L810%2C1470%20L900%2C1486%20L990%2C1511%20L1080%2C1525%20L1170%2C1512%20L1260%2C1486%20L1350%2C1467%20L1440%2C1464%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1609%20L90%2C1614%20L180%2C1604%20L270%2C1586%20L360%2C1577%20L450%2C1580%20L540%2C1586%20L630%2C1588%20L720%2C1593%20L810%2C1606%20L900%2C1616%20L990%2C1611%20L1080%2C1594%20L1170%2C1583%20L1260%2C1582%20L1350%2C1583%20L1440%2C1582%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1753%20L90%2C1748%20L180%2C1738%20L270%2C1734%20L360%2C1738%20L450%2C1741%20L540%2C1743%20L630%2C1748%20L720%2C1754%20L810%2C1751%20L900%2C1741%20L990%2C1736%20L1080%2C1738%20L1170%2C1739%20L1260%2C1740%20L1350%2C1746%20L1440%2C1754%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C1921%20L90%2C1905%20L180%2C1899%20L270%2C1907%20L360%2C1913%20L450%2C1917%20L540%2C1926%20L630%2C1926%20L720%2C1911%20L810%2C1902%20L900%2C1905%20L990%2C1908%20L1080%2C1911%20L1170%2C1923%20L1260%2C1929%20L1350%2C1917%20L1440%2C1906%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2017%20L90%2C1994%20L180%2C2012%20L270%2C2028%20L360%2C2036%20L450%2C2052%20L540%2C2042%20L630%2C2006%20L720%2C2001%20L810%2C2015%20L900%2C2022%20L990%2C2043%20L1080%2C2057%20L1170%2C2029%20L1260%2C2005%20L1350%2C2009%20L1440%2C2009%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2096%20L90%2C2108%20L180%2C2147%20L270%2C2157%20L360%2C2176%20L450%2C2164%20L540%2C2108%20L630%2C2103%20L720%2C2131%20L810%2C2143%20L900%2C2176%20L990%2C2179%20L1080%2C2124%20L1170%2C2106%20L1260%2C2120%20L1350%2C2127%20L1440%2C2167%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3Cpath%20d%3D%22M0%2C2248%20L90%2C2296%20L180%2C2318%20L270%2C2327%20L360%2C2333%20L450%2C2281%20L540%2C2249%20L630%2C2283%20L720%2C2303%20L810%2C2324%20L900%2C2344%20L990%2C2295%20L1080%2C2256%20L1170%2C2275%20L1260%2C2286%20L1350%2C2316%20L1440%2C2350%22%20fill%3D%22none%22%20stroke%3D%22rgba%28214%2C184%2C155%2C0.55%29%22%20stroke-width%3D%221%22/%3E%3C/svg%3E");opacity:.07}
+body.dark .bg-layer::after{opacity:.06;mix-blend-mode:overlay}
 
 /* ---- vetro: frosted ceramic ---- */
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
@@ -604,6 +611,81 @@ button:active{transform:scale(.97)}
 
 /* ---- testo aspetto profilo ---- */
 .paspect{color:var(--soft);font-size:13.5px;margin:2px 2px 18px;line-height:1.5}
+
+/* ---- selettore tema: segmented premium (Luce/Buio/Automatico) ---- */
+.themeseg{display:flex;gap:6px;padding:6px;margin:0 18px;background:var(--glass);border:1px solid var(--strokeSoft);border-radius:18px;-webkit-backdrop-filter:blur(22px) saturate(120%);backdrop-filter:blur(22px) saturate(120%);box-shadow:inset 0 1px 0 var(--hi),0 6px 20px var(--shcol)}
+.segbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 6px;border:none;background:transparent;border-radius:13px;color:var(--soft);font-family:inherit;font-weight:500;font-size:12.5px;letter-spacing:.01em;cursor:pointer;transition:background .35s ease,color .35s ease,box-shadow .35s ease,transform .2s cubic-bezier(.4,0,.2,1)}
+.segbtn .segico{display:grid;place-items:center}
+.segbtn .segico svg{width:22px;height:22px;display:block;stroke:currentColor}
+.segbtn .seglbl{font-weight:600}
+.segbtn:active{transform:scale(.97)}
+.segbtn.on{background:var(--glassDock);color:var(--accent);box-shadow:0 4px 14px var(--shcol),inset 0 1px 0 var(--hi)}
+
+/* ---- transizione morbida al cambio tema ---- */
+body,.bg,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.banner,.segbtn,.title,.kick,.empty,.mat,.cardcat{transition:background-color .42s ease,color .38s ease,border-color .42s ease,box-shadow .42s ease}
+.gico,.dnav svg,.heart svg,.ticon svg{transition:stroke .4s ease,fill .4s ease}
+
+/* ============================ BRIEF: e-commerce premium ====================== */
+/* ---- card: gerarchia editoriale parte inferiore ---- */
+.cbody{padding:14px 14px 15px;display:flex;flex-direction:column;gap:0;min-width:0}
+.cbody .cardcat{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--soft);margin:0 0 9px}
+.cbody .cardcat .gico{width:13px;height:13px;flex:none}
+.cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:16px;line-height:1.18;color:var(--text);margin:0 0 4px;min-width:0}
+.cbody .mat{font-size:11.5px;color:var(--soft);margin:0 0 9px}
+.cbody .cp{font-weight:700;font-size:16.5px;color:var(--text);margin:0 0 13px;letter-spacing:.01em}
+.configbtn{width:100%;padding:11px;border-radius:13px;border:1px solid rgba(191,107,74,.26);background:linear-gradient(180deg,rgba(191,107,74,.15),rgba(191,107,74,.09));color:var(--accent);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.02em;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 5px 14px rgba(191,107,74,.13);transition:background .28s ease,box-shadow .28s ease,transform .2s cubic-bezier(.4,0,.2,1)}
+.configbtn:hover{background:linear-gradient(180deg,rgba(191,107,74,.22),rgba(191,107,74,.13))}
+.configbtn:active{transform:scale(.97)}
+body.dark .configbtn{border-color:rgba(209,124,86,.32);background:linear-gradient(180deg,rgba(209,124,86,.2),rgba(209,124,86,.11));color:#E7A57E;box-shadow:inset 0 1px 0 var(--hi),0 5px 14px rgba(0,0,0,.3)}
+
+/* ---- card: ombra a strati (sospesa) + lift elegante ---- */
+.card{box-shadow:0 1px 3px rgba(70,45,30,.05),0 10px 26px var(--shcol),0 24px 50px rgba(90,55,35,.05);transition:transform .3s ease-out,box-shadow .3s ease-out}
+body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.45)}
+.card:active,.card:hover{transform:scale(1.02);box-shadow:0 4px 10px rgba(70,45,30,.07),0 18px 40px var(--shcol),0 34px 70px rgba(90,55,35,.08)}
+body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4),0 26px 60px rgba(0,0,0,.55)}
+.herocard{transition:transform .3s ease-out,box-shadow .3s ease-out}
+.herocard:hover,.herocard:active{transform:scale(1.015)}
+.cat:active{transform:scale(.985)}
+
+/* ---- dock a 4 (Home/Esplora/Carrello/Profilo) ---- */
+.dock.dock4{gap:4px}
+.dnav.cart{position:relative}
+.dnav.cart svg{stroke:var(--icon)}
+.cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
+.dnav.profile svg{stroke:var(--icon)}
+.dnav.profile.act svg{stroke:var(--accent)}
+
+/* ---- campanella notifiche (topbar) ---- */
+.tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px var(--shcol);color:var(--text)}
+.tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
+.belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(191,107,74,.5)}
+
+/* ---- foglio notifiche ---- */
+.sheet.notifsheet{background:var(--sheetbg);max-height:calc(100vh - 120px - env(safe-area-inset-top));max-height:calc(100dvh - 120px - env(safe-area-inset-top))}
+.notifrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);margin-bottom:9px;cursor:pointer;color:var(--text);font-family:inherit;transition:background .25s ease,transform .2s ease}
+.notifrow:active{transform:scale(.985)}
+.notifdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px rgba(191,107,74,.35)}
+.notifdot.s-pending{background:var(--warning)}
+.notifdot.s-confirmed{background:var(--success)}
+.notifdot.s-rejected{background:#b06a52}
+.notiftxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.notiftxt b{font-size:14px;font-weight:700;color:var(--text)}
+.notifb{font-size:12.5px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notifarrow{color:var(--faint);font-size:22px;line-height:1;flex:none}
+
+/* ---- riga Tema + Esci (collegati) ---- */
+.prefrow{display:flex;gap:10px;align-items:stretch;margin:0 18px}
+.prefrow .themeseg{flex:1;margin:0}
+.themeseg.compact .segbtn{padding:11px 4px;gap:6px;font-size:10.5px}
+.themeseg.compact .segbtn .segico svg{width:20px;height:20px}
+.logout.side{flex:none;width:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin:0;padding:11px 18px;border-radius:18px;border:1px solid var(--strokeSoft);background:var(--glass);color:var(--soft);font-family:inherit;font-weight:600;font-size:10.5px;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi)}
+.logout.side svg{width:20px;height:20px}
+.logout.side:active{transform:scale(.97)}
+
+/* ---- evidenziazione ordine da notifica ---- */
+.ofocus{animation:ofocusPulse 2.4s cubic-bezier(.4,0,.2,1)}
+@keyframes ofocusPulse{0%{box-shadow:0 0 0 0 rgba(191,107,74,0)}22%{box-shadow:0 0 0 3px rgba(191,107,74,.55),0 8px 24px rgba(191,107,74,.2)}100%{box-shadow:0 0 0 0 rgba(191,107,74,0)}}
+.badge.br{background:rgba(176,106,82,.16);color:#b06a52}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -772,7 +854,7 @@ function mapPrint(r) {
   };
 }
 
-function Bg(){return <div className="bg" aria-hidden="true" />;}
+function Bg(){return <div className="bg" aria-hidden="true"><div className="bg-layer" /></div>;}
 
 /* HTML grezzo (icone glass) reso in modo sicuro */
 function Raw({ html, className, style }) {
@@ -803,12 +885,11 @@ function Card({ p, liked, onLike, onOpen, onEdit }) {
         {onEdit && <button className="cedit" onClick={(e) => { e.stopPropagation(); onEdit(p); }} aria-label="Modifica"><Pencil /></button>}
       </div>
       <div className="cbody">
-        <div className="cardcat"><Raw html={glassIcon(p.categoryIcon, 16)} />{p.categoryName}</div>
-        <div className="row"><div className="ct">{p.title}</div><div className="cp">{eur(p.price)}</div></div>
+        <div className="cardcat"><Raw html={glassIcon(p.categoryIcon, 14)} />{p.categoryName}</div>
+        <div className="ct">{p.title}</div>
         <div className="mat">{p.material}</div>
-        <button className="addcart" onClick={(e) => { e.stopPropagation(); onOpen(); }}>
-          <Raw html={glassIcon(p.categoryIcon, 17)} /> Personalizza
-        </button>
+        <div className="cp">{eur(p.price)}</div>
+        <button className="configbtn" onClick={(e) => { e.stopPropagation(); onOpen(); }}>Configura</button>
       </div>
     </div>
   );
@@ -823,6 +904,9 @@ export default function App() {
   const [likes, setLikes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState("home");
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [orderFocus, setOrderFocus] = useState(null);
+  const [notifSeen, setNotifSeen] = useState(() => { try { return JSON.parse(localStorage.getItem("strato_notif_seen") || "[]"); } catch (e) { return []; } });
   const [detailId, setDetailId] = useState(null);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
@@ -947,7 +1031,11 @@ export default function App() {
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
-        document.documentElement.style.setProperty("--par", String(window.scrollY || 0));
+        const sy = window.scrollY || 0;
+        document.documentElement.style.setProperty("--par", String(sy));
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const prog = max > 40 ? sy / max : 0.5;
+        document.documentElement.style.setProperty("--bgpar", ((prog - 0.5) * 24).toFixed(1) + "px");
         raf = 0;
       });
     };
@@ -1036,6 +1124,21 @@ export default function App() {
 
   /* ---- navigazione ---- */
   const open = (t) => { setDetailId(null); setTab(t); window.scrollTo(0, 0); };
+
+  const notifs = orders
+    .filter((o) => isAdmin ? o.status === "pending" : (o.status === "confirmed" || o.status === "rejected"))
+    .slice()
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+    .map((o) => ({
+      id: o.id, status: o.status, date: o.date,
+      title: isAdmin ? "Nuova richiesta" : (o.status === "confirmed" ? "Ordine confermato" : "Ordine non accettato"),
+      body: (o.items[0] ? o.items[0].t : "Ordine") + " · " + eur(o.total) + (isAdmin ? " · " + o.who : ""),
+    }));
+  const notifSig = (n) => n.id + ":" + n.status;
+  const unread = notifs.filter((n) => !notifSeen.includes(notifSig(n))).length;
+  const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen(all); try { localStorage.setItem("strato_notif_seen", JSON.stringify(all)); } catch (e) {} };
+  const openNotifs = () => { setNotifOpen(true); markNotifsSeen(); };
+  const onNotifClick = (id) => { setNotifOpen(false); setTab("profile"); setOrderFocus(id); window.scrollTo(0, 0); };
   const openDetail = (id) => { setDetailId(id); window.scrollTo(0, 0); };
   const byId = (id) => prints.find((p) => p.id === id);
 
@@ -1087,8 +1190,8 @@ export default function App() {
           : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
-          <button className="tb-btn cart" onClick={() => setCartOpen(true)} aria-label="Carrello">
-            <CartIcon />{cartCount > 0 && <span className="cbadge">{cartCount}</span>}
+          <button className="tb-btn bell" onClick={openNotifs} aria-label="Notifiche">
+            <Bell />{unread > 0 && <span className="belldot" />}
           </button>
           <button className="tb-btn right" onClick={() => open("profile")}>
             <img className="av" src={user.avatar || avatarURI(user.name)} alt="" />
@@ -1101,58 +1204,51 @@ export default function App() {
           <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} />
         )}
         {tab === "search" && (
-          <Screen title="Cerca" icon={<SearchI />}>
+          <Screen title="Esplora" icon={<SearchI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
             <input className="searchbox" placeholder="Cerca per nome, materiale, categoria…" value={q} onChange={(e) => setQ(e.target.value)} />
-            <Grid>
-              {prints.filter((p) => matchQ(p, q)).map((p) => (
-                <Card key={p.id} p={p} liked={liked(p.id)} onLike={toggleLike} onOpen={() => openDetail(p.id)} onEdit={adminEdit} />
-              ))}
-            </Grid>
-            {prints.filter((p) => matchQ(p, q)).length === 0 && <p className="empty">Nessun risultato.</p>}
+            {!q.trim() && (
+              <>
+                <h3 className="osec">Categorie</h3>
+                {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
+                <div className="catgrid">
+                  {cats.map((c) => (
+                    <button key={c.id} className="cat glass" onClick={() => setQ(c.name)}>
+                      {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
+                      <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
+                      <span className="catn">{c.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            {q.trim() && (
+              <>
+                <Grid>
+                  {prints.filter((p) => matchQ(p, q)).map((p) => (
+                    <Card key={p.id} p={p} liked={liked(p.id)} onLike={toggleLike} onOpen={() => openDetail(p.id)} onEdit={adminEdit} />
+                  ))}
+                </Grid>
+                {prints.filter((p) => matchQ(p, q)).length === 0 && <p className="empty">Nessun risultato.</p>}
+              </>
+            )}
           </Screen>
-        )}
-        {tab === "cats" && (
-          <Screen title="Categorie" icon={<CatsI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
-            {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
-            <div className="catgrid">
-            {cats.map((c) => (
-              <button key={c.id} className="cat glass" onClick={() => { setQ(c.name); open("search"); }}>
-                {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
-                <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
-                <span className="catn">{c.name}</span>
-              </button>
-            ))}
-            </div>
-          </Screen>
-        )}
-        {tab === "like" && (
-          <Screen title="Piaciuti" icon={<span className="heartred"><HeartI /></span>} heart>
-            {(() => {
-              const list = prints.filter((p) => liked(p.id));
-              if (!list.length) return <p className="empty">Non hai ancora messo mi piace a nulla.</p>;
-              return <Grid>{list.map((p) => <Card key={p.id} p={p} liked onLike={toggleLike} onOpen={() => openDetail(p.id)} onEdit={adminEdit} />)}</Grid>;
-            })()}
-          </Screen>
-        )}
-        {tab === "orders" && (
-          <OrdersScreen orders={orders} isAdmin={isAdmin} onOpen={(id) => setInvId(id)} onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")} />
         )}
         {tab === "profile" && (
           <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
-            isAdmin={isAdmin} onNewProduct={() => setEditing({})} />
+            isAdmin={isAdmin} onNewProduct={() => setEditing({})}
+            likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
+            orders={orders} onOpenOrder={(id) => setInvId(id)} onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)} />
         )}
       </main>
 
       {/* DOCK */}
       <div className="dockwrap">
-        <div className="dock">
-          <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")}><HomeI /></button>
-          <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")}><SearchI /></button>
-          <button className={"dnav cats" + (tab === "cats" ? " act" : "")} onClick={() => open("cats")}><CatsI /></button>
-          <button className={"dnav like" + (tab === "like" ? " act" : "")} onClick={() => open("like")}><HeartI /></button>
-          <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")}>
-            <OrdersI />{orders.some((o) => o.status === "pending") && <span className="orddot" />}
-          </button>
+        <div className="dock dock4">
+          <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
+          <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
+          <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
+          <button className={"dnav profile" + (tab === "profile" ? " act" : "")} onClick={() => open("profile")} aria-label="Profilo"><User /></button>
         </div>
       </div>
 
@@ -1163,6 +1259,10 @@ export default function App() {
           onAdd={addToCart} isAdmin={isAdmin} onEdit={adminEdit} onColorPhoto={changeColorPhoto}
           onSaveAddons={async (patch) => { await supabase.from("prints").update(patch).eq("id", detail.id); await loadPrints(); toast("Prezzi aggiornati"); }}
         />
+      )}
+
+      {notifOpen && (
+        <NotifSheet notifs={notifs} onClose={() => setNotifOpen(false)} onItemClick={onNotifClick} />
       )}
 
       {cartOpen && (
@@ -1471,15 +1571,22 @@ function InvoiceSheet({ o, isAdmin, onClose }) {
 }
 
 /* ---- PROFILO ---- */
-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct }) {
-  const BGS = [
-    { k: "", n: "Default", g: "linear-gradient(135deg,#edc9b2,#bcd1ad)" },
-    { k: "sabbia", n: "Sabbia", g: "linear-gradient(135deg,#e7e0d4,#d3cabb)" },
-    { k: "ardesia", n: "Ardesia", g: "linear-gradient(135deg,#dde1e5,#cfd6dd)" },
-    { k: "tramonto", n: "Tramonto", g: "linear-gradient(135deg,#f6c9a8,#f0c2d2)" },
-    { k: "bosco", n: "Bosco", g: "linear-gradient(135deg,#cfe3b6,#bcd6c2)" },
-    { k: "laguna", n: "Laguna", g: "linear-gradient(135deg,#aee0e0,#b3c6e8)" },
-  ];
+function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, likedPrints, onOpenProduct, onLike, onEditProduct, orders, onOpenOrder, onConfirm, onReject, orderFocus, clearFocus }) {
+  const orderRefs = useRef({});
+  useEffect(() => {
+    if (orderFocus && orderRefs.current[orderFocus]) {
+      orderRefs.current[orderFocus].scrollIntoView({ behavior: "smooth", block: "center" });
+      const t = setTimeout(() => clearFocus && clearFocus(), 2600);
+      return () => clearTimeout(t);
+    }
+  }, [orderFocus]);
+
+  const oTitle = (o) => o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
+  const pend = orders.filter((o) => o.status === "pending");
+  const done = orders.filter((o) => o.status === "confirmed");
+  const rej = orders.filter((o) => o.status === "rejected");
+  const setRef = (id) => (el) => { orderRefs.current[id] = el; };
+
   return (
     <section className="screen on">
       <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
@@ -1488,17 +1595,65 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct }) {
         <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
       </div>
       {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
+
+      {likedPrints && likedPrints.length > 0 && (
+        <>
+          <div className="psec">Preferiti</div>
+          <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpenProduct(p.id)} onEdit={onEditProduct} />)}</Grid>
+        </>
+      )}
+
+      <div className="psec">I miei ordini</div>
+      {orders.length === 0 && <p className="empty">Nessun ordine ancora.</p>}
+      {pend.length > 0 && <h3 className="osec">In attesa</h3>}
+      {pend.map((o) => (
+        <div className={"banner glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)}>
+          {isAdmin && <img className="bnav" src={o.avatar || avatarURI(o.who)} alt="" />}
+          <div className="txt" onClick={() => onOpenOrder(o.id)} style={{ cursor: "pointer" }}>
+            <b>{isAdmin ? "Nuova richiesta" : "La tua richiesta"}</b> · {oTitle(o)} · {eur(o.total)}{isAdmin ? " da " + o.who : ""}<br />
+            <span style={{ color: "var(--soft)", fontSize: "12.5px" }}>Tocca per il dettaglio{isAdmin ? " · conferma per avvisare il cliente" : ""}</span>
+          </div>
+          {isAdmin && <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>}
+          {isAdmin && <button className="btnN" onClick={() => onReject(o.id)}>Rifiuta</button>}
+        </div>
+      ))}
+      {done.length > 0 && <h3 className="osec">Effettuati</h3>}
+      {done.map((o) => (
+        <div className={"ord glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)} onClick={() => onOpenOrder(o.id)}>
+          <img src={o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79")} alt="" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t">{oTitle(o)}</div>
+            <div className="s">{isAdmin ? o.who + " · " : ""}{eur(o.total)}{o.date ? " · " + fmtDate(o.date) : ""}</div>
+          </div>
+          <span className="badge bc">Confermato</span>
+        </div>
+      ))}
+      {rej.length > 0 && <h3 className="osec">Non accettati</h3>}
+      {rej.map((o) => (
+        <div className={"ord glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)} onClick={() => onOpenOrder(o.id)}>
+          <img src={o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79")} alt="" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="t">{oTitle(o)}</div>
+            <div className="s">{isAdmin ? o.who + " · " : ""}{eur(o.total)}{o.date ? " · " + fmtDate(o.date) : ""}</div>
+          </div>
+          <span className="badge br">Rifiutato</span>
+        </div>
+      ))}
+
       <div className="psec">Tema</div>
-      <div className="throw">
-        {[["light", "Chiaro"], ["dark", "Scuro"], ["auto", "Dispositivo"]].map(([t, label]) => (
-          <button key={t} className={"thopt" + (theme === t ? " on" : "")} onClick={() => onTheme(t)}>{label}</button>
-        ))}
+      <div className="prefrow">
+        <div className="themeseg compact">
+          {[["light", "Luce", <Sun key="s" />], ["dark", "Buio", <Moon key="m" />], ["auto", "Automatico", <AutoI key="a" />]].map(([t, label, icon]) => (
+            <button key={t} className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
+              <span className="segico">{icon}</span><span className="seglbl">{label}</span>
+            </button>
+          ))}
+        </div>
+        <button className="logout side" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
       </div>
-      <button className="logout" onClick={onLogout}><LogOut /> Esci</button>
     </section>
   );
 }
-
 /* ---- LOGIN (solo Google) ---- */
 function Login({ onGoogle }) {
   return (
@@ -1645,6 +1800,27 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
   );
 }
 
+function NotifSheet({ notifs, onClose, onItemClick }) {
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 320); };
+  return (
+    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
+      <div className="sheet notifsheet">
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronDown /></button>
+        <h4><span className="ticon"><Bell /></span> Notifiche</h4>
+        {notifs.length === 0 && <p className="empty">Nessuna notifica per ora.</p>}
+        {notifs.map((n) => (
+          <button className="notifrow" key={n.id + n.status} onClick={() => onItemClick(n.id)}>
+            <span className={"notifdot s-" + n.status} />
+            <span className="notiftxt"><b>{n.title}</b><span className="notifb">{n.body}</span></span>
+            <span className="notifarrow">›</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function CategoryEditor({ cat, onClose, onSave, onDelete }) {
   const [name, setName] = useState(cat ? cat.name : "");
   const [icon, setIcon] = useState(cat ? cat.icon : "vaso");
@@ -1672,6 +1848,11 @@ function CategoryEditor({ cat, onClose, onSave, onDelete }) {
     </div>
   );
 }
+
+const Sun = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4.2" /><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6" /></svg>);
+const Moon = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.2A8 8 0 0 1 9.8 4 7.2 7.2 0 1 0 20 14.2z" /></svg>);
+const AutoI = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8.4" /><path d="M12 3.6a8.4 8.4 0 0 0 0 16.8z" fill="currentColor" stroke="none" /></svg>);
+const Bell = () => (<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.6 7.6-2.6 7.6h17.2S18 14.5 18 8.5" /><path d="M13.6 21a2 2 0 0 1-3.2 0" /></svg>);
 
 /* icone lucide minimali (inline per non dipendere troppo) */
 const ChevronLeft = () => (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>);
