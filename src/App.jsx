@@ -106,7 +106,7 @@ const CSS = `
   .cathint{margin:16px 4px 14px;color:var(--soft,#9a8d7d);font-size:13px}
   .ipick{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .28s ease, background .28s ease, visibility .28s}
   .ipick.on{visibility:visible;opacity:1;pointer-events:auto;background:rgba(0,0,0,.4)}
-  .ipick .sheet{width:100%;max-width:520px;max-height:86vh;overflow-y:auto;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32);padding:16px 18px calc(26px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
+  .ipick .sheet{width:100%;max-width:520px;max-height:86vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32);padding:16px 18px calc(26px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
   .iplabel{display:block;font-size:12px;font-weight:700;color:var(--soft);letter-spacing:.05em;text-transform:uppercase;margin:6px 2px 8px}
   .catinput{width:100%;border:1px solid var(--strokeSoft);background:var(--glass2);border-radius:14px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--text);outline:none;margin-bottom:6px;box-shadow:inset 0 1px 0 var(--hi)}
   .catinput:focus{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
@@ -207,7 +207,8 @@ const CSS = `
   .dimgup:active{transform:scale(.9)}
   .dimgup svg{width:21px;height:21px}
   .dopts{grid-area:opts}
-  .dbuy{grid-area:buy;display:flex;flex-direction:column}
+  .dbuy{grid-area:buy;display:flex;flex-direction:column;align-items:center}
+  .dbuy .dadd2{width:100%;max-width:320px}
   .dopts .dttl{margin-top:0}
   .dbuy .dlabel.dctr{text-align:center;margin:2px 0 9px}
   .dbuy .dqty{justify-content:center}
@@ -338,7 +339,8 @@ const CSS = `
 .logout{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 36px);margin:22px 18px 0;padding:13px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-family:inherit;font-weight:600;cursor:pointer}
 /* login */
 .loginwrap{min-height:100vh;display:grid;place-items:center;padding:22px}
-.loginbox{padding:34px 28px;border-radius:26px;text-align:center;max-width:360px;width:100%}
+.loginbox{padding:34px 28px;border-radius:26px;text-align:center;max-width:360px;width:100%;background:var(--glassDock);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 24px 60px rgba(0,0,0,.32)}
+.loginbox.glass{-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
 .brand2.big{font-size:30px;justify-content:center}
 .brand2.big .mk{width:40px;height:40px}
 .lsub{color:var(--soft);margin:6px 0 22px}
@@ -510,6 +512,20 @@ button:active{transform:scale(.93)}
 .ipick.top.on.closing .sheetwrap{animation:sheetTopOut .34s cubic-bezier(.4,0,.7,.4) both}
 .ipick.top .sheetwrap>.sheetclose{margin:12px 0 0}
 
+/* ---- modale conferma ordine (centrata, vetro frostato, auto-dismiss) ---- */
+.odone{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:24px;background:rgba(0,0,0,.34);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:odIn .3s ease both}
+.odone.out{animation:odOut .4s ease both}
+.odcard{width:100%;max-width:340px;text-align:center;padding:32px 28px;border-radius:28px;background:var(--glassDock);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 26px 64px rgba(0,0,0,.42);animation:odCard .44s cubic-bezier(.2,.85,.25,1) both}
+.odone.out .odcard{animation:odCardOut .4s ease both}
+.odicon{width:66px;height:66px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(110,139,105,.18);color:var(--success);box-shadow:inset 0 1px 0 var(--hi)}
+.odicon svg{width:32px;height:32px;stroke:var(--success)}
+.odt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:22px;color:var(--text);margin-bottom:9px}
+.ods{font-size:13.5px;color:var(--soft);line-height:1.5}
+@keyframes odIn{from{opacity:0}to{opacity:1}}
+@keyframes odOut{from{opacity:1}to{opacity:0}}
+@keyframes odCard{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes odCardOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.96)}}
+
 /* ---- carosello in evidenza (scorrevole) ---- */
 .herorow{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 18px 40px;margin-bottom:2px;-webkit-overflow-scrolling:touch}
 .herorow .herocard{flex:0 0 86%;scroll-snap-align:center;margin:0}
@@ -601,7 +617,7 @@ button:active{transform:scale(.97)}
 .card:active,.cat:active,.herocard:active{transform:scale(.985)}
 
 /* ---- dock sempre ancorata al bordo visibile (no jitter con barra Safari) ---- */
-.dockwrap{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom) + var(--vvb,0px))}
+.dockwrap{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom))}
 
 /* ---- testo aspetto profilo ---- */
 .paspect{color:var(--soft);font-size:13.5px;margin:2px 2px 18px;line-height:1.5}
@@ -643,6 +659,10 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 
 /* ---- dock a 4 (Home/Esplora/Carrello/Profilo) ---- */
 .dock.dock4{gap:4px}
+.dock.dock5{gap:2px}
+.dock.dock5 .dnav{width:51px}
+@media(max-width:360px){.dock.dock5 .dnav{width:46px}}
+.dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
 .dnav.cart svg{stroke:var(--icon)}
 .cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
@@ -957,6 +977,7 @@ export default function App() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [invId, setInvId] = useState(null);
+  const [orderDone, setOrderDone] = useState(false);
   const [editing, setEditing] = useState(null); // {} nuovo, {id..} modifica, null chiuso
   const [editingCat, setEditingCat] = useState(null);
   const [theme, setTheme] = useState("auto"); // "light" | "dark" | "auto" (dispositivo)
@@ -1331,7 +1352,7 @@ export default function App() {
     setCartOpen(false);
     await loadOrders();
     setTab("orders");
-    toast("Ordine inviato · in attesa di conferma");
+    setOrderDone(true);
   };
   const setOrderStatus = async (id, status) => {
     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
@@ -1451,6 +1472,9 @@ export default function App() {
             )}
           </Screen>
         )}
+        {tab === "liked" && (
+          <Liked likedPrints={prints.filter((p) => liked(p.id))} onOpen={openDetail} onLike={toggleLike} onEdit={adminEdit} />
+        )}
         {tab === "orders" && (
           <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
             onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
@@ -1465,13 +1489,16 @@ export default function App() {
 
       {/* DOCK */}
       <div className="dockwrap">
-        <div className="dock dock4">
+        <div className="dock dock5">
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
-          <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
+          <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={() => open("liked")} aria-label="Piaciuti"><HeartI /></button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
+          <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
         </div>
       </div>
+
+      {orderDone && <OrderDoneModal onDone={() => setOrderDone(false)} />}
 
       {detail && (
         <Detail
@@ -1590,7 +1617,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
     ? "Cavo " + cable.toLowerCase() + " · " + (bulb ? "con" : "senza") + " lampadina · " + (holder ? "con" : "senza") + " portalampada"
     : "";
 
-  const reco = prints.filter((x) => x.id !== p.id).sort((a, b) => b.likeCount - a.likeCount).slice(0, 3);
+  const reco = [];
 
   const doAdd = (e) => {
     if (e && e.currentTarget) confetti(e.currentTarget);
@@ -1638,7 +1665,6 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                 </div>
               ))}
             </div>
-            <p className="dcolnote">Il colore finale verrà impostato dall'artigiano.</p>
             {p.isElectrical && (
               <div>
                 <div className="dlabel">Cavo</div>
@@ -1675,15 +1701,9 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
           <div className="dbuy">
             <div className="dlabel dctr">Quantità</div>
             <div className="qstep dqty"><button onClick={() => setQty(Math.max(1, qty - 1))}>−</button><span>{qty}</span><button onClick={() => setQty(Math.min(99, qty + 1))}>+</button></div>
-            <button className="dadd2" onClick={doAdd}><CartIcon /> Aggiungi · {eur(unit * qty)}</button>
+            <button className="dadd2" onClick={doAdd}><CartIcon /> {eur(unit * qty)}</button>
           </div>
         </div>
-        {reco.length > 0 && (
-          <div className="dreco">
-            <h3>Può interessarti anche</h3>
-            <Grid>{reco.map((rp) => <Card key={rp.id} p={rp} liked={false} onLike={() => { }} onOpen={() => onOpen(rp.id)} onEdit={onEdit} />)}</Grid>
-          </div>
-        )}
         </div>
       </div>
     </div>
@@ -1701,7 +1721,7 @@ function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
         <div className="sheet">
           <h4><CartIcon /> Carrello</h4>
           <div className="cartitems">
-            {cart.length === 0 && <div className="cempty">Il carrello è vuoto</div>}
+            {cart.length === 0 && <div className="cempty">Il carrello è vuoto.</div>}
             {cart.map((c, i) => (
               <div className="crow" key={c.key}>
                 <img src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
@@ -1738,6 +1758,7 @@ function OrdersScreen({ orders, isAdmin, onOpen, onConfirm, onReject }) {
             <b>{isAdmin ? "Nuova richiesta" : "La tua richiesta"}</b> · {oTitle(o)} · {eur(o.total)}{isAdmin ? " da " + o.who : ""}<br />
             <span style={{ color: "var(--soft)", fontSize: "12.5px" }}>Tocca per il dettaglio{isAdmin ? " · conferma per avvisare il cliente" : ""}</span>
           </div>
+          <span className="badge bp">In attesa di conferma</span>
           {isAdmin && <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>}
           {isAdmin && <button className="btnN" onClick={() => onReject(o.id)}>Rifiuta</button>}
         </div>
@@ -1759,36 +1780,71 @@ function OrdersScreen({ orders, isAdmin, onOpen, onConfirm, onReject }) {
 }
 
 /* ---- RIEPILOGO ORDINE ---- */
-function InvoiceSheet({ o, isAdmin, onClose }) {
+function OrderDoneModal({ onDone }) {
+  const [closing, setClosing] = useState(false);
+  useEffect(() => {
+    const t1 = setTimeout(() => setClosing(true), 3600);
+    const t2 = setTimeout(onDone, 4000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, []);
   return (
-    <div className="ipick on" onClick={(e) => { if (e.target.classList.contains("ipick")) onClose(); }}>
-      <div className="sheet inv">
-        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
-        <div className="invhead">
-          {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
-          <div className="invwho">
-            <div className="invtt">{isAdmin ? o.who : "Il tuo ordine"}</div>
-            <div className="invmeta">{o.status === "confirmed" ? "Confermato" : "In attesa"}{o.date ? " · " + fmtDate(o.date) : ""}</div>
-          </div>
-        </div>
-        <div className="invitems">
-          {o.items.map((it, i) => {
-            const base = it.base != null ? it.base : it.price;
-            const adds = it.adds || [];
-            return (
-              <div className="iitem" key={i}>
-                <div className="iline"><img className="ithumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" /><b className="iname">{it.t}{it.col ? " · " + it.col : ""}</b><span className="ix">×{it.qty}</span></div>
-                <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
-                {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
-                {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
-                <div className="ibd isub"><span>Subtotale{it.qty > 1 ? " (×" + it.qty + ")" : ""}</span><span>{eur(it.price * it.qty)}</span></div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="cttot invtotrow"><span>Totale</span><span className="invtot">{eur(o.total)}</span></div>
+    <div className={"odone" + (closing ? " out" : "")} onClick={() => { setClosing(true); setTimeout(onDone, 380); }}>
+      <div className="odcard">
+        <div className="odicon"><Check /></div>
+        <div className="odt">Ordine inviato</div>
+        <div className="ods">È in attesa di conferma. Ti avviseremo appena l'artigiano lo accetta.</div>
       </div>
     </div>
+  );
+}
+
+function InvoiceSheet({ o, isAdmin, onClose }) {
+  const [closing, setClosing] = useState(false);
+  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
+  return (
+    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
+      <div className="sheetwrap">
+        <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
+        <div className="sheet inv">
+          <div className="invhead">
+            {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
+            <div className="invwho">
+              <div className="invtt">{isAdmin ? o.who : "Il tuo ordine"}</div>
+              <div className="invmeta"><span className={"badge " + (o.status === "confirmed" ? "bc" : "bp")}>{o.status === "confirmed" ? "Confermato" : "In attesa di conferma"}</span>{o.date ? " · " + fmtDate(o.date) : ""}</div>
+            </div>
+          </div>
+          <div className="invitems">
+            {o.items.map((it, i) => {
+              const base = it.base != null ? it.base : it.price;
+              const adds = it.adds || [];
+              return (
+                <div className="iitem" key={i}>
+                  <div className="iline"><img className="ithumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" /><b className="iname">{it.t}{it.col ? " · " + it.col : ""}</b><span className="ix">×{it.qty}</span></div>
+                  <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
+                  {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
+                  {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
+                  <div className="ibd isub"><span>Subtotale{it.qty > 1 ? " (×" + it.qty + ")" : ""}</span><span>{eur(it.price * it.qty)}</span></div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="cttot invtotrow"><span>Totale</span><span className="invtot">{eur(o.total)}</span></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---- PIACIUTI ---- */
+function Liked({ likedPrints, onOpen, onLike, onEdit }) {
+  return (
+    <section className="screen on">
+      <h2 className="title px"><span className="ticon"><HeartI /></span>Piaciuti</h2>
+      {likedPrints.length === 0 && <p className="empty">Non hai ancora messo mi piace a nulla.</p>}
+      {likedPrints.length > 0 && (
+        <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} />)}</Grid>
+      )}
+    </section>
   );
 }
 
