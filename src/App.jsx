@@ -1760,7 +1760,7 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUplo
         <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
       </div>
       {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
-      {isAdmin && <BgUploader onUpload={onUploadBg} />
+      {isAdmin && <BgUploader onUpload={onUploadBg} />}
       {likedPrints && likedPrints.length > 0 && (
         <>
           <div className="psec">Preferiti</div>
