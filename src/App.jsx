@@ -1048,37 +1048,71 @@ export default function App() {
   // Carica la config sfondi da Supabase Storage (percorsi fissi nel bucket "prints").
   const loadBackgrounds = async () => {
     try {
-      const { data, error } = await supabase.storage.from("prints").list("backgrounds");
+      const { data, error } = await supabase.storage.from("prints").list("backgrounds", {
+        limit: 1000,
+        sortBy: { column: "updated_at", order: "desc" },
+      });
       if (error || !data) return;
+
       const conf = { light: {}, dark: {} };
+      const picked = { light: {}, dark: {} };
       let any = false;
+
       for (const f of data) {
-        const m = /^(light|dark)-(pc|mobile)\.webp$/.exec(f.name);
+        const m = /^(light|dark)-(pc|mobile)(?:-(\d+))?\.webp$/.exec(f.name);
         if (!m) continue;
-        const v = f.updated_at ? new Date(f.updated_at).getTime() : Date.now();
+
+        const mode = m[1];
+        const size = m[2];
+        const stamp = m[3]
+          ? Number(m[3])
+          : (f.updated_at ? new Date(f.updated_at).getTime() : 0);
+
+        if (picked[mode][size] && picked[mode][size] >= stamp) continue;
+
         const pub = supabase.storage.from("prints").getPublicUrl("backgrounds/" + f.name).data.publicUrl;
-        conf[m[1]][m[2]] = pub + "?v=" + v;
+        picked[mode][size] = stamp;
+        conf[mode][size] = pub + "?v=" + (stamp || Date.now());
         any = true;
       }
+
       BG_CONF = any ? conf : null;
       applyWallpaper(null, document.body.classList.contains("dark"));
-    } catch (e) {}
+    } catch (e) {
+      console.error("Errore lettura sfondi", e);
+    }
   };
 
-  // Admin: genera versioni WebP (pc + mobile) e le carica a percorsi fissi.
+  // Admin: genera versioni WebP (pc + mobile) e le carica su Supabase Storage.
+  // Usiamo nomi versionati invece di `upsert: true`: così servono solo permessi
+  // INSERT sul bucket `prints` e non si rompe se Supabase non consente UPDATE
+  // sugli oggetti esistenti.
   const onUploadBg = async (file, mode) => {
     try {
+      if (!file || !file.type || !file.type.startsWith("image/")) {
+        toast("Seleziona un'immagine valida");
+        return;
+      }
+
       const pc = await makeWebp(file, 2560, 0.82);
       const mobile = await makeWebp(file, 1280, 0.8);
+      const stamp = Date.now();
+
       for (const pair of [["pc", pc], ["mobile", mobile]]) {
-        const path = "backgrounds/" + mode + "-" + pair[0] + ".webp";
-        const { error } = await supabase.storage.from("prints").upload(path, pair[1], { contentType: "image/webp", upsert: true });
+        const path = "backgrounds/" + mode + "-" + pair[0] + "-" + stamp + ".webp";
+        const { error } = await supabase.storage.from("prints").upload(path, pair[1], {
+          contentType: "image/webp",
+          cacheControl: "3600",
+          upsert: false,
+        });
         if (error) throw error;
       }
+
       await loadBackgrounds();
       toast("Sfondo " + (mode === "dark" ? "scuro" : "chiaro") + " aggiornato");
     } catch (e) {
-      toast("Errore upload sfondo");
+      console.error("Errore upload sfondo", e);
+      toast((e && e.message) ? "Errore sfondo: " + e.message : "Errore upload sfondo");
       throw e;
     }
   };
