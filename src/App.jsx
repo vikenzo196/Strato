@@ -30,29 +30,8 @@ const CSS = `
   .bgsw:active{transform:scale(.97)}
   .bgsw .sw{width:100%;height:40px;border-radius:11px;border:1px solid var(--strokeSoft)}
   .bgsw.act{box-shadow:inset 0 1px 0 var(--hi), 0 0 0 2px var(--text)}
-  /* sfondi alternativi (variante chiara) */
-  body[data-bg="sabbia"]{--b1:#e7e0d4; --b2:#d7d0c2; --b3:#e0d8ca; --b4:#d3cabb; --bg:#efe9df;}
-  body[data-bg="ardesia"]{--b1:#dde1e5; --b2:#d2d8de; --b3:#e0e4e8; --b4:#cfd6dd; --bg:#eef0f2;}
-  body[data-bg="tramonto"]{--b1:#f6c9a8; --b2:#f3a6a0; --b3:#f0c2d2; --b4:#e8b58c; --bg:#f5e7dd;}
-  body[data-bg="bosco"]{--b1:#cfe3b6; --b2:#a9c99a; --b3:#cbd9a6; --b4:#bcd6c2; --bg:#e8efdf;}
-  body[data-bg="laguna"]{--b1:#aee0e0; --b2:#a6c9ec; --b3:#b9e6d2; --b4:#b3c6e8; --bg:#def0f1;}
-  body[data-bg="sabbia"] .blob, body[data-bg="ardesia"] .blob{filter:blur(52px) saturate(102%);}
-  /* sfondi alternativi (variante scura) */
-  body.dark[data-bg="sabbia"]{--b1:#2b2620; --b2:#24201a; --b3:#2e2823; --b4:#221e19; --bg:#15120f;}
-  body.dark[data-bg="ardesia"]{--b1:#242a30; --b2:#1d232a; --b3:#283038; --b4:#1a2026; --bg:#12161a;}
-  body.dark[data-bg="tramonto"]{--b1:#6e4534; --b2:#6b3a3f; --b3:#5e3a4a; --b4:#6a4a32; --bg:#1c1512;}
-  body.dark[data-bg="bosco"]{--b1:#38492f; --b2:#2f4133; --b3:#3a4a2a; --b4:#2c4138; --bg:#141a10;}
-  body.dark[data-bg="laguna"]{--b1:#234a4a; --b2:#234060; --b3:#2a4a40; --b4:#2c3a60; --bg:#0f1a1c;}
   html,body{margin:0;min-height:100%;}
   body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;}
-
-  .bg{position:fixed;inset:-22vmax;z-index:-1;}
-  .blob{position:absolute;border-radius:50%;filter:blur(48px) saturate(135%);will-change:transform;animation:float 22s ease-in-out infinite;}
-  .b1{width:62vmax;height:62vmax;background:var(--b1);top:-12vmax;left:-10vmax;}
-  .b2{width:58vmax;height:58vmax;background:var(--b2);bottom:-14vmax;right:-8vmax;animation-delay:-7s;}
-  .b3{width:50vmax;height:50vmax;background:var(--b3);top:34vmax;left:28vmax;animation-delay:-12s;}
-  .b4{width:42vmax;height:42vmax;background:var(--b4);top:6vmax;right:6vmax;animation-delay:-3s;opacity:.85;}
-  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(5vmax,-4vmax) scale(1.1)}66%{transform:translate(-4vmax,5vmax) scale(.94)}}
 
   .glass{
     background:var(--glass);
@@ -454,9 +433,7 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 .tb-btn.cart .cbadge{display:grid}
 .tb-right{gap:10px}
 
-/* ---- parallasse su scroll ---- */
-/* sfondo statico (no transform su fixed: evita il taglio in overscroll iOS) */
-.bg{transform:none}
+/* ---- parallasse leggera su scroll (solo immagine hero) ---- */
 .herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
 
 /* ---- scrim sfumato in alto (home, primi ~125px) allo scroll ---- */
@@ -567,28 +544,32 @@ body.dark{
   --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
 }
 
-/* ---- SFONDO: base fissa + livello parallasse con gradiente vetro-opaco ---- */
-.blob{display:none!important}
-/* Base fissa a tutto schermo: copre SEMPRE il viewport (PC + smartphone). */
-.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg);transition:background-color .45s ease}
-/* Livello gradiente: inset:0 (copertura garantita) + scale per dare margine alla
-   micro-parallasse, così nessun bordo resta scoperto (niente "rettangolo"). */
-.bg-layer{position:absolute;inset:0;will-change:transform;transform-origin:50% 50%;
-  transform:translate3d(0,var(--bgpar,0px),0) scale(1.08);
-  transition:transform .55s cubic-bezier(.2,.7,.2,1);
+/* ======================= SFONDO — sistema unico ===========================
+   UN solo livello fisso a tutto schermo. Regole anti-"rettangolo":
+   - nessun figlio interno (niente bordi da stirare)
+   - nessun transform/scale sul fixed (evita il taglio in overscroll iOS)
+   - il colore base e' l'ULTIMO layer del background: copertura piena garantita,
+     i gradienti caldi stanno sopra. Identico su PC e smartphone (unita' vmax). */
+.appbg{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
-    radial-gradient(circle 80vmax at 8% 2%,   rgba(191,107,74,.14), rgba(191,107,74,0) 100%),
-    radial-gradient(circle 76vmax at 96% 8%,  rgba(214,184,155,.24), rgba(214,184,155,0) 100%),
-    radial-gradient(circle 80vmax at 88% 100%,rgba(156,92,67,.13),  rgba(156,92,67,0) 100%),
-    radial-gradient(circle 74vmax at 2% 96%,  rgba(214,184,155,.16), rgba(214,184,155,0) 100%),
-    radial-gradient(circle 66vmax at 50% 16%, rgba(255,255,255,.20), rgba(255,255,255,0) 100%)}
-body.dark .bg-layer{
+    radial-gradient(circle 80vmax at 8% 2%,    rgba(191,107,74,.14),  rgba(191,107,74,0)  100%),
+    radial-gradient(circle 76vmax at 96% 8%,   rgba(214,184,155,.24), rgba(214,184,155,0) 100%),
+    radial-gradient(circle 80vmax at 88% 100%, rgba(156,92,67,.13),   rgba(156,92,67,0)   100%),
+    radial-gradient(circle 74vmax at 2% 96%,   rgba(214,184,155,.16), rgba(214,184,155,0) 100%),
+    radial-gradient(circle 66vmax at 50% 16%,  rgba(255,255,255,.20), rgba(255,255,255,0) 100%),
+    var(--bg);
+  transition:background-color .45s ease;
+}
+body.dark .appbg{
   background:
-    radial-gradient(circle 58vmax at 10% 4%,  rgba(209,124,86,.17), rgba(209,124,86,0) 100%),
-    radial-gradient(circle 52vmax at 94% 8%,  rgba(201,169,140,.10),rgba(201,169,140,0) 100%),
-    radial-gradient(circle 58vmax at 90% 99%, rgba(209,124,86,.14), rgba(209,124,86,0) 100%),
-    radial-gradient(circle 52vmax at 4% 97%,  rgba(156,92,67,.11),  rgba(156,92,67,0) 100%),
-    radial-gradient(circle 46vmax at 50% 12%, rgba(232,201,168,.045),rgba(232,201,168,0) 100%)}
+    radial-gradient(circle 58vmax at 10% 4%,   rgba(209,124,86,.17),  rgba(209,124,86,0)  100%),
+    radial-gradient(circle 52vmax at 94% 8%,   rgba(201,169,140,.10), rgba(201,169,140,0) 100%),
+    radial-gradient(circle 58vmax at 90% 99%,  rgba(209,124,86,.14),  rgba(209,124,86,0)  100%),
+    radial-gradient(circle 52vmax at 4% 97%,   rgba(156,92,67,.11),   rgba(156,92,67,0)   100%),
+    radial-gradient(circle 46vmax at 50% 12%,  rgba(232,201,168,.045),rgba(232,201,168,0) 100%),
+    var(--bg);
+}
 
 /* ---- vetro: frosted ceramic ---- */
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
@@ -624,7 +605,7 @@ button:active{transform:scale(.97)}
 .segbtn.on{background:var(--glassDock);color:var(--accent);box-shadow:0 4px 14px var(--shcol),inset 0 1px 0 var(--hi)}
 
 /* ---- transizione morbida al cambio tema ---- */
-body,.bg,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.banner,.segbtn,.title,.kick,.empty,.mat,.cardcat{transition:background-color .42s ease,color .38s ease,border-color .42s ease,box-shadow .42s ease}
+body,.appbg,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.banner,.segbtn,.title,.kick,.empty,.mat,.cardcat{transition:background-color .42s ease,color .38s ease,border-color .42s ease,box-shadow .42s ease}
 .gico,.dnav svg,.heart svg,.ticon svg{transition:stroke .4s ease,fill .4s ease}
 
 /* ============================ BRIEF: e-commerce premium ====================== */
@@ -867,7 +848,7 @@ function mapPrint(r) {
   };
 }
 
-function Bg(){return <div className="bg" aria-hidden="true"><div className="bg-layer" /></div>;}
+function Bg(){return <div className="appbg" aria-hidden="true" />;}
 
 /* HTML grezzo (icone glass) reso in modo sicuro */
 function Raw({ html, className, style }) {
@@ -1046,9 +1027,6 @@ export default function App() {
       raf = requestAnimationFrame(() => {
         const sy = window.scrollY || 0;
         document.documentElement.style.setProperty("--par", String(sy));
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const prog = max > 40 ? sy / max : 0.5;
-        document.documentElement.style.setProperty("--bgpar", ((prog - 0.5) * 16).toFixed(1) + "px");
         raf = 0;
       });
     };
