@@ -30,7 +30,7 @@ const CSS = `
   .bgsw:active{transform:scale(.97)}
   .bgsw .sw{width:100%;height:40px;border-radius:11px;border:1px solid var(--strokeSoft)}
   .bgsw.act{box-shadow:inset 0 1px 0 var(--hi), 0 0 0 2px var(--text)}
-  html,body{margin:0;min-height:100%;}
+  html,body{margin:0;min-height:100%;touch-action:pan-x pan-y;}
   body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;}
 
   .glass{
@@ -494,6 +494,21 @@ button:active{transform:scale(.93)}
 @keyframes sheetTopIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
 @keyframes sheetTopOut{from{transform:translateY(0)}to{transform:translateY(-100%)}}
 .ipick.top .sheetclose{margin:14px auto 0}
+
+/* ---- wrapper foglio: porta l'animazione di slide; il pulsante di chiusura
+   sta FUORI dal foglio (sopra per carrello/dettaglio, sotto per notifiche) ---- */
+.ipick .sheetwrap{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
+.ipick.on .sheetwrap{transform:translateY(0);animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
+.ipick.on.closing .sheetwrap{animation:sheetDown .34s cubic-bezier(.4,0,.7,.4) both}
+/* il foglio dentro al wrapper non slitta da solo (slitta il wrapper) */
+.sheetwrap .sheet{transform:none!important;animation:none!important;max-width:100%}
+/* pulsante chiusura sopra al foglio (carrello/dettaglio) */
+.sheetwrap>.sheetclose{margin:0 0 12px}
+/* variante dall'alto: wrapper scende dall'alto e il pulsante sta SOTTO il foglio */
+.ipick.top .sheetwrap{transform:translateY(-100%)}
+.ipick.top.on .sheetwrap{transform:translateY(0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
+.ipick.top.on.closing .sheetwrap{animation:sheetTopOut .34s cubic-bezier(.4,0,.7,.4) both}
+.ipick.top .sheetwrap>.sheetclose{margin:12px 0 0}
 
 /* ---- carosello in evidenza (scorrevole) ---- */
 .herorow{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 18px 40px;margin-bottom:2px;-webkit-overflow-scrolling:touch}
@@ -1076,16 +1091,39 @@ export default function App() {
     return () => { window.removeEventListener("resize", onR); clearTimeout(t); };
   }, []);
 
+  // Disabilita lo zoom (pinch su iOS, ctrl+rotella e ctrl +/- su desktop, doppio tap).
+  useEffect(() => {
+    const noGesture = (e) => e.preventDefault();
+    const noWheelZoom = (e) => { if (e.ctrlKey) e.preventDefault(); };
+    const noKeyZoom = (e) => { if ((e.ctrlKey || e.metaKey) && ["+", "-", "=", "0"].includes(e.key)) e.preventDefault(); };
+    let lastTouch = 0;
+    const noDblTap = (e) => { const now = Date.now(); if (now - lastTouch < 320) e.preventDefault(); lastTouch = now; };
+    document.addEventListener("gesturestart", noGesture);
+    document.addEventListener("gesturechange", noGesture);
+    document.addEventListener("gestureend", noGesture);
+    window.addEventListener("wheel", noWheelZoom, { passive: false });
+    window.addEventListener("keydown", noKeyZoom);
+    document.addEventListener("touchend", noDblTap, { passive: false });
+    return () => {
+      document.removeEventListener("gesturestart", noGesture);
+      document.removeEventListener("gesturechange", noGesture);
+      document.removeEventListener("gestureend", noGesture);
+      window.removeEventListener("wheel", noWheelZoom);
+      window.removeEventListener("keydown", noKeyZoom);
+      document.removeEventListener("touchend", noDblTap);
+    };
+  }, []);
+
   // Effetto morbido a molla quando si arriva a battuta (sopra o sotto) scrollando.
   // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
+  // Risolve <main.wrap> in modo lazy: puo' montare dopo (boot/login iniziale).
   useEffect(() => {
-    const wrap = document.querySelector("main.wrap");
-    if (!wrap) return;
     const MAX = 72;
     let offset = 0, raf = null, settleTO = null;
+    const getWrap = () => document.querySelector("main.wrap");
     const atTop = () => window.scrollY <= 0;
     const atBottom = () => Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1;
-    const apply = () => { wrap.style.transform = offset ? "translateY(" + offset.toFixed(1) + "px)" : ""; };
+    const apply = () => { const w = getWrap(); if (w) w.style.transform = offset ? "translateY(" + offset.toFixed(1) + "px)" : ""; };
     const spring = () => {
       offset *= 0.82;
       if (Math.abs(offset) < 0.4) { offset = 0; apply(); raf = null; return; }
@@ -1093,13 +1131,13 @@ export default function App() {
       raf = requestAnimationFrame(spring);
     };
     const release = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(spring); };
-    // resistenza progressiva: piu' tiri, piu' e' difficile
     const resist = (add) => {
       const next = offset + add;
       const r = 1 - Math.min(Math.abs(next) / (MAX * 2.2), 0.86);
       offset = Math.max(-MAX, Math.min(MAX, offset + add * r));
     };
     const onWheel = (e) => {
+      if (e.ctrlKey) return;
       const dy = e.deltaY;
       if ((atTop() && dy < 0) || (atBottom() && dy > 0)) {
         resist(-dy * 0.32);
@@ -1132,7 +1170,7 @@ export default function App() {
       window.removeEventListener("touchend", onTE);
       if (raf) cancelAnimationFrame(raf);
       clearTimeout(settleTO);
-      wrap.style.transform = "";
+      const w = getWrap(); if (w) w.style.transform = "";
     };
   }, []);
   useEffect(() => {
@@ -1565,9 +1603,10 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className={"ipick on detailpop" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
-      <div className="sheet detailsheet">
+    <div className={"ipick on detailpop" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
+      <div className="sheetwrap">
         <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronDown /></button>
+        <div className="sheet detailsheet">
         {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
@@ -1645,6 +1684,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             <Grid>{reco.map((rp) => <Card key={rp.id} p={rp} liked={false} onLike={() => { }} onOpen={() => onOpen(rp.id)} onEdit={onEdit} />)}</Grid>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
@@ -1655,26 +1695,28 @@ function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   return (
-    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
-      <div className="sheet">
+    <div className={"ipick on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
+      <div className="sheetwrap">
         <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
-        <h4><CartIcon /> Carrello</h4>
-        <div className="cartitems">
-          {cart.length === 0 && <div className="cempty">Il carrello è vuoto</div>}
-          {cart.map((c, i) => (
-            <div className="crow" key={c.key}>
-              <img src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
-              <div className="cinfo">
-                <div className="cn">{c.t}</div>
-                <div className="cp">{c.col}{c.opt ? " · " + c.opt : ""}</div>
-                <div className="cprice">{eur(c.price)} · tot {eur(c.price * c.qty)}</div>
+        <div className="sheet">
+          <h4><CartIcon /> Carrello</h4>
+          <div className="cartitems">
+            {cart.length === 0 && <div className="cempty">Il carrello è vuoto</div>}
+            {cart.map((c, i) => (
+              <div className="crow" key={c.key}>
+                <img src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
+                <div className="cinfo">
+                  <div className="cn">{c.t}</div>
+                  <div className="cp">{c.col}{c.opt ? " · " + c.opt : ""}</div>
+                  <div className="cprice">{eur(c.price)} · tot {eur(c.price * c.qty)}</div>
+                </div>
+                <div className="qstep csmall"><button onClick={() => onStep(i, -1)}>−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)}>+</button></div>
               </div>
-              <div className="qstep csmall"><button onClick={() => onStep(i, -1)}>−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)}>+</button></div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div className="cttot"><span>Totale</span><span>{eur(total)}</span></div>
+          {cart.length > 0 && <button className="qsend" onClick={onConfirm}><Check /> Conferma ordine</button>}
         </div>
-        <div className="cttot"><span>Totale</span><span>{eur(total)}</span></div>
-        {cart.length > 0 && <button className="qsend" onClick={onConfirm}><Check /> Conferma ordine</button>}
       </div>
     </div>
   );
@@ -2018,18 +2060,20 @@ function NotifSheet({ notifs, onClose, onItemClick }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   return (
-    <div className={"ipick top on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick")) doClose(); }}>
-      <div className="sheet">
-        <h4><Bell /> Notifiche</h4>
-        <div className="cartitems">
-          {notifs.length === 0 && <div className="cempty">Nessuna notifica per ora.</div>}
-          {notifs.map((n) => (
-            <button className="notifrow" key={n.id + n.status} onClick={() => onItemClick(n.id)}>
-              <span className={"notifdot s-" + n.status} />
-              <span className="notiftxt"><b>{n.title}</b><span className="notifb">{n.body}</span></span>
-              <span className="notifarrow">›</span>
-            </button>
-          ))}
+    <div className={"ipick top on" + (closing ? " closing" : "")} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
+      <div className="sheetwrap">
+        <div className="sheet">
+          <h4><Bell /> Notifiche</h4>
+          <div className="cartitems">
+            {notifs.length === 0 && <div className="cempty">Nessuna notifica per ora.</div>}
+            {notifs.map((n) => (
+              <button className="notifrow" key={n.id + n.status} onClick={() => onItemClick(n.id)}>
+                <span className={"notifdot s-" + n.status} />
+                <span className="notiftxt"><b>{n.title}</b><span className="notifb">{n.body}</span></span>
+                <span className="notifarrow">›</span>
+              </button>
+            ))}
+          </div>
         </div>
         <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronUp /></button>
       </div>
