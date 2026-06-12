@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { supabase } from "./lib/supabase";
 
 /* ============================ STILE (Liquid Glass) ===================== */
@@ -524,7 +524,7 @@ button:active{transform:scale(.93)}
 /* ---- dettaglio come popup a foglio (stile carrello) ---- */
 :root{--sheetbg:#f6f1ea}
 body.dark{--sheetbg:#1f1b17}
-.sheet.detailsheet{position:relative;background:var(--sheetbg);-webkit-backdrop-filter:none;backdrop-filter:none;max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -16px 50px rgba(0,0,0,.4)}
+.sheet.detailsheet{position:relative;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32)}
 .detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
 .detailsheet .dgrid{margin-top:6px}
 .detailsheet .dreco{margin-top:26px}
@@ -538,9 +538,9 @@ body.dark{--sheetbg:#1f1b17}
   --accent:#BF6B4A; --accent2:#D6B89B; --accentDark:#9C5C43;
   --icon:#8A7C70; --heart:#BF6B4A; --success:#6E8B69; --warning:#C89C5B;
   --txtShadow:rgba(70,45,30,.14); --shcol:rgba(120,80,55,.12); --shblur:42px; --shy:12px;
-  --elev1:0 1px 2px rgba(92,58,38,.14), 0 4px 12px rgba(92,58,38,.17);
-  --elev2:0 2px 5px rgba(92,58,38,.12), 0 12px 28px rgba(92,58,38,.19);
-  --elev3:0 4px 9px rgba(92,58,38,.11), 0 22px 48px rgba(92,58,38,.21);
+  --elev1:0 1px 2px rgba(74,45,28,.20), 0 3px 10px rgba(74,45,28,.24);
+  --elev2:0 2px 6px rgba(74,45,28,.18), 0 10px 24px rgba(74,45,28,.30);
+  --elev3:0 5px 14px rgba(74,45,28,.18), 0 20px 44px rgba(74,45,28,.34);
   --card:rgba(255,255,255,.5); --sheetbg:#F7F2EB;
   --scrim:rgba(247,242,235,.9); --scrim2:rgba(247,242,235,.5);
 }
@@ -1075,6 +1075,66 @@ export default function App() {
     window.addEventListener("resize", onR);
     return () => { window.removeEventListener("resize", onR); clearTimeout(t); };
   }, []);
+
+  // Effetto morbido a molla quando si arriva a battuta (sopra o sotto) scrollando.
+  // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
+  useEffect(() => {
+    const wrap = document.querySelector("main.wrap");
+    if (!wrap) return;
+    const MAX = 72;
+    let offset = 0, raf = null, settleTO = null;
+    const atTop = () => window.scrollY <= 0;
+    const atBottom = () => Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1;
+    const apply = () => { wrap.style.transform = offset ? "translateY(" + offset.toFixed(1) + "px)" : ""; };
+    const spring = () => {
+      offset *= 0.82;
+      if (Math.abs(offset) < 0.4) { offset = 0; apply(); raf = null; return; }
+      apply();
+      raf = requestAnimationFrame(spring);
+    };
+    const release = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(spring); };
+    // resistenza progressiva: piu' tiri, piu' e' difficile
+    const resist = (add) => {
+      const next = offset + add;
+      const r = 1 - Math.min(Math.abs(next) / (MAX * 2.2), 0.86);
+      offset = Math.max(-MAX, Math.min(MAX, offset + add * r));
+    };
+    const onWheel = (e) => {
+      const dy = e.deltaY;
+      if ((atTop() && dy < 0) || (atBottom() && dy > 0)) {
+        resist(-dy * 0.32);
+        apply();
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        clearTimeout(settleTO);
+        settleTO = setTimeout(release, 70);
+      } else if (offset) { release(); }
+    };
+    let sy = 0, pulling = false;
+    const onTS = (e) => { sy = e.touches[0].clientY; pulling = false; if (raf) { cancelAnimationFrame(raf); raf = null; } };
+    const onTM = (e) => {
+      const dy = e.touches[0].clientY - sy;
+      if ((atTop() && dy > 0) || (atBottom() && dy < 0)) {
+        pulling = true;
+        const r = 1 - Math.min(Math.abs(dy) / (MAX * 4), 0.86);
+        offset = Math.max(-MAX, Math.min(MAX, dy * 0.4 * r));
+        apply();
+      } else if (pulling) { pulling = false; release(); }
+    };
+    const onTE = () => { if (pulling) { pulling = false; release(); } };
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTS, { passive: true });
+    window.addEventListener("touchmove", onTM, { passive: true });
+    window.addEventListener("touchend", onTE, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTS);
+      window.removeEventListener("touchmove", onTM);
+      window.removeEventListener("touchend", onTE);
+      if (raf) cancelAnimationFrame(raf);
+      clearTimeout(settleTO);
+      wrap.style.transform = "";
+    };
+  }, []);
   useEffect(() => {
     if (!mq) return;
     const h = () => { if (theme === "auto") { applyTheme("auto"); syncBackstop(); } };
@@ -1440,26 +1500,22 @@ function Screen({ title, icon, children, heart, action }) {
 function Grid({ children }) { return <div className="grid">{children}</div>; }
 
 function Home({ prints, liked, onLike, onOpen, onEdit }) {
-  const featured = prints.filter((p) => p.featured);
-  const heroes = featured.length ? featured : (prints[0] ? [prints[0]] : []);
+  // Una sola tile in evidenza: articolo casuale, nuovo ad ogni refresh del sito.
+  const hero = useMemo(() => (prints.length ? prints[Math.floor(Math.random() * prints.length)] : null), [prints.length]);
   return (
     <section className="screen on">
       <div className="px">
         <div className="kick">ULTIME CREAZIONI</div>
         <h1 className="hero">Stampe fresche di piatto.</h1>
       </div>
-      {heroes.length > 0 && (
-        <div className={"herorow" + (heroes.length === 1 ? " single" : "")}>
-          {heroes.map((h) => (
-            <div className="herocard" key={h.id} onClick={() => onOpen(h.id)}>
-              <img src={colImg(h.cols[0])} alt="" />
-              <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(h.id); }} aria-label="Mi piace">
-                <span className={"heart" + (liked(h.id) ? " liked" : "")}><HeartI /></span>
-              </button>
-              <div className="herotag"><div className="ht">{h.title}</div><div className="hp">{eur(h.price)}</div></div>
-              {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(h); }} aria-label="Modifica"><Pencil /></button>}
-            </div>
-          ))}
+      {hero && (
+        <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
+          <img src={colImg(hero.cols[0])} alt="" />
+          <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(hero.id); }} aria-label="Mi piace">
+            <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
+          </button>
+          <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
+          {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
         </div>
       )}
       <h2 className="title px">Catalogo</h2>
