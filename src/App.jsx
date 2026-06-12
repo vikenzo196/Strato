@@ -30,7 +30,7 @@ const CSS = `
   .bgsw:active{transform:scale(.97)}
   .bgsw .sw{width:100%;height:40px;border-radius:11px;border:1px solid var(--strokeSoft)}
   .bgsw.act{box-shadow:inset 0 1px 0 var(--hi), 0 0 0 2px var(--text)}
-  html,body{margin:0;min-height:100%;}
+  html,body{margin:0;min-height:100%;touch-action:pan-x pan-y;}
   body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;}
 
   .glass{
@@ -181,9 +181,14 @@ const CSS = `
   .dback button{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-size:20px;cursor:pointer;display:grid;place-items:center}
   .dbt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;color:var(--text)}
   .dimg{width:100%;aspect-ratio:1;border-radius:24px;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 18px 50px var(--shcol)}
-  .dttl{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:26px;color:var(--text);margin:16px 2px 2px}
-  .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:20px;color:var(--text);margin:0 2px}
-  .dmat{color:var(--soft);font-size:14px;margin:4px 2px 0}
+  .dttl{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:26px;color:var(--text);margin:4px 2px 4px;letter-spacing:-.01em;line-height:1.12}
+  .dkick{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:16px 2px 0}
+  .dpricerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 2px 0}
+  .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:25px;color:var(--accent);margin:0;letter-spacing:-.01em}
+  .dmat{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;background:rgba(191,107,74,.10);border:1px solid rgba(191,107,74,.24);color:var(--accent);font-size:12.5px;font-weight:600;margin:0}
+  .dtag{display:flex;align-items:center;gap:8px;margin:14px 2px 0;font-size:12.5px;color:var(--soft);font-weight:500}
+  .dtagdot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+  .ddesc{margin:14px 2px 0;font-size:14px;line-height:1.55;color:var(--text);opacity:.88}
   .dlabel{font-size:12px;font-weight:700;color:var(--soft);margin:18px 2px 9px;letter-spacing:.06em;text-transform:uppercase}
   .dswatches{display:flex;gap:16px;flex-wrap:wrap}
   .dswbox{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:0;padding:0;cursor:pointer}
@@ -648,7 +653,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dock.dock4{gap:4px}
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
-.cartbadge{position:absolute;top:4px;right:calc(50% - 19px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--accent);color:#fff;font-size:10.5px;font-weight:800;line-height:17px;text-align:center;border:1.5px solid var(--glassDock);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.cartbadge{position:absolute;top:5px;right:7px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:800;line-height:19px;text-align:center;border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
 .dnav.profile svg{stroke:var(--icon)}
 .dnav.profile.act svg{stroke:var(--accent)}
@@ -1087,6 +1092,29 @@ export default function App() {
     return () => { window.removeEventListener("resize", onR); clearTimeout(t); };
   }, []);
 
+  // Disabilita lo zoom (pinch su iOS, ctrl+rotella e ctrl +/- su desktop, doppio tap).
+  useEffect(() => {
+    const noGesture = (e) => e.preventDefault();
+    const noWheelZoom = (e) => { if (e.ctrlKey) e.preventDefault(); };
+    const noKeyZoom = (e) => { if ((e.ctrlKey || e.metaKey) && ["+", "-", "=", "0"].includes(e.key)) e.preventDefault(); };
+    let lastTouch = 0;
+    const noDblTap = (e) => { const now = Date.now(); if (now - lastTouch < 320) e.preventDefault(); lastTouch = now; };
+    document.addEventListener("gesturestart", noGesture);
+    document.addEventListener("gesturechange", noGesture);
+    document.addEventListener("gestureend", noGesture);
+    window.addEventListener("wheel", noWheelZoom, { passive: false });
+    window.addEventListener("keydown", noKeyZoom);
+    document.addEventListener("touchend", noDblTap, { passive: false });
+    return () => {
+      document.removeEventListener("gesturestart", noGesture);
+      document.removeEventListener("gesturechange", noGesture);
+      document.removeEventListener("gestureend", noGesture);
+      window.removeEventListener("wheel", noWheelZoom);
+      window.removeEventListener("keydown", noKeyZoom);
+      document.removeEventListener("touchend", noDblTap);
+    };
+  }, []);
+
   // Effetto morbido a molla quando si arriva a battuta (sopra o sotto) scrollando.
   // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
   // Risolve <main.wrap> in modo lazy: puo' montare dopo (boot/login iniziale).
@@ -1120,27 +1148,10 @@ export default function App() {
         settleTO = setTimeout(release, 70);
       } else if (offset) { release(); }
     };
-    let sy = 0, pulling = false;
-    const onTS = (e) => { sy = e.touches[0].clientY; pulling = false; if (raf) { cancelAnimationFrame(raf); raf = null; } };
-    const onTM = (e) => {
-      const dy = e.touches[0].clientY - sy;
-      if ((atTop() && dy > 0) || (atBottom() && dy < 0)) {
-        pulling = true;
-        const r = 1 - Math.min(Math.abs(dy) / (MAX * 4), 0.86);
-        offset = Math.max(-MAX, Math.min(MAX, dy * 0.4 * r));
-        apply();
-      } else if (pulling) { pulling = false; release(); }
-    };
-    const onTE = () => { if (pulling) { pulling = false; release(); } };
+    // Solo desktop (rotella): su mobile lo scroll resta nativo (momentum + rimbalzo iOS).
     window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTS, { passive: true });
-    window.addEventListener("touchmove", onTM, { passive: true });
-    window.addEventListener("touchend", onTE, { passive: true });
     return () => {
       window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTS);
-      window.removeEventListener("touchmove", onTM);
-      window.removeEventListener("touchend", onTE);
       if (raf) cancelAnimationFrame(raf);
       clearTimeout(settleTO);
       const w = getWrap(); if (w) w.style.transform = "";
@@ -1620,9 +1631,14 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             )}
           </div>
           <div className="dopts">
+            {p.categoryName && <div className="dkick">{p.categoryName}</div>}
             <div className="dttl">{p.title}</div>
-            <div className="dprice">{eur(p.price)}</div>
-            <div className="dmat">{p.material}</div>
+            <div className="dpricerow">
+              <span className="dprice">{eur(p.price)}</span>
+              {p.material && <span className="dmat">{p.material}</span>}
+            </div>
+            <div className="dtag"><span className="dtagdot" /> Stampato in 3D su richiesta · pezzo unico</div>
+            {p.desc && <p className="ddesc">{p.desc}</p>}
             <div className="dlabel dcolor">Colori disponibili</div>
             <div className="dswatches readonly">
               {p.cols.map((cc, k) => (
