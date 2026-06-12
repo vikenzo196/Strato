@@ -138,7 +138,11 @@ const CSS = `
   .ipick .ib.on{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
 
   /* ===== DOCK (versione pulita: icone standard allineate + riquadro vetro sull'attiva) ===== */
-  .dockwrap{position:fixed;left:0;right:0;bottom:18px;z-index:72;display:flex;justify-content:center;pointer-events:none}
+  .dockwrap{position:fixed;left:0;right:0;bottom:18px;z-index:72;display:flex;justify-content:center;align-items:center;gap:10px;pointer-events:none}
+  .dockcart{pointer-events:auto;position:relative;width:60px;height:60px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);display:grid;place-items:center;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),var(--elev3),0 0 0 .5px rgba(0,0,0,.05);transition:transform .12s}
+  .dockcart:active{transform:scale(.93)}
+  .dockcart svg{width:26px;height:26px;stroke:var(--text);fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35)) drop-shadow(0 -.8px .8px rgba(255,255,255,.55))}
+  .dockcart .cartdot{top:9px;right:9px;left:auto}
   .dock{pointer-events:auto;display:flex;align-items:center;gap:5px;padding:8px 11px;border-radius:30px;
     background:var(--glassDock);
     -webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);
@@ -150,12 +154,6 @@ const CSS = `
   .dnav.act svg{opacity:1}
   .dnav:not(.act) svg{stroke:var(--text);fill:none}
   .tb-spacer{width:44px;height:1px}
-  .fab{position:fixed;right:14px;bottom:96px;z-index:73;display:flex;flex-direction:column;gap:12px}
-  .fbtn{position:relative;width:52px;height:52px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);display:grid;place-items:center;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 8px 22px rgba(0,0,0,.22);transition:transform .12s}
-  .fbtn:active{transform:scale(.93)}
-  .fbtn svg{width:25px;height:25px;stroke:var(--text);fill:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.32)) drop-shadow(0 -.8px .8px rgba(255,255,255,.5))}
-  .fbtn.act{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text),0 8px 22px rgba(0,0,0,.22)}
-  .fbtn .dot{position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:5px;background:var(--heart);border:1.5px solid var(--glassDock)}
   .cardcat{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:12.7px;font-weight:600;color:var(--soft)}
   .cardcat .gico{width:16px;height:16px;flex:none}
   .dnav .dot{position:absolute;top:10px;right:11px;width:9px;height:9px;border-radius:5px;background:var(--heart);border:1.5px solid var(--glassDock)}
@@ -183,9 +181,6 @@ const CSS = `
   .addcart{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-weight:600;font-size:13.5px;cursor:pointer;transition:transform .12s}
   .addcart:active{transform:scale(.97)}
   .addcart svg{width:22px;height:22px;display:block}
-  .detail{position:fixed;inset:0;z-index:70;background:var(--bg);overflow-y:auto;display:none}
-  .detail.on{display:block}
-  .dwrap{max-width:620px;margin:0 auto;padding:6px 16px 120px}
   .dback{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;padding:12px 0;background:linear-gradient(to bottom,var(--bg) 70%,transparent)}
   .dback button{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-size:20px;cursor:pointer;display:grid;place-items:center}
   .dbt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;color:var(--text)}
@@ -235,8 +230,6 @@ const CSS = `
   .invav{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--strokeSoft);box-shadow:0 2px 8px rgba(0,0,0,.2)}
   .invtt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:18px;color:var(--text)}
   .bnav{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none;align-self:flex-start}
-  .dreco{margin-top:30px}
-  .dreco h3{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:20px;color:var(--text);margin:0 2px 14px}
   .dadd2{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:14px;border-radius:16px;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);color:var(--text);font-weight:700;font-size:15px;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 8px 22px rgba(0,0,0,.18);transition:transform .12s}
   .dadd2:active{transform:scale(.96)}
   .dadd2 svg{width:21px;height:21px;stroke:var(--text);filter:drop-shadow(0 1px 1px rgba(0,0,0,.3)) drop-shadow(0 -.7px .7px rgba(255,255,255,.5))}
@@ -395,7 +388,6 @@ const CSS = `
 .topbar{padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
 .wrap{padding-top:calc(62px + env(safe-area-inset-top))}
 .dockwrap{bottom:calc(18px + env(safe-area-inset-bottom))}
-.fab{bottom:calc(96px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
@@ -517,8 +509,8 @@ button:active{transform:scale(.93)}
 .odone.out{animation:odOut .4s ease both}
 .odcard{width:100%;max-width:340px;text-align:center;padding:32px 28px;border-radius:28px;background:var(--glassDock);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 26px 64px rgba(0,0,0,.42);animation:odCard .44s cubic-bezier(.2,.85,.25,1) both}
 .odone.out .odcard{animation:odCardOut .4s ease both}
-.odicon{width:66px;height:66px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(110,139,105,.18);color:var(--success);box-shadow:inset 0 1px 0 var(--hi)}
-.odicon svg{width:32px;height:32px;stroke:var(--success)}
+.odicon{width:66px;height:66px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(191,107,74,.16);color:var(--accent);box-shadow:inset 0 1px 0 var(--hi)}
+.odicon svg{width:32px;height:32px;stroke:var(--accent)}
 .odt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:22px;color:var(--text);margin-bottom:9px}
 .ods{font-size:13.5px;color:var(--soft);line-height:1.5}
 @keyframes odIn{from{opacity:0}to{opacity:1}}
@@ -526,10 +518,7 @@ button:active{transform:scale(.93)}
 @keyframes odCard{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 @keyframes odCardOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.96)}}
 
-/* ---- carosello in evidenza (scorrevole) ---- */
-.herorow{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 18px 40px;margin-bottom:2px;-webkit-overflow-scrolling:touch}
-.herorow .herocard{flex:0 0 86%;scroll-snap-align:center;margin:0}
-.herorow.single .herocard{flex:0 0 100%}
+/* ---- carosello rimosso: la home usa una singola tile .herocard ---- */
 
 /* ---- transizione apertura/chiusura dettaglio ---- */
 
@@ -558,7 +547,6 @@ body.dark{--sheetbg:#1f1b17}
 .sheet.detailsheet{position:relative;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32)}
 .detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
 .detailsheet .dgrid{margin-top:6px}
-.detailsheet .dreco{margin-top:26px}
 
 /* ================= DESIGN SYSTEM — premium warm (light/dark auto) ============= */
 :root{
@@ -657,14 +645,9 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .herocard:hover,.herocard:active{transform:scale(1.015)}
 .cat:active{transform:scale(.985)}
 
-/* ---- dock a 4 (Home/Esplora/Carrello/Profilo) ---- */
+/* ---- dock a 4 (Home/Esplora/Piaciuti/Ordini) ---- */
 .dock.dock4{gap:4px}
-.dock.dock5{gap:2px}
-.dock.dock5 .dnav{width:51px}
-@media(max-width:360px){.dock.dock5 .dnav{width:46px}}
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
-.dnav.cart{position:relative}
-.dnav.cart svg{stroke:var(--icon)}
 .cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
 .dnav.profile svg{stroke:var(--icon)}
 .dnav.profile.act svg{stroke:var(--accent)}
@@ -675,7 +658,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(191,107,74,.5)}
 
 /* ---- foglio notifiche ---- */
-.sheet.notifsheet{background:var(--sheetbg);max-height:calc(100vh - 120px - env(safe-area-inset-top));max-height:calc(100dvh - 120px - env(safe-area-inset-top))}
+
 .notifrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);margin-bottom:9px;cursor:pointer;color:var(--text);font-family:inherit;transition:background .25s ease,transform .2s ease}
 .notifrow:active{transform:scale(.985)}
 .notifdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px rgba(191,107,74,.35)}
@@ -714,6 +697,9 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .ofocus{animation:ofocusPulse 2.4s cubic-bezier(.4,0,.2,1)}
 @keyframes ofocusPulse{0%{box-shadow:0 0 0 0 rgba(191,107,74,0)}22%{box-shadow:0 0 0 3px rgba(191,107,74,.55),0 8px 24px rgba(191,107,74,.2)}100%{box-shadow:0 0 0 0 rgba(191,107,74,0)}}
 .badge.br{background:rgba(176,106,82,.16);color:#b06a52}
+.orddel{flex:none;width:34px;height:34px;margin-left:8px;border-radius:11px;border:1px solid rgba(192,57,43,.35);background:rgba(192,57,43,.08);color:#c0392b;display:grid;place-items:center;cursor:pointer;transition:transform .12s,background .2s}
+.orddel:active{transform:scale(.9)}
+.orddel svg{width:18px;height:18px}
 
 /* ---- dock: tab ordini ---- */
 .dnav.orders{position:relative}
@@ -724,7 +710,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 /* ---- detail: colori in sola lettura ---- */
 .dswatches.readonly{pointer-events:none}
 .dswbox.ro{cursor:default}
-.dcolnote{font-size:12px;color:var(--soft);margin:6px 2px 4px;line-height:1.45}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -997,19 +983,6 @@ export default function App() {
     const dark = t === "dark" || (t === "auto" && mq && mq.matches);
     document.body.classList.toggle("dark", !!dark);
   };
-  // tieni la dock ancorata al bordo visibile (compensa la barra di Safari)
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    const update = () => {
-      const gap = document.documentElement.clientHeight - vv.height - vv.offsetTop;
-      document.documentElement.style.setProperty("--vvb", Math.max(0, Math.round(gap)) + "px");
-    };
-    vv.addEventListener("resize", update);
-    vv.addEventListener("scroll", update);
-    update();
-    return () => { vv.removeEventListener("resize", update); vv.removeEventListener("scroll", update); };
-  }, []);
 
   const syncBackstop = () => {
     try {
@@ -1361,6 +1334,14 @@ export default function App() {
     toast(status === "confirmed" ? "Ordine confermato" : "Richiesta rifiutata");
   };
 
+  const deleteOrder = async (id) => {
+    await supabase.from("order_items").delete().eq("order_id", id);
+    const { error } = await supabase.from("orders").delete().eq("id", id);
+    if (error) { toast("Errore eliminazione"); return; }
+    await loadOrders();
+    toast("Ordine eliminato");
+  };
+
   /* ---- navigazione ---- */
   const open = (t) => { setDetailId(null); setTab(t); window.scrollTo(0, 0); };
 
@@ -1478,6 +1459,7 @@ export default function App() {
         {tab === "orders" && (
           <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
             onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+            onDelete={deleteOrder}
             orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)} />
         )}
         {tab === "profile" && (
@@ -1489,13 +1471,13 @@ export default function App() {
 
       {/* DOCK */}
       <div className="dockwrap">
-        <div className="dock dock5">
+        <div className="dock dock4">
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={() => open("liked")} aria-label="Piaciuti"><HeartI /></button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
-          <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
         </div>
+        <button className="dockcart" onClick={() => setCartOpen(true)} aria-label="Carrello"><CartIcon />{cartCount > 0 && <span className="cartdot" />}</button>
       </div>
 
       {orderDone && <OrderDoneModal onDone={() => setOrderDone(false)} />}
@@ -1616,8 +1598,6 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const optLabel = p.isElectrical
     ? "Cavo " + cable.toLowerCase() + " · " + (bulb ? "con" : "senza") + " lampadina · " + (holder ? "con" : "senza") + " portalampada"
     : "";
-
-  const reco = [];
 
   const doAdd = (e) => {
     if (e && e.currentTarget) confetti(e.currentTarget);
@@ -1792,7 +1772,7 @@ function OrderDoneModal({ onDone }) {
       <div className="odcard">
         <div className="odicon"><Check /></div>
         <div className="odt">Ordine inviato</div>
-        <div className="ods">È in attesa di conferma. Ti avviseremo appena l'artigiano lo accetta.</div>
+        <div className="ods">Il tuo acquisto è in attesa di conferma. Ti avviseremo appena verrà accettato.</div>
       </div>
     </div>
   );
@@ -1849,7 +1829,7 @@ function Liked({ likedPrints, onOpen, onLike, onEdit }) {
 }
 
 /* ---- PROFILO ---- */
-function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, orderFocus, clearFocus }) {
+function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete, orderFocus, clearFocus }) {
   const orderRefs = useRef({});
   useEffect(() => {
     if (orderFocus && orderRefs.current[orderFocus]) {
@@ -1899,6 +1879,7 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, orderFoc
             <div className="s">{isAdmin ? o.who + " · " : ""}{eur(o.total)}{o.date ? " · " + fmtDate(o.date) : ""}</div>
           </div>
           <span className="badge br">Rifiutato</span>
+          {isAdmin && <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>}
         </div>
       ))}
     </section>
@@ -2169,6 +2150,7 @@ const Sun = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" s
 const Moon = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.2A8 8 0 0 1 9.8 4 7.2 7.2 0 1 0 20 14.2z" /></svg>);
 const AutoI = () => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8.4" /><path d="M12 3.6a8.4 8.4 0 0 0 0 16.8z" fill="currentColor" stroke="none" /></svg>);
 const Bell = () => (<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.6 7.6-2.6 7.6h17.2S18 14.5 18 8.5" /><path d="M13.6 21a2 2 0 0 1-3.2 0" /></svg>);
+const Trash = () => (<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6M14 11v6" /></svg>);
 
 /* icone lucide minimali (inline per non dipendere troppo) */
 const ChevronLeft = () => (<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>);
