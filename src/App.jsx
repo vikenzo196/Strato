@@ -26,7 +26,7 @@ const CSS = `
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   .bgttl{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:17px;color:var(--text);margin:18px 2px 8px}
   .bgpick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-  .bgsw{border:1px solid var(--strokeSoft);border-radius:16px;padding:8px;cursor:pointer;background:var(--glass2);display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--text);transition:box-shadow .15s, transform .12s;box-shadow:inset 0 1px 0 var(--hi), 0 1px 6px rgba(0,0,0,.10)}
+  .bgsw{border:1px solid var(--strokeSoft);border-radius:16px;padding:8px;cursor:pointer;background:var(--glass2);display:flex;flex-direction:column;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--text);transition:box-shadow .15s, transform .12s;box-shadow:inset 0 1px 0 var(--hi), var(--elev1)}
   .bgsw:active{transform:scale(.97)}
   .bgsw .sw{width:100%;height:40px;border-radius:11px;border:1px solid var(--strokeSoft)}
   .bgsw.act{box-shadow:inset 0 1px 0 var(--hi), 0 0 0 2px var(--text)}
@@ -69,11 +69,11 @@ const CSS = `
   .sec h2{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:22px;margin:0}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
-  .card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column;background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 10px 26px var(--shcol)}
+  .card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column;background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:var(--elev2)}
   .card::before{display:none}
   .card .ph{position:relative;aspect-ratio:1}
   .card .ph img{width:100%;height:100%;object-fit:cover;display:block}
-  .lk{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.62);box-shadow:0 3px 10px rgba(0,0,0,.22);transition:transform .15s}
+  .lk{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.62);box-shadow:var(--elev1);transition:transform .15s}
   .card .cnt{position:absolute;bottom:10px;left:10px;display:flex;align-items:center;gap:4px;font-size:11px;color:#fff;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:20px}
   .card .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:9px}
   .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
@@ -83,7 +83,7 @@ const CSS = `
   .qstep{display:flex;align-items:center;gap:8px}
   .qstep button{width:38px;height:38px;border-radius:12px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-size:20px;font-weight:600;cursor:pointer;display:grid;place-items:center}
   .qstep span{min-width:26px;text-align:center;font-weight:700;font-size:17px;color:var(--text)}
-  .qsend{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:16px;border:1px solid var(--strokeSoft);background:linear-gradient(135deg,#bb8b72,#8c6856);color:#fff;font-weight:600;font-size:15px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 22px var(--shcol);transition:transform .12s}
+  .qsend{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:16px;border:1px solid var(--strokeSoft);background:linear-gradient(135deg,#bb8b72,#8c6856);color:#fff;font-weight:600;font-size:15px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.45), var(--elev2);transition:transform .12s}
   .qsend:active{transform:scale(.98)}
   .qsend svg{width:20px;height:20px}
   .heart{width:24px;height:24px;display:block;fill:rgba(255,255,255,.22);stroke:url(#g_white);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.5)) drop-shadow(0 -0.6px .6px rgba(255,255,255,.5));transition:fill .15s, stroke .15s}
@@ -143,7 +143,7 @@ const CSS = `
     background:var(--glassDock);
     -webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);
     border:1px solid var(--strokeSoft);
-    box-shadow:var(--shx) var(--shy) var(--shblur) var(--shcol), inset 0 1px 0 var(--hi), 0 0 0 .5px rgba(0,0,0,.05)}
+    box-shadow:inset 0 1px 0 var(--hi), var(--elev3), 0 0 0 .5px rgba(0,0,0,.05)}
   .dnav{position:relative;width:53px;height:53px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:17px;padding:0;transition:background .2s, box-shadow .2s}
   .dnav svg{width:26px;height:26px;display:block;opacity:.95;transition:opacity .2s, filter .2s;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35)) drop-shadow(0 -0.8px .8px rgba(255,255,255,.55))}
   .dnav.act{background:var(--glass2);box-shadow:inset 0 1px 0 var(--hi), 0 1px 6px rgba(0,0,0,.12)}
@@ -172,9 +172,9 @@ const CSS = `
   .tb-btn.left{justify-self:start}
   .tb-btn.right{justify-self:end}
   .tb-btn svg{width:25px;height:25px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35)) drop-shadow(0 -0.8px .8px rgba(255,255,255,.6))}
-  .tb-btn .av{width:40px;height:40px;border-radius:50%;object-fit:cover;display:block;border:1.5px solid var(--strokeSoft);box-shadow:0 2px 8px rgba(0,0,0,.28)}
+  .tb-btn .av{width:40px;height:40px;border-radius:50%;object-fit:cover;display:block;border:1.5px solid var(--strokeSoft);box-shadow:var(--elev1)}
   .tb-btn.act{background:var(--glass2)}
-  .tb-btn.right.act .av{box-shadow:0 0 0 2px var(--glass2),0 2px 8px rgba(0,0,0,.28)}
+  .tb-btn.right.act .av{box-shadow:0 0 0 2px var(--glass2), var(--elev1)}
   .tb-right{justify-self:end;display:flex;align-items:center;gap:4px}
   .tb-btn.cart{position:relative}
   .cbadge{position:absolute;top:6px;right:6px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--heart);color:#fff;font-size:10px;font-weight:700;display:none;place-items:center;border:1.5px solid var(--glassDock)}
@@ -306,7 +306,7 @@ const CSS = `
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
 .hero{font-size:40px;line-height:1.04;font-weight:800;color:var(--text);margin:0 0 18px}
-.herocard{position:relative;margin:0 18px 18px;border-radius:26px;overflow:hidden;box-shadow:0 var(--shy,12px) var(--shblur,42px) var(--shcol,rgba(120,80,55,.12));cursor:pointer;aspect-ratio:16/11}
+.herocard{position:relative;margin:0 18px 18px;border-radius:26px;overflow:hidden;box-shadow:var(--elev3);cursor:pointer;aspect-ratio:16/11}
 .herocard img{width:100%;height:100%;object-fit:cover;display:block}
 .herotag{position:absolute;left:14px;bottom:14px;background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--strokeSoft);border-radius:15px;padding:9px 13px}
 .herotag .ht{font-weight:700;color:var(--text)}
@@ -321,7 +321,7 @@ const CSS = `
 .heartred svg{stroke:#F0231A;fill:rgba(240,35,26,.18)}
 .cempty{text-align:center;color:var(--soft);padding:42px 0 16px;font-size:19px;font-weight:600}
 .osec{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--soft);margin:4px 20px 12px}
-.qsend{display:flex;align-items:center;justify-content:center;gap:9px;width:calc(100% - 36px);margin:8px 18px 0;padding:15px;border-radius:17px;border:none;background:linear-gradient(135deg,var(--b3,#e0a890),#c2715f);color:#fff;font-family:inherit;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 8px 22px rgba(120,60,40,.3)}
+.qsend{display:flex;align-items:center;justify-content:center;gap:9px;width:calc(100% - 36px);margin:8px 18px 0;padding:15px;border-radius:17px;border:none;background:linear-gradient(135deg,var(--b3,#e0a890),#c2715f);color:#fff;font-family:inherit;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 2px 6px rgba(120,60,40,.16), 0 14px 32px rgba(120,60,40,.24)}
 .qsend:disabled{opacity:.6}
 .invtot{font-size:30px;font-weight:800;color:var(--text)}
 .invtotrow{align-items:baseline}
@@ -426,9 +426,9 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 /* ---- topbar: back + carrello accanto al profilo ---- */
 .topbar{pointer-events:none}
 .topbar button,.topbar .tb-right{pointer-events:auto}
-.tb-back{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;place-items:center;color:var(--text);cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
+.tb-back{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);display:grid;place-items:center;color:var(--text);cursor:pointer;box-shadow:inset 0 1px 0 var(--hi), var(--elev1)}
 .tb-back svg{width:22px;height:22px;stroke:var(--text)}
-.tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.18)}
+.tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1)}
 .tb-btn.cart svg{width:23px;height:23px;stroke:var(--text);fill:none}
 .tb-btn.cart .cbadge{display:grid}
 .tb-right{gap:10px}
@@ -529,6 +529,9 @@ body.dark{--sheetbg:#1f1b17}
   --accent:#BF6B4A; --accent2:#D6B89B; --accentDark:#9C5C43;
   --icon:#8A7C70; --heart:#BF6B4A; --success:#6E8B69; --warning:#C89C5B;
   --txtShadow:rgba(70,45,30,.14); --shcol:rgba(120,80,55,.12); --shblur:42px; --shy:12px;
+  --elev1:0 1px 2px rgba(92,58,38,.10), 0 5px 14px rgba(92,58,38,.10);
+  --elev2:0 2px 6px rgba(92,58,38,.07), 0 14px 34px rgba(92,58,38,.12);
+  --elev3:0 4px 10px rgba(92,58,38,.06), 0 26px 56px rgba(92,58,38,.13);
   --card:rgba(255,255,255,.5); --sheetbg:#F7F2EB;
   --scrim:rgba(247,242,235,.9); --scrim2:rgba(247,242,235,.5);
 }
@@ -540,6 +543,9 @@ body.dark{
   --accent:#D17C56; --accent2:#B69A82; --accentDark:#B69A82;
   --icon:#8A7C70; --heart:#D17C56; --success:#7A9774; --warning:#D1A366;
   --txtShadow:rgba(0,0,0,.5); --shcol:rgba(0,0,0,.5);
+  --elev1:0 1px 2px rgba(0,0,0,.34), 0 6px 16px rgba(0,0,0,.42);
+  --elev2:0 2px 8px rgba(0,0,0,.34), 0 16px 36px rgba(0,0,0,.46);
+  --elev3:0 4px 12px rgba(0,0,0,.34), 0 28px 60px rgba(0,0,0,.52);
   --card:rgba(40,32,26,.5); --sheetbg:#231D19;
   --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
 }
@@ -620,7 +626,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dnav.profile.act svg{stroke:var(--accent)}
 
 /* ---- campanella notifiche (topbar) ---- */
-.tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi),0 4px 12px var(--shcol);color:var(--text)}
+.tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1);color:var(--text)}
 .tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
 .belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(191,107,74,.5)}
 
