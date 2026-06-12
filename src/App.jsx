@@ -544,32 +544,14 @@ body.dark{
   --scrim:rgba(24,20,17,.9); --scrim2:rgba(24,20,17,.5);
 }
 
-/* ======================= SFONDO — sistema unico ===========================
-   UN solo livello fisso a tutto schermo. Regole anti-"rettangolo":
-   - nessun figlio interno (niente bordi da stirare)
-   - nessun transform/scale sul fixed (evita il taglio in overscroll iOS)
-   - il colore base e' l'ULTIMO layer del background: copertura piena garantita,
-     i gradienti caldi stanno sopra. Identico su PC e smartphone (unita' vmax). */
-.appbg{
-  position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(circle 80vmax at 8% 2%,    rgba(191,107,74,.14),  rgba(191,107,74,0)  100%),
-    radial-gradient(circle 76vmax at 96% 8%,   rgba(214,184,155,.24), rgba(214,184,155,0) 100%),
-    radial-gradient(circle 80vmax at 88% 100%, rgba(156,92,67,.13),   rgba(156,92,67,0)   100%),
-    radial-gradient(circle 74vmax at 2% 96%,   rgba(214,184,155,.16), rgba(214,184,155,0) 100%),
-    radial-gradient(circle 66vmax at 50% 16%,  rgba(255,255,255,.20), rgba(255,255,255,0) 100%),
-    var(--bg);
-  transition:background-color .45s ease;
-}
-body.dark .appbg{
-  background:
-    radial-gradient(circle 58vmax at 10% 4%,   rgba(209,124,86,.17),  rgba(209,124,86,0)  100%),
-    radial-gradient(circle 52vmax at 94% 8%,   rgba(201,169,140,.10), rgba(201,169,140,0) 100%),
-    radial-gradient(circle 58vmax at 90% 99%,  rgba(209,124,86,.14),  rgba(209,124,86,0)  100%),
-    radial-gradient(circle 52vmax at 4% 97%,   rgba(156,92,67,.11),   rgba(156,92,67,0)   100%),
-    radial-gradient(circle 46vmax at 50% 12%,  rgba(232,201,168,.045),rgba(232,201,168,0) 100%),
-    var(--bg);
-}
+/* ======================= SFONDO — dipinto sul canvas radice (html) =========
+   Lo sfondo NON e' piu' un elemento fisso: il gradiente viene applicato
+   direttamente all'elemento <html> (vedi syncBackstop in JS), con
+   background-attachment:fixed. E' il canvas radice, quindi:
+   - i pannelli con backdrop-filter lo leggono in modo affidabile (niente
+     "rettangolo"/seam da layer fisso che si ridisegna a meta');
+   - copertura piena garantita su PC e smartphone, chiaro e scuro.
+   Qui restano solo le transizioni di tema. */
 
 /* ---- vetro: frosted ceramic ---- */
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
@@ -605,7 +587,7 @@ button:active{transform:scale(.97)}
 .segbtn.on{background:var(--glassDock);color:var(--accent);box-shadow:0 4px 14px var(--shcol),inset 0 1px 0 var(--hi)}
 
 /* ---- transizione morbida al cambio tema ---- */
-body,.appbg,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.banner,.segbtn,.title,.kick,.empty,.mat,.cardcat{transition:background-color .42s ease,color .38s ease,border-color .42s ease,box-shadow .42s ease}
+body,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.banner,.segbtn,.title,.kick,.empty,.mat,.cardcat{transition:background-color .42s ease,color .38s ease,border-color .42s ease,box-shadow .42s ease}
 .gico,.dnav svg,.heart svg,.ticon svg{transition:stroke .4s ease,fill .4s ease}
 
 /* ============================ BRIEF: e-commerce premium ====================== */
@@ -848,7 +830,22 @@ function mapPrint(r) {
   };
 }
 
-function Bg(){return <div className="appbg" aria-hidden="true" />;}
+/* Lo sfondo e' dipinto sul canvas radice (<html>) da syncBackstop. */
+const BG_LIGHT =
+  "radial-gradient(circle 80vmax at 8% 2%,rgba(191,107,74,.14),rgba(191,107,74,0) 100%)," +
+  "radial-gradient(circle 76vmax at 96% 8%,rgba(214,184,155,.24),rgba(214,184,155,0) 100%)," +
+  "radial-gradient(circle 80vmax at 88% 100%,rgba(156,92,67,.13),rgba(156,92,67,0) 100%)," +
+  "radial-gradient(circle 74vmax at 2% 96%,rgba(214,184,155,.16),rgba(214,184,155,0) 100%)," +
+  "radial-gradient(circle 66vmax at 50% 16%,rgba(255,255,255,.20),rgba(255,255,255,0) 100%)," +
+  "#F7F2EB";
+const BG_DARK =
+  "radial-gradient(circle 58vmax at 10% 4%,rgba(209,124,86,.17),rgba(209,124,86,0) 100%)," +
+  "radial-gradient(circle 52vmax at 94% 8%,rgba(201,169,140,.10),rgba(201,169,140,0) 100%)," +
+  "radial-gradient(circle 58vmax at 90% 99%,rgba(209,124,86,.14),rgba(209,124,86,0) 100%)," +
+  "radial-gradient(circle 52vmax at 4% 97%,rgba(156,92,67,.11),rgba(156,92,67,0) 100%)," +
+  "radial-gradient(circle 46vmax at 50% 12%,rgba(232,201,168,.045),rgba(232,201,168,0) 100%)," +
+  "#181411";
+function Bg(){return null;}
 
 /* HTML grezzo (icone glass) reso in modo sicuro */
 function Raw({ html, className, style }) {
@@ -940,15 +937,20 @@ export default function App() {
 
   const syncBackstop = () => {
     try {
-      const c = getComputedStyle(document.body).getPropertyValue("--bg").trim();
-      if (c) { document.documentElement.style.background = c; document.body.style.background = c; }
+      const dark = document.body.classList.contains("dark");
+      const root = document.documentElement;
+      root.style.background = dark ? BG_DARK : BG_LIGHT;
+      root.style.backgroundAttachment = "fixed";
+      root.style.backgroundRepeat = "no-repeat";
+      // il body resta trasparente: lascia vedere il canvas radice
+      document.body.style.background = "transparent";
     } catch (e) {}
   };
   useEffect(() => { applyTheme(theme); syncBackstop(); }, [theme]);
   useEffect(() => { document.body.removeAttribute("data-bg"); }, []);
   useEffect(() => {
     if (!mq) return;
-    const h = () => { if (theme === "auto") applyTheme("auto"); };
+    const h = () => { if (theme === "auto") { applyTheme("auto"); syncBackstop(); } };
     mq.addEventListener && mq.addEventListener("change", h);
     return () => { mq.removeEventListener && mq.removeEventListener("change", h); };
   }, [theme]);
