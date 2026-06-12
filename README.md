@@ -1,105 +1,116 @@
-# Strato · v2 (Liquid Glass)
+# Strato · Ecommerce React + Vite per design stampato in 3D
 
-> Aggiornamento: nuovo design "Liquid Glass", login solo Google, carrello e ordini su Supabase (niente piu' WhatsApp), prodotti con palette colori + foto per colore, aggiunte elettriche con prezzi admin, categorie, riepilogo ordine scomposto, preferenze tema/sfondo per utente.
->
-> **Prima del deploy esegui** `supabase/schema_v2.sql` poi `supabase/schema_v3.sql` e infine `supabase/schema_v4.sql` nel SQL Editor di Supabase.
+Strato è un frontend ecommerce mobile-first per oggetti di design stampati in 3D. L'esperienza è pensata come una piccola app: catalogo pubblico, scheda prodotto in bottom sheet, carrello locale e richiesta ordine con conferma successiva.
 
----
+## Stato del flusso attuale
 
-# Strato · sito per le tue stampe 3D
+- **Catalogo pubblico**: Home, Esplora, schede prodotto e carrello sono navigabili anche senza login.
+- **Login Google**: richiesto solo per azioni personali: preferiti, invio richiesta ordine, storico ordini, profilo e funzioni admin.
+- **Scheda prodotto**: si apre come popup/bottom sheet con scroll interno, colori selezionabili, descrizione, materiale, categoria, quantità e CTA chiara.
+- **Carrello**: salva righe in `localStorage`, mostra colore/opzioni/quantità/subtotale e invia una richiesta ordine.
+- **Ordini**: gli ordini vengono salvati in Supabase come `pending`; l'admin può confermare o rifiutare.
+- **Admin**: gli amministratori possono creare/modificare prodotti, categorie, colori, immagini e sfondi.
 
-App reale con: catalogo a carosello, login **Apple/Google**, **like col cuoricino** (con
-contatore pubblico), **commenti** per ogni stampa, **ordine su WhatsApp** con messaggio
-già pronto, **tema chiaro/scuro automatico** (segue il telefono) e pannello **admin** per
-caricare e **modificare** stampe (foto, descrizione, prezzo).
+## Stack
 
-> Nome e logo sono "Strato" provvisori: si cambiano in `src/App.jsx` (cerca "Strato") e
-> nel logo dell'header quando vorrai.
+- React 18
+- Vite 5
+- Supabase Auth, Database e Storage
+- CSS custom con design system interno Liquid Glass
 
-Stack: **React + Vite** (frontend) · **Supabase** (login, database, storage).
+## Setup locale
 
----
-
-## 0. Cosa ti serve
-- Account **Supabase** (gratis) → https://supabase.com
-- Account **Google Cloud** (gratis) per il login Google
-- *(facoltativo)* Account **Apple Developer** (99 €/anno) per "Accedi con Apple"
-- **Node.js 18+** sul computer
-- Il tuo **numero WhatsApp** (già impostato: `393248143316`, modificabile)
-
----
-
-## 1. Progetto Supabase
-1. Crea un nuovo progetto su Supabase.
-2. **SQL Editor** → incolla tutto `supabase/schema.sql` ed esegui (tabelle, sicurezza,
-   trigger dei like, bucket foto).
-3. **Project Settings → API**: copia **Project URL** e **anon public key**.
-
-## 2. Login (Authentication → Providers)
-- **Google**: in Google Cloud crea credenziali OAuth (Web), come *redirect URI* usa quello
-  mostrato da Supabase (`https://<progetto>.supabase.co/auth/v1/callback`), poi incolla
-  Client ID/Secret in Supabase e abilita Google.
-- **Apple** *(facoltativo)*: segui la card Apple in Supabase. Se non ti serve subito,
-  lascialo spento: con Google funziona tutto.
-- **Authentication → URL Configuration**: *Site URL* = indirizzo del sito
-  (`http://localhost:5173` in locale; il dominio Vercel in produzione).
-
-## 3. Avvio in locale
 ```bash
-cp .env.example .env     # incolla URL e anon key; il numero WhatsApp è già impostato
+cp .env.example .env
 npm install
-npm run dev              # http://localhost:5173
+npm run dev
 ```
 
-## 4. Diventa amministratore
-1. Fai login una prima volta dall'app.
-2. **SQL Editor**:
-   ```sql
-   update public.profiles set is_admin = true
-   where id = (select id from auth.users where email = 'tua@email.com');
-   ```
-3. Ricarica: ora vedi "Carica nuova stampa", il tasto "Modifica" su ogni pezzo e la
-   gestione dal profilo.
+Compila produzione:
 
-## 5. Online (Vercel)
-1. Carica su GitHub → importa su https://vercel.com (framework **Vite**).
-2. Environment Variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`,
-   `VITE_WHATSAPP_NUMBER`.
-3. Deploy, poi aggiorna *Site URL* e i redirect dei provider col dominio Vercel.
-
----
-
-## Come funzionano le cose
-- **Ordine**: ogni stampa ha il tasto verde WhatsApp; apre la chat col tuo numero e un
-  messaggio precompilato (es. *"Ciao! Vorrei ordinare: Vaso Onda — 24,00 €"*). Nessun
-  carrello, nessun backend di pagamento: l'ordine ti arriva direttamente in chat.
-- **Like (cuoricino)**: una riga in `likes` per utente/stampa; il **conteggio pubblico**
-  è in `prints.like_count`, aggiornato da trigger. La lista personale è in **"I miei like"**
-  nel menu (e nel profilo).
-- **Commenti**: tabella `comments`, visibili a tutti; ognuno scrive a proprio nome e può
-  cancellare i propri; tu admin puoi cancellare qualsiasi commento.
-- **Tema chiaro/scuro**: automatico via `prefers-color-scheme`, nessun interruttore.
-- **Admin**: carica e modifica stampe (foto, descrizione, prezzo) dal profilo o dal tasto
-  "Modifica" sulla scheda. Le foto vanno nello Storage pubblico, scrivibile solo da te.
-
-## Cambiare numero WhatsApp
-È in `.env` come `VITE_WHATSAPP_NUMBER` (formato internazionale senza "+" né spazi).
-
-## Struttura
+```bash
+npm run build
 ```
+
+## Variabili ambiente
+
+```env
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+```
+
+## Setup Supabase
+
+Esegui gli script SQL nel SQL Editor di Supabase in questo ordine:
+
+1. `supabase/schema.sql`
+2. `supabase/schema_v2.sql`
+3. `supabase/schema_v3.sql`
+4. `supabase/schema_v4.sql`
+
+Le policy RLS includono lettura pubblica per catalogo/categorie/colori e accesso autenticato per preferiti e ordini personali.
+
+## Login Google
+
+In Supabase abilita il provider Google.
+
+Nel progetto Google Cloud configura il redirect URI indicato da Supabase:
+
+```txt
+https://<project-ref>.supabase.co/auth/v1/callback
+```
+
+In Supabase, in Authentication → URL Configuration, imposta:
+
+- Site URL locale: `http://localhost:5173`
+- Site URL produzione: dominio Vercel/hosting finale
+
+## Rendere un utente amministratore
+
+Dopo il primo accesso Google, esegui:
+
+```sql
+update public.profiles
+set is_admin = true
+where id = (
+  select id from auth.users where email = 'tua@email.com'
+);
+```
+
+## Struttura progetto
+
+```txt
 strato/
 ├─ index.html
-├─ package.json · vite.config.js · .env.example
+├─ package.json
+├─ vite.config.js
 ├─ src/
 │  ├─ main.jsx
-│  ├─ App.jsx            # interfaccia + logica (design, animazioni, tema)
-│  └─ lib/supabase.js    # client Supabase
+│  ├─ App.jsx
+│  └─ lib/
+│     └─ supabase.js
 └─ supabase/
-   └─ schema.sql         # database + sicurezza + trigger + storage
+   ├─ schema.sql
+   ├─ schema_v2.sql
+   ├─ schema_v3.sql
+   └─ schema_v4.sql
 ```
 
-## Prossimi passi (facoltativi)
-- **Pagamenti** con Stripe (se un giorno vorrai vendere online davvero).
-- **Stato ordine** o galleria "fatte da voi" con foto dei clienti.
-- **PWA**: installazione su home screen.
-- Sostituzione di **nome e logo** definitivi.
+## Note UX implementate
+
+- Il login non blocca più la scoperta del catalogo.
+- La dock principale è a 4 voci: Home, Esplora, Carrello, Ordini.
+- I preferiti sono spostati nel profilo e richiedono login.
+- La Home usa i prodotti `featured` invece di un prodotto casuale.
+- La richiesta ordine chiarisce che non si paga subito.
+- Il viewport consente zoom: non viene più forzato `user-scalable=no`.
+- Sono stati rimossi i listener globali che bloccavano zoom e gesture browser.
+- Gli sfondi fallback non sono più JPEG base64 enormi nel bundle JS.
+
+## Prossimi refactoring consigliati
+
+- Spezzare `src/App.jsx` in feature/components.
+- Spostare il CSS da stringa JS a `src/styles/tokens.css` e `src/styles/global.css`.
+- Lazy-load completo dell'admin editor.
+- Aggiungere deep link prodotto e SEO.
+- Aggiungere dati checkout più completi: telefono, indirizzo/consegna, note e privacy.
