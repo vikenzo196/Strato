@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { supabase } from "./lib/supabase";
 
 /* ============================ STILE (Liquid Glass) ===================== */
@@ -931,6 +931,110 @@ const WP_DARK = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQE
 let BG_CONF = null;
 function Bg(){return null;}
 
+/* ============================================================
+   HAPTIC FEEDBACK — strategia progressiva a 3 livelli
+   ============================================================
+   Livello 1 — Vibration API (Android Chrome, alcuni browser):
+     navigator.vibrate() — pattern discreti per tipo di azione.
+     Escluso iOS: Safari/PWA non supportano vibrate(); verrebbe
+     ignorato silenziosamente ma non ha senso includerlo.
+
+   Livello 2 — CSS class injection per microanimazione visiva:
+     Aggiunge .hap-[type] all'elemento target per 320ms.
+     Scale + brightness transitional → sensazione di "risposta".
+     Funziona su tutti i dispositivi, incluso iOS Safari e PWA.
+
+   Livello 3 — No-op silenzioso:
+     Se nessuna API è disponibile o il contesto non è supportato,
+     le interazioni restano perfettamente funzionali senza alcuna
+     regressione visiva o comportamento anomalo.
+
+   Rilevamento capabilities a runtime (prima chiamata):
+   - iOS Safari / WKWebView / PWA iOS: vibrate non disponibile
+     → solo livello 2 (microanimazione CSS)
+   - Android Chrome / Edge / Samsung Internet: vibrate disponibile
+     → livello 1 + livello 2 in parallelo
+   - Desktop: vibrate raramente disponibile
+     → solo livello 2 (coerente, non invasivo)
+   ============================================================ */
+
+const _hapticCap = (() => {
+  let cache = null;
+  return () => {
+    if (cache !== null) return cache;
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const hasVibrate = !isIOS && typeof navigator.vibrate === "function";
+    cache = { hasVibrate, isIOS };
+    return cache;
+  };
+})();
+
+/* Durate di vibrazione per tipo di azione [ms] */
+const HAPTIC_PATTERNS = {
+  like:    [18],          /* feedback leggero, positivo */
+  unlike:  [10],          /* più breve, azione di rimozione */
+  add:     [12],          /* risposta immediata, azione primaria */
+  confirm: [20, 40, 20],  /* doppio impulso: azione critica completata */
+  nav:     [8],           /* navigazione: quasi impercettibile */
+};
+
+/* CSS keyframes e classi iniettati dinamicamente una sola volta */
+const _injectHapticCSS = (() => {
+  let done = false;
+  return () => {
+    if (done) return;
+    done = true;
+    const s = document.createElement("style");
+    s.id = "haptic-css";
+    s.textContent = [
+      "@keyframes hapLike{0%{transform:scale(1)}30%{transform:scale(1.28)}70%{transform:scale(.96)}100%{transform:scale(1)}}",
+      "@keyframes hapAdd{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}",
+      "@keyframes hapConfirm{0%{transform:scale(1)}25%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}",
+      "@keyframes hapNav{0%{transform:scale(1)}35%{transform:scale(.95)}100%{transform:scale(1)}}",
+      ".hap-like{animation:hapLike .28s cubic-bezier(.22,1,.36,1) both!important}",
+      ".hap-unlike{animation:hapAdd .22s cubic-bezier(.22,1,.36,1) both!important}",
+      ".hap-add{animation:hapAdd .24s cubic-bezier(.22,1,.36,1) both!important}",
+      ".hap-confirm{animation:hapConfirm .32s cubic-bezier(.22,1,.36,1) both!important}",
+      ".hap-nav{animation:hapNav .2s cubic-bezier(.22,1,.36,1) both!important}",
+    ].join("");
+    document.head.appendChild(s);
+  };
+})();
+
+/**
+ * useHaptic() → { tap }
+ * tap(type, element?) — attiva il feedback appropriato.
+ *   type: "like" | "unlike" | "add" | "confirm" | "nav"
+ *   element: HTMLElement opzionale per microanimazione CSS (livello 2)
+ */
+function useHaptic() {
+  const tap = useCallback((type, element) => {
+    _injectHapticCSS();
+    const cap = _hapticCap();
+
+    /* Livello 1: Vibration API (Android/desktop supportato) */
+    if (cap.hasVibrate) {
+      const pattern = HAPTIC_PATTERNS[type] || HAPTIC_PATTERNS.nav;
+      try { navigator.vibrate(pattern); } catch (_) { /* silenzio */ }
+    }
+
+    /* Livello 2: microanimazione CSS sull'elemento target */
+    if (element && element instanceof HTMLElement) {
+      const cls = "hap-" + type;
+      element.classList.remove(cls);
+      /* forza reflow per restart animazione in caso di tap rapidi */
+      void element.offsetWidth;
+      element.classList.add(cls);
+      const tid = setTimeout(() => element.classList.remove(cls), 350);
+      return () => clearTimeout(tid);
+    }
+  }, []);
+
+  return { tap };
+}
+
+
+
 /* HTML grezzo (icone glass) reso in modo sicuro */
 function Raw({ html, className, style }) {
   return <span className={className} style={style} dangerouslySetInnerHTML={{ __html: html }} />;
@@ -949,11 +1053,13 @@ const OrdersI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" st
 /* ============================ CARD ==================================== */
 function Card({ p, liked, onLike, onOpen, onEdit }) {
   const c0 = p.cols[0];
+  const { tap } = useHaptic();
+  const lkRef = useRef(null);
   return (
     <div className="card in" onClick={onOpen}>
       <div className="ph">
         <img src={colImg(c0)} alt={p.title + (p.category ? " · " + p.category : "")} loading="lazy" decoding="async" />
-        <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(p.id); }}>
+        <button ref={lkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked ? "unlike" : "like", lkRef.current); onLike(p.id); }}>
           <span className={"heart" + (liked ? " liked" : "")}><HeartI /></span>
         </button>
         <div className="cnt"><HeartI /> {p.likeCount}</div>
@@ -973,6 +1079,7 @@ function Card({ p, liked, onLike, onOpen, onEdit }) {
 /* ============================ APP ===================================== */
 export default function App() {
   const [ready, setReady] = useState(false);
+  const { tap } = useHaptic();
   const [user, setUser] = useState(null);
   const [prints, setPrints] = useState([]);
   const [cats, setCats] = useState([]);
@@ -1306,6 +1413,7 @@ export default function App() {
 
   /* ---- carrello ---- */
   const addToCart = (line) => {
+    tap("add");
     const ex = cart.find((x) => x.key === line.key);
     let next;
     if (ex) next = cart.map((x) => x.key === line.key ? { ...x, qty: x.qty + line.qty } : x);
@@ -1331,6 +1439,7 @@ export default function App() {
     }));
     const { error: e2 } = await supabase.from("order_items").insert(rows);
     if (e2) { toast("Errore righe ordine"); return; }
+    tap("confirm");
     saveCart([]);
     setCartOpen(false);
     await loadOrders();
@@ -1493,11 +1602,11 @@ export default function App() {
       {/* DOCK */}
       <div className="dockwrap">
         <div className="dock dock5">
-          <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
-          <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
-          <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={() => open("liked")} aria-label="Piaciuti"><HeartI /></button>
-          <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
-          <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
+          <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
+          <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
+          <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
+          <button className="dnav cart" onClick={(e) => { tap("nav", e.currentTarget); setCartOpen(true); }} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
+          <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
 
@@ -1572,6 +1681,8 @@ function Grid({ children }) { return <div className="grid">{children}</div>; }
 function Home({ prints, liked, onLike, onOpen, onEdit }) {
   // Una sola tile in evidenza: articolo casuale, nuovo ad ogni refresh del sito.
   const hero = useMemo(() => (prints.length ? prints[Math.floor(Math.random() * prints.length)] : null), [prints.length]);
+  const { tap } = useHaptic();
+  const heroLkRef = useRef(null);
   return (
     <section className="screen on">
       <div className="px">
@@ -1581,7 +1692,7 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
       {hero && (
         <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
           <img src={colImg(hero.cols[0])} alt={hero.title} loading="lazy" decoding="async" />
-          <button className="lk" onClick={(e) => { e.stopPropagation(); onLike(hero.id); }} aria-label="Mi piace">
+          <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label="Mi piace">
             <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
           </button>
           <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
