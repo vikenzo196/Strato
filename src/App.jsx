@@ -309,6 +309,13 @@ const CSS = `
 .herotag .hp{font-size:13px;color:var(--soft)}
 .searchbox{width:calc(100% - 36px);margin:0 18px 16px;padding:13px 16px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-family:inherit;font-size:15px}
 .empty{color:var(--faint);font-size:14px;padding:6px 18px}
+/* ---- PIACIUTI: empty state editoriale ---- */
+.liked-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:54vh;padding:0 36px;text-align:center;animation:likedEmptyIn .3s cubic-bezier(.22,1,.36,1) both}
+@keyframes likedEmptyIn{from{opacity:0;filter:blur(4px);transform:translateY(8px)}to{opacity:1;filter:blur(0);transform:none}}
+.liked-empty-mark{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(199,125,107,.12);border:1.5px solid rgba(199,125,107,.22);margin:0 auto 32px;box-shadow:0 4px 18px rgba(199,125,107,.14)}
+.liked-empty-mark svg{width:24px;height:24px;stroke:#C77D6B;fill:rgba(199,125,107,.18)}
+.liked-empty-title{font-family:'Inter',system-ui,sans-serif;font-size:28px;font-weight:800;letter-spacing:-.6px;line-height:1.1;color:var(--text);margin:0 0 18px}
+.liked-empty-sub{font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:400;line-height:1.6;color:var(--soft);margin:0;letter-spacing:.01em}
 .catgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 18px}
 .cat{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px 18px;border-radius:22px;text-align:center;cursor:pointer}
 .cat .ci{display:grid;place-items:center}
@@ -1857,11 +1864,22 @@ function InvoiceSheet({ o, isAdmin, onClose }) {
 }
 
 /* ---- PIACIUTI ---- */
+function LikedEmpty() {
+  return (
+    <div className="liked-empty">
+      <div className="liked-empty-mark" aria-hidden="true">
+        <HeartI />
+      </div>
+      <h3 className="liked-empty-title">Ciò che merita di restare.</h3>
+      <p className="liked-empty-sub">Gli oggetti che salvi appariranno qui.</p>
+    </div>
+  );
+}
 function Liked({ likedPrints, onOpen, onLike, onEdit }) {
   return (
     <section className="screen on">
       <h2 className="title px"><span className="ticon"><HeartI /></span>Piaciuti</h2>
-      {likedPrints.length === 0 && <p className="empty">Non hai ancora messo mi piace a nulla.</p>}
+      {likedPrints.length === 0 && <LikedEmpty />}
       {likedPrints.length > 0 && (
         <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} />)}</Grid>
       )}
