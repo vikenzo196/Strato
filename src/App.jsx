@@ -186,8 +186,6 @@ const CSS = `
   .dpricerow{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:2px 2px 0}
   .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:30px;color:var(--priceCol);margin:0;letter-spacing:-.02em}
   .dmat{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;background:rgba(191,107,74,.10);border:1px solid rgba(191,107,74,.24);color:var(--accent);font-size:12.5px;font-weight:600;margin:0}
-  .dtag{display:flex;align-items:center;gap:8px;margin:14px 2px 0;font-size:12.5px;color:var(--soft);font-weight:500}
-  .dtagdot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
   .ddesc{margin:14px 2px 0;font-size:14px;line-height:1.55;color:var(--text);opacity:.88}
   .dlabel{font-size:12px;font-weight:700;color:var(--soft);margin:18px 2px 9px;letter-spacing:.06em;text-transform:uppercase}
   .dswatches{display:flex;gap:16px;flex-wrap:wrap}
@@ -208,10 +206,11 @@ const CSS = `
   .dopts .dttl{margin-top:0}
   .dbuy .dlabel.dctr{text-align:center;margin:2px 0 9px}
   .dbuy .dqty{justify-content:center}
-  .seg{display:flex;gap:6px;background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:13px;padding:4px;max-width:360px}
-  .seg button{flex:1;border:none;background:transparent;color:var(--soft);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:13.5px;padding:9px 6px;border-radius:9px;cursor:pointer;transition:background .15s,color .15s}
-  .seg button.on{background:var(--glassDock);color:var(--text);box-shadow:inset 0 1px 0 var(--hi),0 2px 7px rgba(0,0,0,.12)}
-  .seg button i{font-style:normal;font-weight:600;font-size:11px;opacity:.65;margin-left:3px}
+  .seg{display:flex;gap:6px;background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:15px;padding:5px;max-width:360px;-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%)}
+  .seg button{flex:1;border:none;background:transparent;color:var(--soft);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:13.5px;padding:9px 6px;border-radius:11px;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s}
+  .seg button.on{background:rgba(191,107,74,.14);color:var(--accent);font-weight:700;box-shadow:inset 0 0 0 1px rgba(191,107,74,.32),0 3px 9px rgba(191,107,74,.16)}
+  .seg button i{font-style:normal;font-weight:600;font-size:11px;opacity:.6;margin-left:3px}
+  .seg button.on i{opacity:.95;color:var(--accent)}
   .elecedit{margin-top:14px;background:none;border:none;color:var(--soft);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:12.5px;cursor:pointer;padding:2px 0}
   .elecprices{margin-top:8px;background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:13px;padding:6px 12px}
   .epp{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;font-size:13.5px;color:var(--text);border-bottom:1px solid var(--strokeSoft)}
@@ -557,8 +556,8 @@ body.dark{--detailGlass:linear-gradient(180deg,rgba(40,32,26,.84),rgba(30,24,20,
 /* ================= DESIGN SYSTEM — premium warm (light/dark auto) ============= */
 :root{
   --text:#2D2621; --soft:#6E6257; --faint:rgba(110,98,87,.55);
-  --glass:rgba(255,255,255,.45); --glass2:rgba(255,255,255,.58);
-  --strokeSoft:rgba(191,107,74,.12); --hi:rgba(255,255,255,.5); --glassDock:rgba(247,242,235,.70);
+  --glass:rgba(255,253,250,.46); --glass2:rgba(251,244,235,.62);
+  --strokeSoft:rgba(191,107,74,.14); --hi:rgba(255,255,255,.5); --glassDock:rgba(246,236,225,.74);
   --bg:#F7F2EB; --bg2:#F1E8DC;
   --accent:#BF6B4A; --accent2:#D6B89B; --accentDark:#9C5C43;
   --icon:#8A7C70; --heart:#BF6B4A; --success:#6E8B69; --warning:#C89C5B;
@@ -571,8 +570,8 @@ body.dark{--detailGlass:linear-gradient(180deg,rgba(40,32,26,.84),rgba(30,24,20,
 }
 body.dark{
   --text:#F2E5D5; --soft:#B9A897; --faint:rgba(185,168,151,.5);
-  --glass:rgba(255,255,255,.05); --glass2:rgba(255,255,255,.085);
-  --strokeSoft:rgba(209,124,86,.14); --hi:rgba(255,255,255,.1); --glassDock:rgba(24,20,17,.72);
+  --glass:rgba(214,184,155,.06); --glass2:rgba(214,184,155,.10);
+  --strokeSoft:rgba(209,124,86,.16); --hi:rgba(255,255,255,.1); --glassDock:rgba(34,27,21,.76);
   --bg:#181411; --bg2:#231D19;
   --accent:#D17C56; --accent2:#B69A82; --accentDark:#B69A82;
   --icon:#8A7C70; --heart:#D17C56; --success:#7A9774; --warning:#D1A366;
@@ -1004,7 +1003,7 @@ export default function App() {
   const syncBackstop = () => {
     try {
       const dark = document.body.classList.contains("dark");
-      const base = dark ? "#181411" : "#F7F2EB";
+      const base = dark ? "#1d1813" : "#EFE7DB";
       // Backstop tinta unita su <html>; il body resta trasparente.
       document.documentElement.style.background = base;
       document.body.style.background = "transparent";
@@ -1017,11 +1016,13 @@ export default function App() {
         bg = document.createElement("div");
         bg.id = "appbg";
         bg.setAttribute("aria-hidden", "true");
-        bg.style.cssText =
-          "position:fixed;inset:0;pointer-events:none;" +
-          "background-size:cover;background-position:center center;background-repeat:no-repeat;";
         document.body.insertBefore(bg, document.body.firstChild);
       }
+      // Si estende oltre il fondo del viewport (height 118vh) per coprire il
+      // "gap" della barra dinamica di iOS: niente piu' striscia chiara in basso.
+      bg.style.cssText =
+        "position:fixed;top:0;left:0;right:0;height:118vh;z-index:0;pointer-events:none;" +
+        "background-size:cover;background-position:center center;background-repeat:no-repeat;";
       applyWallpaper(bg, dark);
       // Solleva il contenuto sopra lo sfondo fisso (niente z-index negativo,
       // che in certi compositing finiva dietro al canvas).
@@ -1653,9 +1654,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
               <span className="dprice">{eur(p.price)}</span>
               {p.material && <span className="dmat">{p.material}</span>}
             </div>
-            <div className="dtag"><span className="dtagdot" /> Stampato in 3D su richiesta · pezzo unico</div>
             {p.desc && <p className="ddesc">{p.desc}</p>}
-            <div className="dlabel dcolor">Colori disponibili</div>
+            <div className="dlabel dcolor">Colori</div>
             <div className="dswatches readonly">
               {p.cols.map((cc, k) => (
                 <div key={k} className="dswbox ro">
