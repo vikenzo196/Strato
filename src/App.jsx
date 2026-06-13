@@ -185,7 +185,7 @@ const CSS = `
   .dkick{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:16px 2px 0}
   .dpricerow{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:2px 2px 0}
   .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:30px;color:var(--priceCol);margin:0;letter-spacing:-.02em}
-  .dmat{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;background:rgba(191,107,74,.10);border:1px solid rgba(191,107,74,.24);color:var(--accent);font-size:12.5px;font-weight:600;margin:0}
+  .dmat{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.24);color:var(--accent);font-size:12.5px;font-weight:600;margin:0}
   .ddesc{margin:14px 2px 0;font-size:14px;line-height:1.55;color:var(--text);opacity:.88}
   .dlabel{font-size:12px;font-weight:700;color:var(--soft);margin:18px 2px 9px;letter-spacing:.06em;text-transform:uppercase}
   .dswatches{display:flex;gap:16px;flex-wrap:wrap}
@@ -208,7 +208,7 @@ const CSS = `
   .dbuy .dqty{justify-content:center}
   .seg{display:flex;gap:6px;background:var(--glass2);border:1px solid var(--strokeSoft);border-radius:15px;padding:5px;max-width:360px;-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%)}
   .seg button{flex:1;border:none;background:transparent;color:var(--soft);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:13.5px;padding:9px 6px;border-radius:11px;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s}
-  .seg button.on{background:rgba(191,107,74,.14);color:var(--accent);font-weight:700;box-shadow:inset 0 0 0 1px rgba(191,107,74,.32),0 3px 9px rgba(191,107,74,.16)}
+  .seg button.on{background:rgba(199,125,107,.14);color:var(--accent);font-weight:700;box-shadow:inset 0 0 0 1px rgba(199,125,107,.32),0 3px 9px rgba(199,125,107,.16)}
   .seg button i{font-style:normal;font-weight:600;font-size:11px;opacity:.6;margin-left:3px}
   .seg button.on i{opacity:.95;color:var(--accent)}
   .elecedit{margin-top:14px;background:none;border:none;color:var(--soft);font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:12.5px;cursor:pointer;padding:2px 0}
@@ -298,7 +298,12 @@ const CSS = `
 .grid{grid-template-columns:repeat(2,1fr);gap:12px}
 .grid .card{opacity:1}
 .px{padding-left:18px;padding-right:18px}
-.kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--soft);margin:8px 0 2px}
+.kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--accent);margin:8px 0 2px}
+.trust{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 24px}
+.trustit{display:flex;flex-direction:column;gap:3px;padding:13px 15px;border-radius:16px;background:var(--glass2);border:1px solid var(--strokeSoft);-webkit-backdrop-filter:blur(14px) saturate(155%);backdrop-filter:blur(14px) saturate(155%);box-shadow:inset 0 1px 0 var(--hi)}
+.trustk{font-size:13.5px;font-weight:700;color:var(--text)}
+.trustv{font-size:12px;color:var(--soft);line-height:1.35}
+@media(min-width:560px){.trust{grid-template-columns:repeat(3,1fr)}}
 .hero{font-size:40px;line-height:1.04;font-weight:800;color:var(--text);margin:0 0 18px}
 .herocard{position:relative;margin:0 18px 18px;border-radius:26px;overflow:hidden;box-shadow:var(--elev3);cursor:pointer;aspect-ratio:16/11}
 .herocard img{width:100%;height:100%;object-fit:cover;display:block}
@@ -509,7 +514,7 @@ button:active{transform:scale(.93)}
 .odone.out{animation:odOut .4s ease both}
 .odcard{width:100%;max-width:340px;text-align:center;padding:32px 28px;border-radius:28px;background:var(--glassDock);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 26px 64px rgba(0,0,0,.42);animation:odCard .44s cubic-bezier(.2,.85,.25,1) both}
 .odone.out .odcard{animation:odCardOut .4s ease both}
-.odicon{width:66px;height:66px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(191,107,74,.16);color:var(--accent);box-shadow:inset 0 1px 0 var(--hi)}
+.odicon{width:66px;height:66px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(199,125,107,.16);color:var(--accent);box-shadow:inset 0 1px 0 var(--hi)}
 .odicon svg{width:32px;height:32px;stroke:var(--accent)}
 .odt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:22px;color:var(--text);margin-bottom:9px}
 .ods{font-size:13.5px;color:var(--soft);line-height:1.5}
@@ -547,34 +552,34 @@ button:active{transform:scale(.93)}
 /* ---- dettaglio come popup a foglio (stile carrello) ---- */
 :root{--sheetbg:#f6f1ea}
 body.dark{--sheetbg:#1f1b17}
-:root{--detailGlass:linear-gradient(180deg,rgba(249,242,234,.82),rgba(244,233,222,.80));--detailBorder:rgba(191,107,74,.20);--priceCol:#8F4E37}
-body.dark{--detailGlass:linear-gradient(180deg,rgba(40,32,26,.84),rgba(30,24,20,.84));--detailBorder:rgba(209,124,86,.22);--priceCol:#E6A079}
+:root{--detailGlass:linear-gradient(180deg,rgba(249,243,236,.84),rgba(243,235,225,.82));--detailBorder:rgba(199,125,107,.22);--priceCol:#8B4A32}
+body.dark{--detailGlass:linear-gradient(180deg,rgba(60,46,40,.86),rgba(45,36,32,.86));--detailBorder:rgba(217,142,114,.24);--priceCol:#E6A079}
 .sheet.detailsheet{position:relative;background:var(--detailGlass);-webkit-backdrop-filter:blur(26px) saturate(185%);backdrop-filter:blur(26px) saturate(185%);max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--detailBorder);box-shadow:inset 0 1px 0 var(--hi),0 -14px 44px rgba(0,0,0,.34)}
 .detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
 .detailsheet .dgrid{margin-top:6px}
 
 /* ================= DESIGN SYSTEM — premium warm (light/dark auto) ============= */
 :root{
-  --text:#2D2621; --soft:#6E6257; --faint:rgba(110,98,87,.55);
-  --glass:rgba(255,253,250,.46); --glass2:rgba(251,244,235,.62);
-  --strokeSoft:rgba(191,107,74,.14); --hi:rgba(255,255,255,.5); --glassDock:rgba(246,236,225,.74);
-  --bg:#F7F2EB; --bg2:#F1E8DC;
-  --accent:#BF6B4A; --accent2:#D6B89B; --accentDark:#9C5C43;
-  --icon:#8A7C70; --heart:#BF6B4A; --success:#6E8B69; --warning:#C89C5B;
+  --text:#2E2620; --soft:#6F6358; --faint:rgba(111,99,88,.55);
+  --glass:rgba(255,253,250,.46); --glass2:rgba(250,243,235,.62);
+  --strokeSoft:rgba(199,125,107,.16); --hi:rgba(255,255,255,.5); --glassDock:rgba(247,240,231,.74);
+  --bg:#F7F3EE; --bg2:#EFE7DD;
+  --accent:#C77D6B; --accent2:#D9C2A3; --accentDark:#A65435;
+  --icon:#8C7E72; --heart:#C77D6B; --success:#6E8B69; --warning:#C69B72;
   --txtShadow:rgba(70,45,30,.14); --shcol:rgba(120,80,55,.12); --shblur:42px; --shy:12px;
   --elev1:0 1px 2px rgba(74,45,28,.20), 0 3px 10px rgba(74,45,28,.24);
   --elev2:0 2px 6px rgba(74,45,28,.18), 0 10px 24px rgba(74,45,28,.30);
   --elev3:0 5px 14px rgba(74,45,28,.18), 0 20px 44px rgba(74,45,28,.34);
-  --card:rgba(255,255,255,.5); --sheetbg:#F7F2EB;
-  --scrim:rgba(247,242,235,.9); --scrim2:rgba(247,242,235,.5);
+  --card:rgba(255,255,255,.5); --sheetbg:#F7F3EE;
+  --scrim:rgba(247,243,238,.9); --scrim2:rgba(247,243,238,.5);
 }
 body.dark{
-  --text:#F2E5D5; --soft:#B9A897; --faint:rgba(185,168,151,.5);
-  --glass:rgba(214,184,155,.06); --glass2:rgba(214,184,155,.10);
-  --strokeSoft:rgba(209,124,86,.16); --hi:rgba(255,255,255,.1); --glassDock:rgba(34,27,21,.76);
-  --bg:#181411; --bg2:#231D19;
-  --accent:#D17C56; --accent2:#B69A82; --accentDark:#B69A82;
-  --icon:#8A7C70; --heart:#D17C56; --success:#7A9774; --warning:#D1A366;
+  --text:#F2E6D8; --soft:#BBAA98; --faint:rgba(187,170,152,.5);
+  --glass:rgba(217,194,163,.06); --glass2:rgba(217,194,163,.10);
+  --strokeSoft:rgba(217,142,114,.18); --hi:rgba(255,255,255,.1); --glassDock:rgba(45,36,32,.78);
+  --bg:#2D2420; --bg2:#3B2B25;
+  --accent:#D98E72; --accent2:#C69B72; --accentDark:#C69B72;
+  --icon:#9C8B7C; --heart:#D98E72; --success:#7A9774; --warning:#D1A878;
   --txtShadow:rgba(0,0,0,.5); --shcol:rgba(0,0,0,.5);
   --elev1:0 1px 2px rgba(0,0,0,.34), 0 6px 16px rgba(0,0,0,.42);
   --elev2:0 2px 8px rgba(0,0,0,.34), 0 16px 36px rgba(0,0,0,.46);
@@ -595,13 +600,13 @@ body.dark{
 .glass{-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%)}
 
 /* ---- icone monocromatiche (famiglia terracotta) ---- */
-.gico{stroke:var(--accent);fill:rgba(191,107,74,.10)}
+.gico{stroke:var(--accent);fill:rgba(199,125,107,.10)}
 body.dark .gico{fill:rgba(209,124,86,.12)}
 .dock .dnav svg{stroke:var(--icon)!important;fill:none}
 .dock .dnav.act svg{stroke:var(--accent)!important}
-.heart.liked svg{stroke:var(--heart)!important;fill:rgba(191,107,74,.16)!important}
+.heart.liked svg{stroke:var(--heart)!important;fill:rgba(199,125,107,.16)!important}
 body.dark .heart.liked svg{fill:rgba(209,124,86,.18)!important}
-.title .ticon.heartred svg,.heartred svg{stroke:var(--heart)!important;fill:rgba(191,107,74,.14)!important}
+.title .ticon.heartred svg,.heartred svg{stroke:var(--heart)!important;fill:rgba(199,125,107,.14)!important}
 
 /* ---- micro-interazioni: morbide, senza rimbalzo ---- */
 button{transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .22s ease,background .22s ease}
@@ -636,8 +641,8 @@ body,.card,.cat,.herocard,.glass,.sheet,.detailsheet,.topbar,.dock,.cbody,.ord,.
 .cbody .ct{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:16px;line-height:1.18;color:var(--text);margin:0 0 4px;min-width:0}
 .cbody .mat{font-size:11.5px;color:var(--soft);margin:0 0 9px}
 .cbody .cp{font-weight:700;font-size:16.5px;color:var(--text);margin:0 0 13px;letter-spacing:.01em}
-.configbtn{width:100%;padding:11px;border-radius:13px;border:1px solid rgba(191,107,74,.26);background:linear-gradient(180deg,rgba(191,107,74,.15),rgba(191,107,74,.09));color:var(--accent);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.02em;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 5px 14px rgba(191,107,74,.13);transition:background .28s ease,box-shadow .28s ease,transform .2s cubic-bezier(.4,0,.2,1)}
-.configbtn:hover{background:linear-gradient(180deg,rgba(191,107,74,.22),rgba(191,107,74,.13))}
+.configbtn{width:100%;padding:11px;border-radius:13px;border:1px solid rgba(199,125,107,.26);background:linear-gradient(180deg,rgba(199,125,107,.15),rgba(199,125,107,.09));color:var(--accent);font-family:inherit;font-weight:700;font-size:13px;letter-spacing:.02em;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 5px 14px rgba(199,125,107,.13);transition:background .28s ease,box-shadow .28s ease,transform .2s cubic-bezier(.4,0,.2,1)}
+.configbtn:hover{background:linear-gradient(180deg,rgba(199,125,107,.22),rgba(199,125,107,.13))}
 .configbtn:active{transform:scale(.97)}
 body.dark .configbtn{border-color:rgba(209,124,86,.32);background:linear-gradient(180deg,rgba(209,124,86,.2),rgba(209,124,86,.11));color:#E7A57E;box-shadow:inset 0 1px 0 var(--hi),0 5px 14px rgba(0,0,0,.3)}
 
@@ -665,13 +670,13 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 /* ---- campanella notifiche (topbar) ---- */
 .tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1);color:var(--text)}
 .tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
-.belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(191,107,74,.5)}
+.belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(199,125,107,.5)}
 
 /* ---- foglio notifiche ---- */
 
 .notifrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:15px;border:1px solid var(--strokeSoft);background:var(--glass2);margin-bottom:9px;cursor:pointer;color:var(--text);font-family:inherit;transition:background .25s ease,transform .2s ease}
 .notifrow:active{transform:scale(.985)}
-.notifdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px rgba(191,107,74,.35)}
+.notifdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px rgba(199,125,107,.35)}
 .notifdot.s-pending{background:var(--warning)}
 .notifdot.s-confirmed{background:var(--success)}
 .notifdot.s-rejected{background:#b06a52}
@@ -705,7 +710,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 
 /* ---- evidenziazione ordine da notifica ---- */
 .ofocus{animation:ofocusPulse 2.4s cubic-bezier(.4,0,.2,1)}
-@keyframes ofocusPulse{0%{box-shadow:0 0 0 0 rgba(191,107,74,0)}22%{box-shadow:0 0 0 3px rgba(191,107,74,.55),0 8px 24px rgba(191,107,74,.2)}100%{box-shadow:0 0 0 0 rgba(191,107,74,0)}}
+@keyframes ofocusPulse{0%{box-shadow:0 0 0 0 rgba(199,125,107,0)}22%{box-shadow:0 0 0 3px rgba(199,125,107,.55),0 8px 24px rgba(199,125,107,.2)}100%{box-shadow:0 0 0 0 rgba(199,125,107,0)}}
 .badge.br{background:rgba(176,106,82,.16);color:#b06a52}
 .orddel{flex:none;width:34px;height:34px;margin-left:8px;border-radius:11px;border:1px solid rgba(192,57,43,.35);background:rgba(192,57,43,.08);color:#c0392b;display:grid;place-items:center;cursor:pointer;transition:transform .12s,background .2s}
 .orddel:active{transform:scale(.9)}
@@ -1003,7 +1008,7 @@ export default function App() {
   const syncBackstop = () => {
     try {
       const dark = document.body.classList.contains("dark");
-      const base = dark ? "#1d1813" : "#EFE7DB";
+      const base = dark ? "#2A211C" : "#EFE7DD";
       // Backstop tinta unita su <html>; il body resta trasparente.
       document.documentElement.style.background = base;
       document.body.style.background = "transparent";
@@ -1566,8 +1571,8 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   return (
     <section className="screen on">
       <div className="px">
-        <div className="kick">ULTIME CREAZIONI</div>
-        <h1 className="hero">Stampe fresche di piatto.</h1>
+        <div className="kick">OGGETTI DA ABITARE</div>
+        <h1 className="hero">Design contemporaneo, realizzato strato dopo strato.</h1>
       </div>
       {hero && (
         <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
@@ -1579,6 +1584,11 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
           {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
         </div>
       )}
+      <div className="trust px">
+        <div className="trustit"><span className="trustk">Manifattura digitale</span><span className="trustv">Precisione, strato dopo strato</span></div>
+        <div className="trustit"><span className="trustk">Materiali selezionati</span><span className="trustv">Finiture calde e durevoli</span></div>
+        <div className="trustit"><span className="trustk">Pezzi su richiesta</span><span className="trustv">Prodotti localmente per te</span></div>
+      </div>
       <h2 className="title px">Catalogo</h2>
       {prints.length === 0 && <p className="empty">Nessun prodotto ancora.</p>}
       <Grid>
@@ -1986,7 +1996,7 @@ function Login({ onGoogle }) {
     <div className="loginwrap">
       <div className="loginbox glass">
         <div className="brand2 big"><span className="mk"><Box /></span>Strato</div>
-        <p className="lsub">Stampe 3D su misura</p>
+        <p className="lsub">Oggetti di design per la casa</p>
         <button className="gbtn" onClick={onGoogle}><GoogleIcon /> Continua con Google</button>
       </div>
     </div>
