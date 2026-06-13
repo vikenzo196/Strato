@@ -69,7 +69,7 @@ const CSS = `
   .sec h2{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;font-size:22px;margin:0}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
-  .card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column;background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:var(--elev2)}
+  .card{border-radius:26px;overflow:hidden;display:flex;flex-direction:column;background:var(--glassDock);-webkit-backdrop-filter:blur(18px) saturate(175%);backdrop-filter:blur(18px) saturate(175%);box-shadow:var(--elev2)}
   .card::before{display:none}
   .card .ph{position:relative;aspect-ratio:1}
   .card .ph img{width:100%;height:100%;object-fit:cover;display:block}
@@ -181,10 +181,10 @@ const CSS = `
   .dback button{width:40px;height:40px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-size:20px;cursor:pointer;display:grid;place-items:center}
   .dbt{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:600;color:var(--text)}
   .dimg{width:100%;aspect-ratio:1;border-radius:24px;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 18px 50px var(--shcol)}
-  .dttl{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:26px;color:var(--text);margin:4px 2px 4px;letter-spacing:-.01em;line-height:1.12}
-  .dkick{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:16px 2px 0}
-  .dpricerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:2px 2px 0}
-  .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:25px;color:var(--accent);margin:0;letter-spacing:-.01em}
+  .dttl{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:700;font-size:30px;color:var(--text);margin:5px 2px 6px;letter-spacing:-.02em;line-height:1.06}
+  .dkick{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:16px 2px 0}
+  .dpricerow{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:2px 2px 0}
+  .dprice{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;font-size:30px;color:var(--priceCol);margin:0;letter-spacing:-.02em}
   .dmat{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;background:rgba(191,107,74,.10);border:1px solid rgba(191,107,74,.24);color:var(--accent);font-size:12.5px;font-weight:600;margin:0}
   .dtag{display:flex;align-items:center;gap:8px;margin:14px 2px 0;font-size:12.5px;color:var(--soft);font-weight:500}
   .dtagdot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
@@ -548,7 +548,9 @@ button:active{transform:scale(.93)}
 /* ---- dettaglio come popup a foglio (stile carrello) ---- */
 :root{--sheetbg:#f6f1ea}
 body.dark{--sheetbg:#1f1b17}
-.sheet.detailsheet{position:relative;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32)}
+:root{--detailGlass:linear-gradient(180deg,rgba(249,242,234,.82),rgba(244,233,222,.80));--detailBorder:rgba(191,107,74,.20);--priceCol:#8F4E37}
+body.dark{--detailGlass:linear-gradient(180deg,rgba(40,32,26,.84),rgba(30,24,20,.84));--detailBorder:rgba(209,124,86,.22);--priceCol:#E6A079}
+.sheet.detailsheet{position:relative;background:var(--detailGlass);-webkit-backdrop-filter:blur(26px) saturate(185%);backdrop-filter:blur(26px) saturate(185%);max-height:calc(100vh - 96px - env(safe-area-inset-top));max-height:calc(100dvh - 96px - env(safe-area-inset-top));padding-top:14px;border:1px solid var(--detailBorder);box-shadow:inset 0 1px 0 var(--hi),0 -14px 44px rgba(0,0,0,.34)}
 .detailsheet .detailedit{position:absolute;top:12px;right:16px;margin:0;z-index:4}
 .detailsheet .dgrid{margin-top:6px}
 
@@ -651,9 +653,12 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 
 /* ---- dock a 4 (Home/Esplora/Piaciuti/Ordini) ---- */
 .dock.dock4{gap:4px}
+.dock.dock5{gap:2px}
+.dock.dock5 .dnav{width:51px}
+@media(max-width:360px){.dock.dock5 .dnav{width:46px}}
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
-.cartbadge{position:absolute;top:5px;right:7px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:800;line-height:19px;text-align:center;border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.cartbadge{position:absolute;top:1px;right:1px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:800;line-height:19px;text-align:center;border:2px solid var(--bg);box-shadow:0 2px 5px rgba(0,0,0,.35);z-index:3}
 .cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
 .dnav.profile svg{stroke:var(--icon)}
 .dnav.profile.act svg{stroke:var(--accent)}
@@ -706,6 +711,10 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .orddel{flex:none;width:34px;height:34px;margin-left:8px;border-radius:11px;border:1px solid rgba(192,57,43,.35);background:rgba(192,57,43,.08);color:#c0392b;display:grid;place-items:center;cursor:pointer;transition:transform .12s,background .2s}
 .orddel:active{transform:scale(.9)}
 .orddel svg{width:18px;height:18px}
+.notifhead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.notifclear{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-family:inherit;font-weight:600;font-size:12.5px;padding:7px 12px;border-radius:20px;cursor:pointer;transition:transform .12s,background .2s}
+.notifclear:active{transform:scale(.95)}
+.notifclear svg{width:15px;height:15px}
 
 /* ---- dock: tab ordini ---- */
 .dnav.orders{position:relative}
@@ -965,6 +974,7 @@ export default function App() {
   const [notifOpen, setNotifOpen] = useState(false);
   const [orderFocus, setOrderFocus] = useState(null);
   const [notifSeen, setNotifSeen] = useState(() => { try { return JSON.parse(localStorage.getItem("strato_notif_seen") || "[]"); } catch (e) { return []; } });
+  const [notifCleared, setNotifCleared] = useState(() => { try { return JSON.parse(localStorage.getItem("strato_notif_cleared") || "[]"); } catch (e) { return []; } });
   const [detailId, setDetailId] = useState(null);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
@@ -1048,71 +1058,37 @@ export default function App() {
   // Carica la config sfondi da Supabase Storage (percorsi fissi nel bucket "prints").
   const loadBackgrounds = async () => {
     try {
-      const { data, error } = await supabase.storage.from("prints").list("backgrounds", {
-        limit: 1000,
-        sortBy: { column: "updated_at", order: "desc" },
-      });
+      const { data, error } = await supabase.storage.from("prints").list("backgrounds");
       if (error || !data) return;
-
       const conf = { light: {}, dark: {} };
-      const picked = { light: {}, dark: {} };
       let any = false;
-
       for (const f of data) {
-        const m = /^(light|dark)-(pc|mobile)(?:-(\d+))?\.webp$/.exec(f.name);
+        const m = /^(light|dark)-(pc|mobile)\.webp$/.exec(f.name);
         if (!m) continue;
-
-        const mode = m[1];
-        const size = m[2];
-        const stamp = m[3]
-          ? Number(m[3])
-          : (f.updated_at ? new Date(f.updated_at).getTime() : 0);
-
-        if (picked[mode][size] && picked[mode][size] >= stamp) continue;
-
+        const v = f.updated_at ? new Date(f.updated_at).getTime() : Date.now();
         const pub = supabase.storage.from("prints").getPublicUrl("backgrounds/" + f.name).data.publicUrl;
-        picked[mode][size] = stamp;
-        conf[mode][size] = pub + "?v=" + (stamp || Date.now());
+        conf[m[1]][m[2]] = pub + "?v=" + v;
         any = true;
       }
-
       BG_CONF = any ? conf : null;
       applyWallpaper(null, document.body.classList.contains("dark"));
-    } catch (e) {
-      console.error("Errore lettura sfondi", e);
-    }
+    } catch (e) {}
   };
 
-  // Admin: genera versioni WebP (pc + mobile) e le carica su Supabase Storage.
-  // Usiamo nomi versionati invece di `upsert: true`: così servono solo permessi
-  // INSERT sul bucket `prints` e non si rompe se Supabase non consente UPDATE
-  // sugli oggetti esistenti.
+  // Admin: genera versioni WebP (pc + mobile) e le carica a percorsi fissi.
   const onUploadBg = async (file, mode) => {
     try {
-      if (!file || !file.type || !file.type.startsWith("image/")) {
-        toast("Seleziona un'immagine valida");
-        return;
-      }
-
       const pc = await makeWebp(file, 2560, 0.82);
       const mobile = await makeWebp(file, 1280, 0.8);
-      const stamp = Date.now();
-
       for (const pair of [["pc", pc], ["mobile", mobile]]) {
-        const path = "backgrounds/" + mode + "-" + pair[0] + "-" + stamp + ".webp";
-        const { error } = await supabase.storage.from("prints").upload(path, pair[1], {
-          contentType: "image/webp",
-          cacheControl: "3600",
-          upsert: false,
-        });
+        const path = "backgrounds/" + mode + "-" + pair[0] + ".webp";
+        const { error } = await supabase.storage.from("prints").upload(path, pair[1], { contentType: "image/webp", upsert: true });
         if (error) throw error;
       }
-
       await loadBackgrounds();
       toast("Sfondo " + (mode === "dark" ? "scuro" : "chiaro") + " aggiornato");
     } catch (e) {
-      console.error("Errore upload sfondo", e);
-      toast((e && e.message) ? "Errore sfondo: " + e.message : "Errore upload sfondo");
+      toast("Errore upload sfondo");
       throw e;
     }
   };
@@ -1359,20 +1335,23 @@ export default function App() {
   };
 
   const deleteOrder = async (id) => {
-    await supabase.from("order_items").delete().eq("order_id", id);
-    const { error } = await supabase.from("orders").delete().eq("id", id);
-    if (error) { toast("Errore eliminazione"); return; }
+    if (!window.confirm("Eliminare definitivamente questo ordine rifiutato? L'azione è irreversibile.")) return;
+    const r1 = await supabase.from("order_items").delete().eq("order_id", id);
+    if (r1.error) { toast("Errore: " + r1.error.message); return; }
+    const { data, error } = await supabase.from("orders").delete().eq("id", id).select("id");
+    if (error) { toast("Errore: " + error.message); return; }
+    if (!data || data.length === 0) { toast("Eliminazione bloccata: manca una policy DELETE per gli admin (RLS)."); return; }
     await loadOrders();
     toast("Ordine eliminato");
   };
 
   /* ---- navigazione ---- */
   const open = (t) => {
-    if ((t === "orders" || t === "profile") && !user) { setAuthGate(t === "orders" ? "per vedere i tuoi ordini" : "per accedere al profilo"); return; }
+    if ((t === "orders" || t === "profile" || t === "liked") && !user) { setAuthGate(t === "orders" ? "per vedere i tuoi ordini" : (t === "liked" ? "per vedere i tuoi preferiti" : "per accedere al profilo")); return; }
     setDetailId(null); setTab(t); window.scrollTo(0, 0);
   };
 
-  const notifs = orders
+  const allNotifs = orders
     .filter((o) => isAdmin ? o.status === "pending" : (o.status === "confirmed" || o.status === "rejected"))
     .slice()
     .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
@@ -1382,8 +1361,10 @@ export default function App() {
       body: (o.items[0] ? o.items[0].t : "Ordine") + " · " + eur(o.total) + (isAdmin ? " · " + o.who : ""),
     }));
   const notifSig = (n) => n.id + ":" + n.status;
+  const notifs = allNotifs.filter((n) => !notifCleared.includes(notifSig(n)));
   const unread = notifs.filter((n) => !notifSeen.includes(notifSig(n))).length;
-  const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen(all); try { localStorage.setItem("strato_notif_seen", JSON.stringify(all)); } catch (e) {} };
+  const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen((prev) => { const m = [...new Set([...prev, ...all])]; try { localStorage.setItem("strato_notif_seen", JSON.stringify(m)); } catch (e) {} return m; }); };
+  const clearNotifs = () => { const sigs = notifs.map(notifSig); setNotifCleared((prev) => { const m = [...new Set([...prev, ...sigs])]; try { localStorage.setItem("strato_notif_cleared", JSON.stringify(m)); } catch (e) {} return m; }); };
   const openNotifs = () => { setNotifOpen(true); markNotifsSeen(); };
   const onNotifClick = (id) => { setNotifOpen(false); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
   const openDetail = (id) => { setDetailId(id); };
@@ -1501,9 +1482,10 @@ export default function App() {
 
       {/* DOCK */}
       <div className="dockwrap">
-        <div className="dock dock4">
+        <div className="dock dock5">
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={() => open("home")} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={() => open("search")} aria-label="Esplora"><SearchI /></button>
+          <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={() => open("liked")} aria-label="Piaciuti"><HeartI /></button>
           <button className="dnav cart" onClick={() => setCartOpen(true)} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={() => open("orders")} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
@@ -1523,7 +1505,7 @@ export default function App() {
       )}
 
       {notifOpen && (
-        <NotifSheet notifs={notifs} onClose={() => setNotifOpen(false)} onItemClick={onNotifClick} />
+        <NotifSheet notifs={notifs} onClose={() => setNotifOpen(false)} onItemClick={onNotifClick} onClear={clearNotifs} />
       )}
 
       {cartOpen && (
@@ -1953,12 +1935,6 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUplo
       </div>
       {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
       {isAdmin && <BgUploader onUpload={onUploadBg} />}
-      {likedPrints && likedPrints.length > 0 && (
-        <>
-          <div className="psec">Preferiti</div>
-          <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpenProduct(p.id)} onEdit={onEditProduct} />)}</Grid>
-        </>
-      )}
       <div className="psec">Tema</div>
       <div className="prefrow">
         <div className="themeseg compact">
@@ -2150,14 +2126,17 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
   );
 }
 
-function NotifSheet({ notifs, onClose, onItemClick }) {
+function NotifSheet({ notifs, onClose, onItemClick, onClear }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   return (
     <div className={"ipick top on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Notifiche" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
       <div className="sheetwrap">
         <div className="sheet">
-          <h4><Bell /> Notifiche</h4>
+          <div className="notifhead">
+            <h4><Bell /> Notifiche</h4>
+            {notifs.length > 0 && <button className="notifclear" onClick={onClear}><Trash /> Elimina tutte</button>}
+          </div>
           <div className="cartitems">
             {notifs.length === 0 && <div className="cempty">Nessuna notifica per ora.</div>}
             {notifs.map((n) => (
