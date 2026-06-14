@@ -1,6 +1,68 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { supabase } from "./lib/supabase";
 
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+
+function canUseWebPush() {
+  return typeof window !== "undefined"
+    && "serviceWorker" in navigator
+    && "PushManager" in window
+    && "Notification" in window;
+}
+
+function urlB64ToUint8(b64) {
+  const padding = "=".repeat((4 - (b64.length % 4)) % 4);
+  const base64 = (b64 + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = window.atob(base64);
+  return Uint8Array.from([...raw].map((char) => char.charCodeAt(0)));
+}
+
+function sameAppServerKey(existing, current) {
+  if (!existing) return null; // alcuni browser non espongono la chiave: non possiamo confrontare
+  const a = new Uint8Array(existing);
+  if (a.length !== current.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== current[i]) return false;
+  return true;
+}
+
+async function enablePush(supabaseClient, userId) {
+  if (!VAPID_PUBLIC_KEY) throw new Error("missing-vapid-public-key");
+  if (!canUseWebPush()) throw new Error("push-not-supported");
+
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") throw new Error(permission === "denied" ? "push-denied" : "push-dismissed");
+
+  const appKey = urlB64ToUint8(VAPID_PUBLIC_KEY);
+  const reg = await navigator.serviceWorker.register("/sw.js");
+  let sub = await reg.pushManager.getSubscription();
+
+  // Se esiste già una subscription legata a una VAPID key DIVERSA (es. chiavi
+  // rigenerate dopo il primo test), il push server rifiuta gli invii pur risultando
+  // "attivata": la disiscriviamo e ne creiamo una nuova con la chiave corrente.
+  if (sub && sameAppServerKey(sub.options?.applicationServerKey, appKey) === false) {
+    try { await sub.unsubscribe(); } catch (_) {}
+    try { await supabaseClient.from("push_subscriptions").delete().eq("user_id", userId); } catch (_) {}
+    sub = null;
+  }
+
+  if (!sub) {
+    sub = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: appKey,
+    });
+  }
+
+  const { error } = await supabaseClient
+    .from("push_subscriptions")
+    .upsert(
+      { user_id: userId, subscription: sub.toJSON() },
+      { onConflict: "user_id,subscription" }
+    );
+  if (error) throw error;
+  return sub;
+}
+
+
 /* ============================ STILE (Liquid Glass) ===================== */
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -350,6 +412,12 @@ body.dark .searchbox{background:rgba(199,125,107,.09);border-color:rgba(199,125,
 .pwa-prows{font-size:12.5px;color:var(--soft);margin-top:2px}
 .pwa-prow-check svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .pwa-prow-arr{opacity:.35;display:flex}
+.push-prow{margin-top:10px}
+.push-prow.busy{pointer-events:none;opacity:.72}
+.push-prow.disabled{cursor:not-allowed;opacity:.58}
+.push-prow-ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;color:var(--accent);background:rgba(199,125,107,.12);border:1px solid rgba(199,125,107,.18);box-shadow:inset 0 1px 0 var(--hi)}
+.push-prow-ico svg{width:21px;height:21px}
+.pwa-prow:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(199,125,107,.28), inset 0 1px 0 var(--hi)}
 .catgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 18px}
 .cat{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px 18px;border-radius:22px;text-align:center;cursor:pointer;background:rgba(217,194,163,.30);border:1px solid rgba(199,125,107,.16);box-shadow:0 2px 8px rgba(140,90,55,.08),inset 0 1px 0 rgba(255,243,228,.5)}
 body.dark .cat{background:rgba(199,125,107,.09);border-color:rgba(199,125,107,.20);box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(199,125,107,.08)}
@@ -772,86 +840,6 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dswatches.readonly{pointer-events:none}
 .dswbox.ro{cursor:default}
 
-/* ===================== PROFILO — redesign premium ===================== */
-.profilePage{padding-bottom:8px}
-.profilePage .title{margin-bottom:20px}
-
-/* entrata pagina + stagger sezioni */
-@keyframes profIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:profIn .5s cubic-bezier(.22,1,.36,1) both}
-.profilePage .profileSection:nth-of-type(1){animation-delay:.04s}
-.profilePage .profileSection:nth-of-type(2){animation-delay:.09s}
-.profilePage .profileSection:nth-of-type(3){animation-delay:.14s}
-.profileLogoutWrap{animation-delay:.18s}
-
-/* Card identità */
-.profileHero{display:flex;align-items:center;gap:18px;margin:0 18px;padding:22px;border-radius:26px;background:var(--card);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 10px 30px var(--shcol)}
-.profileAvatar{width:74px;height:74px;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--strokeSoft);box-shadow:0 4px 14px var(--shcol)}
-.profileIdentity{min-width:0;display:flex;flex-direction:column;gap:7px}
-.profileName{font-family:'Inter',system-ui,sans-serif;font-weight:700;font-size:21px;letter-spacing:-.3px;line-height:1.12;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.profileRolePill{align-self:flex-start;display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--accent2);background:rgba(199,125,107,.12);border:1px solid rgba(199,125,107,.24)}
-body.dark .profileRolePill{color:var(--accent);background:rgba(199,125,107,.15);border-color:rgba(199,125,107,.30)}
-.profileMicrocopy{margin:1px 0 0;font-size:13px;line-height:1.45;font-weight:400;color:var(--soft)}
-
-/* Sezioni */
-.profileSection{margin-top:26px}
-.profileSectionTitle{margin:0 22px 12px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--soft)}
-
-/* Amministrazione */
-.profileAdminCard{margin:0 18px;padding:8px;border-radius:22px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
-.profileAdminActions{display:flex;flex-direction:column;gap:6px}
-.profileSubtleButton{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 13px;border-radius:16px;border:1px solid transparent;background:transparent;color:var(--text);font-family:inherit;cursor:pointer;transition:background .25s cubic-bezier(.22,1,.36,1),transform .18s cubic-bezier(.22,1,.36,1)}
-.profileSubtleButton:hover{background:var(--glass)}
-.profileSubtleButton:active{transform:scale(.985)}
-.profileSubtleIcon{flex:none;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 12px var(--shcol)}
-.profileSubtleIcon svg{width:19px;height:19px}
-.profileSubtleText{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.profileSubtleT{font-weight:600;font-size:15px;color:var(--text)}
-.profileSubtleS{font-size:12.5px;font-weight:400;color:var(--soft)}
-.profileSubtleArr{flex:none;display:flex;color:var(--soft);opacity:.5}
-.profileSubtleArr svg{width:18px;height:18px}
-
-/* Sfondi app — disclosure premium */
-.profileBgDetails{border-top:1px solid var(--strokeSoft);margin-top:6px}
-.profileBgDetails[open]{padding-bottom:4px}
-.profileBgSummary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 13px;cursor:pointer;font-weight:600;font-size:15px;color:var(--text);border-radius:14px;transition:background .25s}
-.profileBgSummary::-webkit-details-marker{display:none}
-.profileBgSummary:hover{background:var(--glass)}
-.profileBgChev{display:flex;color:var(--soft);opacity:.6;transition:transform .3s cubic-bezier(.22,1,.36,1)}
-.profileBgChev svg{width:18px;height:18px}
-.profileBgDetails[open] .profileBgChev{transform:rotate(90deg)}
-.profileBgGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 8px 4px}
-.profileBgNote{margin:10px 10px 4px;font-size:12px;line-height:1.5;color:var(--soft)}
-
-/* Aspetto — segmented control raffinato (scoped) */
-.profilePage .themeseg{margin:0 18px;gap:4px;padding:5px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
-.profilePage .segbtn{transition:background .3s cubic-bezier(.22,1,.36,1),color .3s cubic-bezier(.22,1,.36,1),box-shadow .3s cubic-bezier(.22,1,.36,1),transform .18s cubic-bezier(.22,1,.36,1)}
-.profilePage .segbtn.on{background:var(--card);color:var(--accent);box-shadow:0 2px 8px var(--shcol),inset 0 1px 0 var(--hi)}
-.profilePage .segbtn:active{transform:scale(.97)}
-
-/* App row */
-.profilePage .pwa-prow{box-shadow:inset 0 1px 0 var(--hi)}
-.profilePage .push-prow{margin-top:10px;border:none;font-family:inherit;color:var(--text);width:calc(100% - 36px);text-align:left}
-.profilePage .push-prow:disabled{cursor:default;opacity:.76}
-.push-prow-ico{display:grid;place-items:center;background:var(--glass);color:var(--accent);border:1px solid var(--strokeSoft)}
-.push-prow-ico svg{width:21px;height:21px}
-
-/* Logout discreto */
-.profileLogoutWrap{display:flex;justify-content:center;margin:34px 18px 4px}
-.profileLogout{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:14px;border:1px solid var(--strokeSoft);background:transparent;color:var(--soft);font-family:inherit;font-weight:500;font-size:14px;cursor:pointer;transition:background .25s,color .25s,transform .18s}
-.profileLogout svg{width:17px;height:17px}
-.profileLogout:hover{background:var(--glass);color:var(--text)}
-.profileLogout:active{transform:scale(.985)}
-
-/* Focus visibile ed elegante */
-.profilePage button:focus-visible,.profileBgSummary:focus-visible,.profilePage .pwa-prow:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:none!important}
-  .profileBgChev,.profilePage .segbtn,.profileSubtleButton,.profileLogout,.profileBgSummary{transition:none!important}
-}
-
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1083,31 +1071,6 @@ function usePWAInstall() {
   return { installed, platform, canPrompt: !!deferredPrompt, install };
 }
 
-
-/* Web Push — subscription dispositivo per notifiche ordini */
-const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || "";
-
-function urlB64ToUint8Array(b64) {
-  const padding = "=".repeat((4 - (b64.length % 4)) % 4);
-  const base64 = (b64 + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const raw = atob(base64);
-  return Uint8Array.from([...raw].map((char) => char.charCodeAt(0)));
-}
-
-function canUsePush() {
-  return typeof window !== "undefined"
-    && "serviceWorker" in navigator
-    && "PushManager" in window
-    && "Notification" in window;
-}
-
-async function getCurrentPushSubscription() {
-  if (!canUsePush()) return null;
-  const reg = await navigator.serviceWorker.getRegistration();
-  if (!reg) return null;
-  return reg.pushManager.getSubscription();
-}
-
 /* PWA: benefit list */
 const PWA_BENEFITS = [
   { text: "Accesso immediato dalla Home",      path: "M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9" },
@@ -1325,6 +1288,7 @@ export default function App() {
   const { installed: pwaInstalled, platform: pwaPlatform, canPrompt: pwaCanPrompt, install: pwaInstall } = usePWAInstall();
   const [pwaModal, setPwaModal]   = useState(null); // null | "main" | "ios"
   const pwaShownRef               = useRef(false);
+  const [pushInfo, setPushInfo] = useState({ supported: false, permission: "default", subscribed: false, busy: false });
   const [user, setUser] = useState(null);
   const [prints, setPrints] = useState([]);
   const [cats, setCats] = useState([]);
@@ -1346,11 +1310,8 @@ export default function App() {
   const [theme, setTheme] = useState("auto"); // "light" | "dark" | "auto" (dispositivo)
   const [toasts, setToasts] = useState([]);
   const [q, setQ] = useState("");
-  const [pushEnabled, setPushEnabled] = useState(false);
-  const [pushBusy, setPushBusy] = useState(false);
 
   const isAdmin = user?.is_admin;
-  const pushSupported = canUsePush();
   const toast = (m) => {
     const id = Date.now() + Math.random();
     setToasts((t) => [...t, { id, m }]);
@@ -1565,7 +1526,7 @@ export default function App() {
       .select("*, order_items(*)")
       .order("created_at", { ascending: false });
     setOrders((data || []).map((o) => ({
-      id: o.id, userId: o.user_id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
+      id: o.id, user_id: o.user_id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
       status: o.status, total: Number(o.total) || 0, date: o.created_at,
       items: (o.order_items || []).map((it) => ({
         t: it.title, col: it.color_name, base: Number(it.base_price) || 0,
@@ -1616,47 +1577,47 @@ export default function App() {
     return () => clearTimeout(t);
   }, [user, pwaInstalled]);
 
-  /* Notifiche push ordini: stato subscription dispositivo */
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      if (!user || !pushSupported) { setPushEnabled(false); return; }
+
+  const refreshPushInfo = useCallback(async () => {
+    const supported = canUseWebPush();
+    const permission = supported ? Notification.permission : "unsupported";
+    let subscribed = false;
+    if (supported) {
       try {
-        const sub = await getCurrentPushSubscription();
-        if (alive) setPushEnabled(!!sub && Notification.permission === "granted");
-      } catch (e) {
-        if (alive) setPushEnabled(false);
-      }
-    })();
-    return () => { alive = false; };
-  }, [user?.id, pushSupported]);
+        const reg = await navigator.serviceWorker.getRegistration("/sw.js") || await navigator.serviceWorker.getRegistration();
+        const sub = reg ? await reg.pushManager.getSubscription() : null;
+        subscribed = !!sub;
+      } catch (_) {}
+    }
+    setPushInfo((prev) => ({ ...prev, supported, permission, subscribed }));
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    refreshPushInfo();
+  }, [user, pwaInstalled, refreshPushInfo]);
 
   const enableOrderPush = async () => {
-    if (!user) { setAuthGate("per attivare le notifiche"); return; }
-    if (!pushSupported) { toast("Push non supportate su questo browser"); return; }
-    if (!VAPID_PUBLIC_KEY) { toast("Chiave VAPID pubblica mancante"); return; }
-    setPushBusy(true);
+    if (!user) return;
+    if (pwaPlatform === "ios" && !pwaInstalled) {
+      toast("Su iPhone installa Strato sulla schermata Home per attivare le notifiche.");
+      setPwaModal("ios");
+      return;
+    }
+    setPushInfo((prev) => ({ ...prev, busy: true }));
     try {
-      const perm = await Notification.requestPermission();
-      if (perm !== "granted") { toast("Permesso notifiche non concesso"); return; }
-      const reg = await navigator.serviceWorker.register("/sw.js");
-      const existing = await reg.pushManager.getSubscription();
-      const sub = existing || await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
-      });
-      const { error } = await supabase.from("push_subscriptions").upsert(
-        { user_id: user.id, subscription: sub.toJSON() },
-        { onConflict: "user_id,endpoint" }
-      );
-      if (error) throw error;
-      setPushEnabled(true);
+      await enablePush(supabase, user.id);
+      setPushInfo({ supported: true, permission: "granted", subscribed: true, busy: false });
       toast("Notifiche ordini attivate");
     } catch (e) {
-      console.warn("enable push failed", e);
-      toast("Errore attivazione notifiche");
-    } finally {
-      setPushBusy(false);
+      await refreshPushInfo();
+      setPushInfo((prev) => ({ ...prev, busy: false }));
+      const msg = String(e?.message || e);
+      if (msg.includes("missing-vapid")) toast("Manca VITE_VAPID_PUBLIC_KEY su Vercel.");
+      else if (msg.includes("not-supported")) toast("Push non supportate su questo browser.");
+      else if (msg.includes("denied")) toast("Notifiche bloccate nelle impostazioni del browser.");
+      else if (msg.includes("dismissed")) toast("Permesso notifiche non concesso.");
+      else toast("Errore attivazione notifiche");
     }
   };
 
@@ -1750,31 +1711,36 @@ export default function App() {
     setOrderDone(true);
   };
   const setOrderStatus = async (id, status) => {
-    const target = orders.find((o) => o.id === id);
-    const { data: updated, error } = await supabase
-      .from("orders")
-      .update({ status })
-      .eq("id", id)
-      .select("id,user_id,total")
-      .single();
+    const order = orders.find((o) => o.id === id);
+    const { error } = await supabase.from("orders").update({ status }).eq("id", id);
     if (error) { toast("Errore aggiornamento"); return; }
 
-    if ((status === "confirmed" || status === "rejected") && updated?.user_id) {
-      const itemTitle = target?.items?.[0]?.t || "La tua richiesta";
-      const title = status === "confirmed" ? "Ordine confermato" : "Richiesta non accettata";
-      const body = status === "confirmed"
-        ? itemTitle + " è stato confermato da Strato."
-        : itemTitle + " non è stato accettato.";
-      supabase.functions.invoke("push-notify", {
-        body: {
-          user_id: updated.user_id,
-          title,
-          body,
-          url: "/",
-        },
-      }).then(({ error: pushError }) => {
-        if (pushError) console.warn("push-notify failed", pushError);
-      });
+    if (order?.user_id && (status === "confirmed" || status === "rejected")) {
+      const firstItem = order.items?.[0]?.t || "Ordine";
+      const isConfirmed = status === "confirmed";
+      try {
+        const { data: pushData, error: pushError } = await supabase.functions.invoke("push-notify", {
+          body: {
+            user_id: order.user_id,
+            title: isConfirmed ? "Ordine confermato" : "Richiesta non accettata",
+            body: isConfirmed
+              ? firstItem + " · La tua richiesta è stata confermata."
+              : firstItem + " · La tua richiesta non è stata accettata.",
+            url: "/?tab=orders&order=" + encodeURIComponent(id),
+          },
+        });
+        // La function risponde 200 anche quando non recapita nulla: senza leggere
+        // sent/total il fallimento resterebbe invisibile.
+        if (pushError) {
+          console.warn("Push notify error", pushError);
+          toast("Notifica non inviata (errore funzione push)");
+        } else if (pushData && typeof pushData.sent === "number") {
+          if (pushData.total === 0) toast("Notifica: nessun dispositivo iscritto per l'utente");
+          else if (pushData.sent < pushData.total) toast("Notifica rifiutata dal push server — controlla le chiavi VAPID");
+        }
+      } catch (_) {
+        // La push non deve mai bloccare il flusso admin o l'aggiornamento ordine.
+      }
     }
 
     await loadOrders();
@@ -1925,7 +1891,9 @@ export default function App() {
             isAdmin={isAdmin} onNewProduct={() => setEditing({})} onUploadBg={onUploadBg}
             likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
             pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
-            pushSupported={pushSupported} pushEnabled={pushEnabled} pushBusy={pushBusy} onEnablePush={enableOrderPush} />
+            pushSupported={pushInfo.supported} pushPermission={pushInfo.permission}
+            pushSubscribed={pushInfo.subscribed} pushBusy={pushInfo.busy}
+            onEnablePush={enableOrderPush} />
         )}
       </main>
 
@@ -2404,112 +2372,84 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
   );
 }
 
-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushEnabled, pushBusy, onEnablePush }) {
-  const chevron = (
-    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-  );
-  const onPwaKey = (e) => {
-    if (pwaInstalled) return;
-    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); onPWAInstall(); }
+function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushPermission, pushSubscribed, pushBusy, onEnablePush }) {
+  const pushDisabled = pushSubscribed || !pushSupported || pushBusy || pushPermission === "denied";
+  const pushTitle = pushSubscribed ? "Notifiche ordini attive" : "Attiva notifiche ordini";
+  const pushCopy = pushSubscribed
+    ? "Riceverai aggiornamenti quando un ordine viene confermato o rifiutato."
+    : pushPermission === "denied"
+      ? "Le notifiche sono bloccate nelle impostazioni del browser."
+      : !pushSupported
+        ? "Push non disponibili su questo browser o dispositivo."
+        : "Aggiornamenti discreti anche quando Strato è chiusa.";
+  const activatePush = () => { if (!pushDisabled) onEnablePush(); };
+  const onPushKey = (e) => {
+    if (!pushDisabled && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      onEnablePush();
+    }
   };
+
   return (
-    <section className="screen on profilePage">
+    <section className="screen on">
       <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
-
-      {/* Card identità */}
-      <div className="profileHero">
-        <img className="profileAvatar" src={user.avatar || avatarURI(user.name)} alt={"Avatar di " + user.name} />
-        <div className="profileIdentity">
-          <div className="profileName">{user.name}</div>
-          <span className="profileRolePill">{isAdmin ? "Amministratore" : "Cliente"}</span>
-          <p className="profileMicrocopy">{isAdmin ? "Gestisci l'esperienza Strato con cura e coerenza." : "Il tuo spazio personale Strato."}</p>
-        </div>
+      <div className="pcard glass">
+        <img className="pav" src={user.avatar || avatarURI(user.name)} alt="" />
+        <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
       </div>
-
-      {/* Amministrazione */}
-      {isAdmin && (
-        <section className="profileSection">
-          <h3 className="profileSectionTitle">Amministrazione</h3>
-          <div className="profileAdminCard">
-            <div className="profileAdminActions">
-              <button type="button" className="profileSubtleButton" onClick={onNewProduct}>
-                <span className="profileSubtleIcon"><Plus /></span>
-                <span className="profileSubtleText">
-                  <span className="profileSubtleT">Nuovo prodotto</span>
-                  <span className="profileSubtleS">Aggiungi un oggetto alla collezione.</span>
-                </span>
-                <span className="profileSubtleArr">{chevron}</span>
-              </button>
-            </div>
-            <details className="profileBgDetails">
-              <summary className="profileBgSummary"><span>Sfondi app</span><span className="profileBgChev">{chevron}</span></summary>
-              <BgUploader onUpload={onUploadBg} />
-            </details>
-          </div>
-        </section>
-      )}
-
-      {/* Aspetto */}
-      <section className="profileSection">
-        <h3 className="profileSectionTitle">Aspetto</h3>
+      {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
+      {isAdmin && <BgUploader onUpload={onUploadBg} />}
+      <div className="psec">Tema</div>
+      <div className="prefrow">
         <div className="themeseg compact">
           {[["light", "Luce", <Sun key="s" />], ["dark", "Buio", <Moon key="m" />], ["auto", "Automatico", <AutoI key="a" />]].map(([t, label, icon]) => (
-            <button key={t} type="button" className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
+            <button key={t} className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
               <span className="segico">{icon}</span><span className="seglbl">{label}</span>
             </button>
           ))}
         </div>
-      </section>
-
-      {/* App */}
-      <section className="profileSection">
-        <h3 className="profileSectionTitle">App</h3>
-        <div
-          className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
-          onClick={!pwaInstalled ? onPWAInstall : undefined}
-          onKeyDown={!pwaInstalled ? onPwaKey : undefined}
-          role={pwaInstalled ? undefined : "button"}
-          tabIndex={pwaInstalled ? undefined : 0}
-        >
-          <div className="pwa-prowl">
-            <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
-            <div>
-              <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
-              <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
-            </div>
+        <button className="logout side" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
+      </div>
+      {/* Sezione App */}
+      <div className="psec">App</div>
+      <div
+        className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
+        onClick={!pwaInstalled ? onPWAInstall : undefined}
+        onKeyDown={!pwaInstalled ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPWAInstall(); } } : undefined}
+        role={pwaInstalled ? undefined : "button"}
+        tabIndex={pwaInstalled ? undefined : 0}
+      >
+        <div className="pwa-prowl">
+          <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
+          <div>
+            <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
+            <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
           </div>
-          {pwaInstalled
-            ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-            : <span className="pwa-prow-arr">{chevron}</span>
-          }
         </div>
-
-        <button
-          type="button"
-          className={"pwa-prow push-prow" + (pushEnabled ? " installed" : "")}
-          onClick={pushEnabled || pushBusy ? undefined : onEnablePush}
-          disabled={pushBusy || pushEnabled || !pushSupported}
-          aria-label={pushEnabled ? "Notifiche ordini attive" : "Attiva notifiche ordini"}
-        >
-          <div className="pwa-prowl">
-            <span className="pwa-prow-ico push-prow-ico"><Bell /></span>
-            <div>
-              <div className="pwa-prowt">{pushEnabled ? "Notifiche ordini attive" : "Attiva notifiche ordini"}</div>
-              <div className="pwa-prows">{pushSupported ? "Ricevi aggiornamenti quando una richiesta cambia stato." : "Non supportate da questo browser."}</div>
-            </div>
+        {pwaInstalled
+          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        }
+      </div>
+      <div
+        className={"pwa-prow push-prow" + (pushSubscribed ? " installed" : "") + (pushBusy ? " busy" : "") + (!pushSupported || pushPermission === "denied" ? " disabled" : "")}
+        onClick={activatePush}
+        onKeyDown={onPushKey}
+        role={!pushDisabled ? "button" : undefined}
+        tabIndex={!pushDisabled ? 0 : undefined}
+        aria-disabled={pushDisabled ? "true" : undefined}
+      >
+        <div className="pwa-prowl">
+          <span className="push-prow-ico"><Bell /></span>
+          <div>
+            <div className="pwa-prowt">{pushBusy ? "Attivazione in corso…" : pushTitle}</div>
+            <div className="pwa-prows">{pushCopy}</div>
           </div>
-          {pushBusy
-            ? <span className="pwa-prows">Attivo…</span>
-            : pushEnabled
-              ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-              : <span className="pwa-prow-arr">{chevron}</span>
-          }
-        </button>
-      </section>
-
-      {/* Logout */}
-      <div className="profileLogoutWrap">
-        <button type="button" className="profileLogout" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
+        </div>
+        {pushSubscribed
+          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+        }
       </div>
     </section>
   );
@@ -2525,7 +2465,8 @@ function BgUploader({ onUpload }) {
   };
   return (
     <>
-      <div className="profileBgGrid">
+      <div className="psec">Sfondo app</div>
+      <div className="bgup">
         <label className={"bgupbtn" + (busy === "light" ? " busy" : "")}>
           <span className="bgupi"><Sun /></span>
           <span className="bgupt">Sfondo chiaro</span>
@@ -2539,7 +2480,7 @@ function BgUploader({ onUpload }) {
           <input type="file" accept="image/*" onChange={(e) => pick("dark", e.target.files[0])} disabled={!!busy} />
         </label>
       </div>
-      <p className="profileBgNote">Carica un'immagine ad alta risoluzione. Strato genera in automatico versioni leggere e ottimizzate per ogni schermo.</p>
+      <p className="bgnote">Carica un'immagine ad alta risoluzione: vengono generate in automatico versioni WebP leggere ottimizzate per smartphone e PC.</p>
     </>
   );
 }
