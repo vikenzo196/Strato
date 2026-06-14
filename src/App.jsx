@@ -831,6 +831,10 @@ body.dark .profileRolePill{color:var(--accent);background:rgba(199,125,107,.15);
 
 /* App row */
 .profilePage .pwa-prow{box-shadow:inset 0 1px 0 var(--hi)}
+.profilePage .push-prow{margin-top:10px;border:none;font-family:inherit;color:var(--text);width:calc(100% - 36px);text-align:left}
+.profilePage .push-prow:disabled{cursor:default;opacity:.76}
+.push-prow-ico{display:grid;place-items:center;background:var(--glass);color:var(--accent);border:1px solid var(--strokeSoft)}
+.push-prow-ico svg{width:21px;height:21px}
 
 /* Logout discreto */
 .profileLogoutWrap{display:flex;justify-content:center;margin:34px 18px 4px}
@@ -1079,6 +1083,31 @@ function usePWAInstall() {
   return { installed, platform, canPrompt: !!deferredPrompt, install };
 }
 
+
+/* Web Push — subscription dispositivo per notifiche ordini */
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || "";
+
+function urlB64ToUint8Array(b64) {
+  const padding = "=".repeat((4 - (b64.length % 4)) % 4);
+  const base64 = (b64 + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = atob(base64);
+  return Uint8Array.from([...raw].map((char) => char.charCodeAt(0)));
+}
+
+function canUsePush() {
+  return typeof window !== "undefined"
+    && "serviceWorker" in navigator
+    && "PushManager" in window
+    && "Notification" in window;
+}
+
+async function getCurrentPushSubscription() {
+  if (!canUsePush()) return null;
+  const reg = await navigator.serviceWorker.getRegistration();
+  if (!reg) return null;
+  return reg.pushManager.getSubscription();
+}
+
 /* PWA: benefit list */
 const PWA_BENEFITS = [
   { text: "Accesso immediato dalla Home",      path: "M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9" },
@@ -1317,8 +1346,11 @@ export default function App() {
   const [theme, setTheme] = useState("auto"); // "light" | "dark" | "auto" (dispositivo)
   const [toasts, setToasts] = useState([]);
   const [q, setQ] = useState("");
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [pushBusy, setPushBusy] = useState(false);
 
   const isAdmin = user?.is_admin;
+  const pushSupported = canUsePush();
   const toast = (m) => {
     const id = Date.now() + Math.random();
     setToasts((t) => [...t, { id, m }]);
@@ -1533,7 +1565,7 @@ export default function App() {
       .select("*, order_items(*)")
       .order("created_at", { ascending: false });
     setOrders((data || []).map((o) => ({
-      id: o.id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
+      id: o.id, userId: o.user_id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
       status: o.status, total: Number(o.total) || 0, date: o.created_at,
       items: (o.order_items || []).map((it) => ({
         t: it.title, col: it.color_name, base: Number(it.base_price) || 0,
@@ -1583,6 +1615,50 @@ export default function App() {
     const t = setTimeout(() => setPwaModal("main"), 1400);
     return () => clearTimeout(t);
   }, [user, pwaInstalled]);
+
+  /* Notifiche push ordini: stato subscription dispositivo */
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      if (!user || !pushSupported) { setPushEnabled(false); return; }
+      try {
+        const sub = await getCurrentPushSubscription();
+        if (alive) setPushEnabled(!!sub && Notification.permission === "granted");
+      } catch (e) {
+        if (alive) setPushEnabled(false);
+      }
+    })();
+    return () => { alive = false; };
+  }, [user?.id, pushSupported]);
+
+  const enableOrderPush = async () => {
+    if (!user) { setAuthGate("per attivare le notifiche"); return; }
+    if (!pushSupported) { toast("Push non supportate su questo browser"); return; }
+    if (!VAPID_PUBLIC_KEY) { toast("Chiave VAPID pubblica mancante"); return; }
+    setPushBusy(true);
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== "granted") { toast("Permesso notifiche non concesso"); return; }
+      const reg = await navigator.serviceWorker.register("/sw.js");
+      const existing = await reg.pushManager.getSubscription();
+      const sub = existing || await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+      const { error } = await supabase.from("push_subscriptions").upsert(
+        { user_id: user.id, subscription: sub.toJSON() },
+        { onConflict: "user_id,endpoint" }
+      );
+      if (error) throw error;
+      setPushEnabled(true);
+      toast("Notifiche ordini attivate");
+    } catch (e) {
+      console.warn("enable push failed", e);
+      toast("Errore attivazione notifiche");
+    } finally {
+      setPushBusy(false);
+    }
+  };
 
   // parallax + scrim su scroll
   useEffect(() => {
@@ -1674,8 +1750,33 @@ export default function App() {
     setOrderDone(true);
   };
   const setOrderStatus = async (id, status) => {
-    const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+    const target = orders.find((o) => o.id === id);
+    const { data: updated, error } = await supabase
+      .from("orders")
+      .update({ status })
+      .eq("id", id)
+      .select("id,user_id,total")
+      .single();
     if (error) { toast("Errore aggiornamento"); return; }
+
+    if ((status === "confirmed" || status === "rejected") && updated?.user_id) {
+      const itemTitle = target?.items?.[0]?.t || "La tua richiesta";
+      const title = status === "confirmed" ? "Ordine confermato" : "Richiesta non accettata";
+      const body = status === "confirmed"
+        ? itemTitle + " è stato confermato da Strato."
+        : itemTitle + " non è stato accettato.";
+      supabase.functions.invoke("push-notify", {
+        body: {
+          user_id: updated.user_id,
+          title,
+          body,
+          url: "/",
+        },
+      }).then(({ error: pushError }) => {
+        if (pushError) console.warn("push-notify failed", pushError);
+      });
+    }
+
     await loadOrders();
     toast(status === "confirmed" ? "Ordine confermato" : "Richiesta rifiutata");
   };
@@ -1823,7 +1924,8 @@ export default function App() {
           <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
             isAdmin={isAdmin} onNewProduct={() => setEditing({})} onUploadBg={onUploadBg}
             likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
-            pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")} />
+            pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
+            pushSupported={pushSupported} pushEnabled={pushEnabled} pushBusy={pushBusy} onEnablePush={enableOrderPush} />
         )}
       </main>
 
@@ -2302,7 +2404,7 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
   );
 }
 
-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall }) {
+function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushEnabled, pushBusy, onEnablePush }) {
   const chevron = (
     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
   );
@@ -2381,6 +2483,28 @@ function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUplo
             : <span className="pwa-prow-arr">{chevron}</span>
           }
         </div>
+
+        <button
+          type="button"
+          className={"pwa-prow push-prow" + (pushEnabled ? " installed" : "")}
+          onClick={pushEnabled || pushBusy ? undefined : onEnablePush}
+          disabled={pushBusy || pushEnabled || !pushSupported}
+          aria-label={pushEnabled ? "Notifiche ordini attive" : "Attiva notifiche ordini"}
+        >
+          <div className="pwa-prowl">
+            <span className="pwa-prow-ico push-prow-ico"><Bell /></span>
+            <div>
+              <div className="pwa-prowt">{pushEnabled ? "Notifiche ordini attive" : "Attiva notifiche ordini"}</div>
+              <div className="pwa-prows">{pushSupported ? "Ricevi aggiornamenti quando una richiesta cambia stato." : "Non supportate da questo browser."}</div>
+            </div>
+          </div>
+          {pushBusy
+            ? <span className="pwa-prows">Attivo…</span>
+            : pushEnabled
+              ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+              : <span className="pwa-prow-arr">{chevron}</span>
+          }
+        </button>
       </section>
 
       {/* Logout */}
