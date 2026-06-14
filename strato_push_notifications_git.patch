@@ -1,0 +1,379 @@
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -1,6 +1,49 @@
+ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+ import { supabase } from "./lib/supabase";
+ 
++const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
++
++function canUseWebPush() {
++  return typeof window !== "undefined"
++    && "serviceWorker" in navigator
++    && "PushManager" in window
++    && "Notification" in window;
++}
++
++function urlB64ToUint8(b64) {
++  const padding = "=".repeat((4 - (b64.length % 4)) % 4);
++  const base64 = (b64 + padding).replace(/-/g, "+").replace(/_/g, "/");
++  const raw = window.atob(base64);
++  return Uint8Array.from([...raw].map((char) => char.charCodeAt(0)));
++}
++
++async function enablePush(supabaseClient, userId) {
++  if (!VAPID_PUBLIC_KEY) throw new Error("missing-vapid-public-key");
++  if (!canUseWebPush()) throw new Error("push-not-supported");
++
++  const permission = await Notification.requestPermission();
++  if (permission !== "granted") throw new Error(permission === "denied" ? "push-denied" : "push-dismissed");
++
++  const reg = await navigator.serviceWorker.register("/sw.js");
++  let sub = await reg.pushManager.getSubscription();
++  if (!sub) {
++    sub = await reg.pushManager.subscribe({
++      userVisibleOnly: true,
++      applicationServerKey: urlB64ToUint8(VAPID_PUBLIC_KEY),
++    });
++  }
++
++  const { error } = await supabaseClient
++    .from("push_subscriptions")
++    .upsert(
++      { user_id: userId, subscription: sub.toJSON() },
++      { onConflict: "user_id,subscription" }
++    );
++  if (error) throw error;
++  return sub;
++}
++
++
+ /* ============================ STILE (Liquid Glass) ===================== */
+ const CSS = `
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@@ -350,6 +393,12 @@
+ .pwa-prows{font-size:12.5px;color:var(--soft);margin-top:2px}
+ .pwa-prow-check svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+ .pwa-prow-arr{opacity:.35;display:flex}
++.push-prow{margin-top:10px}
++.push-prow.busy{pointer-events:none;opacity:.72}
++.push-prow.disabled{cursor:not-allowed;opacity:.58}
++.push-prow-ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none;color:var(--accent);background:rgba(199,125,107,.12);border:1px solid rgba(199,125,107,.18);box-shadow:inset 0 1px 0 var(--hi)}
++.push-prow-ico svg{width:21px;height:21px}
++.pwa-prow:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(199,125,107,.28), inset 0 1px 0 var(--hi)}
+ .catgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 18px}
+ .cat{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px 18px;border-radius:22px;text-align:center;cursor:pointer;background:rgba(217,194,163,.30);border:1px solid rgba(199,125,107,.16);box-shadow:0 2px 8px rgba(140,90,55,.08),inset 0 1px 0 rgba(255,243,228,.5)}
+ body.dark .cat{background:rgba(199,125,107,.09);border-color:rgba(199,125,107,.20);box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 1px 0 rgba(199,125,107,.08)}
+@@ -1220,6 +1269,7 @@
+   const { installed: pwaInstalled, platform: pwaPlatform, canPrompt: pwaCanPrompt, install: pwaInstall } = usePWAInstall();
+   const [pwaModal, setPwaModal]   = useState(null); // null | "main" | "ios"
+   const pwaShownRef               = useRef(false);
++  const [pushInfo, setPushInfo] = useState({ supported: false, permission: "default", subscribed: false, busy: false });
+   const [user, setUser] = useState(null);
+   const [prints, setPrints] = useState([]);
+   const [cats, setCats] = useState([]);
+@@ -1457,7 +1507,7 @@
+       .select("*, order_items(*)")
+       .order("created_at", { ascending: false });
+     setOrders((data || []).map((o) => ({
+-      id: o.id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
++      id: o.id, user_id: o.user_id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
+       status: o.status, total: Number(o.total) || 0, date: o.created_at,
+       items: (o.order_items || []).map((it) => ({
+         t: it.title, col: it.color_name, base: Number(it.base_price) || 0,
+@@ -1508,6 +1558,50 @@
+     return () => clearTimeout(t);
+   }, [user, pwaInstalled]);
+ 
++
++  const refreshPushInfo = useCallback(async () => {
++    const supported = canUseWebPush();
++    const permission = supported ? Notification.permission : "unsupported";
++    let subscribed = false;
++    if (supported) {
++      try {
++        const reg = await navigator.serviceWorker.getRegistration("/sw.js") || await navigator.serviceWorker.getRegistration();
++        const sub = reg ? await reg.pushManager.getSubscription() : null;
++        subscribed = !!sub;
++      } catch (_) {}
++    }
++    setPushInfo((prev) => ({ ...prev, supported, permission, subscribed }));
++  }, []);
++
++  useEffect(() => {
++    if (!user) return;
++    refreshPushInfo();
++  }, [user, pwaInstalled, refreshPushInfo]);
++
++  const enableOrderPush = async () => {
++    if (!user) return;
++    if (pwaPlatform === "ios" && !pwaInstalled) {
++      toast("Su iPhone installa Strato sulla schermata Home per attivare le notifiche.");
++      setPwaModal("ios");
++      return;
++    }
++    setPushInfo((prev) => ({ ...prev, busy: true }));
++    try {
++      await enablePush(supabase, user.id);
++      setPushInfo({ supported: true, permission: "granted", subscribed: true, busy: false });
++      toast("Notifiche ordini attivate");
++    } catch (e) {
++      await refreshPushInfo();
++      setPushInfo((prev) => ({ ...prev, busy: false }));
++      const msg = String(e?.message || e);
++      if (msg.includes("missing-vapid")) toast("Manca VITE_VAPID_PUBLIC_KEY su Vercel.");
++      else if (msg.includes("not-supported")) toast("Push non supportate su questo browser.");
++      else if (msg.includes("denied")) toast("Notifiche bloccate nelle impostazioni del browser.");
++      else if (msg.includes("dismissed")) toast("Permesso notifiche non concesso.");
++      else toast("Errore attivazione notifiche");
++    }
++  };
++
+   // parallax + scrim su scroll
+   useEffect(() => {
+     let raf = 0;
+@@ -1598,8 +1692,30 @@
+     setOrderDone(true);
+   };
+   const setOrderStatus = async (id, status) => {
++    const order = orders.find((o) => o.id === id);
+     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+     if (error) { toast("Errore aggiornamento"); return; }
++
++    if (order?.user_id && (status === "confirmed" || status === "rejected")) {
++      const firstItem = order.items?.[0]?.t || "Ordine";
++      const isConfirmed = status === "confirmed";
++      try {
++        const { error: pushError } = await supabase.functions.invoke("push-notify", {
++          body: {
++            user_id: order.user_id,
++            title: isConfirmed ? "Ordine confermato" : "Richiesta non accettata",
++            body: isConfirmed
++              ? firstItem + " · La tua richiesta è stata confermata."
++              : firstItem + " · La tua richiesta non è stata accettata.",
++            url: "/?tab=orders&order=" + encodeURIComponent(id),
++          },
++        });
++        if (pushError) console.warn("Push notify error", pushError);
++      } catch (_) {
++        // La push non deve mai bloccare il flusso admin o l'aggiornamento ordine.
++      }
++    }
++
+     await loadOrders();
+     toast(status === "confirmed" ? "Ordine confermato" : "Richiesta rifiutata");
+   };
+@@ -1747,7 +1863,10 @@
+           <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
+             isAdmin={isAdmin} onNewProduct={() => setEditing({})} onUploadBg={onUploadBg}
+             likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
+-            pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")} />
++            pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
++            pushSupported={pushInfo.supported} pushPermission={pushInfo.permission}
++            pushSubscribed={pushInfo.subscribed} pushBusy={pushInfo.busy}
++            onEnablePush={enableOrderPush} />
+         )}
+       </main>
+ 
+@@ -2226,7 +2345,24 @@
+   );
+ }
+ 
+-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall }) {
++function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushPermission, pushSubscribed, pushBusy, onEnablePush }) {
++  const pushDisabled = pushSubscribed || !pushSupported || pushBusy || pushPermission === "denied";
++  const pushTitle = pushSubscribed ? "Notifiche ordini attive" : "Attiva notifiche ordini";
++  const pushCopy = pushSubscribed
++    ? "Riceverai aggiornamenti quando un ordine viene confermato o rifiutato."
++    : pushPermission === "denied"
++      ? "Le notifiche sono bloccate nelle impostazioni del browser."
++      : !pushSupported
++        ? "Push non disponibili su questo browser o dispositivo."
++        : "Aggiornamenti discreti anche quando Strato è chiusa.";
++  const activatePush = () => { if (!pushDisabled) onEnablePush(); };
++  const onPushKey = (e) => {
++    if (!pushDisabled && (e.key === "Enter" || e.key === " ")) {
++      e.preventDefault();
++      onEnablePush();
++    }
++  };
++
+   return (
+     <section className="screen on">
+       <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
+@@ -2252,20 +2388,41 @@
+       <div
+         className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
+         onClick={!pwaInstalled ? onPWAInstall : undefined}
++        onKeyDown={!pwaInstalled ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPWAInstall(); } } : undefined}
+         role={pwaInstalled ? undefined : "button"}
+         tabIndex={pwaInstalled ? undefined : 0}
+       >
+         <div className="pwa-prowl">
+           <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
+           <div>
+-            <div className="pwa-prowt">{pwaInstalled ? "Strato è installata" : "Installa Strato"}</div>
+-            <div className="pwa-prows">{pwaInstalled ? "Stai utilizzando la versione app." : "Accesso più rapido e esperienza ottimizzata."}</div>
++            <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
++            <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
+           </div>
+         </div>
+         {pwaInstalled
+           ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+           : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+         }
++      </div>
++      <div
++        className={"pwa-prow push-prow" + (pushSubscribed ? " installed" : "") + (pushBusy ? " busy" : "") + (!pushSupported || pushPermission === "denied" ? " disabled" : "")}
++        onClick={activatePush}
++        onKeyDown={onPushKey}
++        role={!pushDisabled ? "button" : undefined}
++        tabIndex={!pushDisabled ? 0 : undefined}
++        aria-disabled={pushDisabled ? "true" : undefined}
++      >
++        <div className="pwa-prowl">
++          <span className="push-prow-ico"><Bell /></span>
++          <div>
++            <div className="pwa-prowt">{pushBusy ? "Attivazione in corso…" : pushTitle}</div>
++            <div className="pwa-prows">{pushCopy}</div>
++          </div>
++        </div>
++        {pushSubscribed
++          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
++          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
++        }
+       </div>
+     </section>
+   );
+--- a/supabase/functions/push-notify/index.ts
++++ b/supabase/functions/push-notify/index.ts
+@@ -2,54 +2,86 @@
+ // Invia una notifica push Web a tutti i dispositivi iscritti di un utente.
+ // Deploy:  supabase functions deploy push-notify
+ // Secrets: supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... VAPID_SUBJECT=mailto:tu@dominio.it
+-//
+-// Chiamala dal tuo backend / da un Database Webhook quando un ordine cambia stato,
+-// passando { user_id, title, body, url }.
+ 
+ import webpush from "https://esm.sh/web-push@3.6.7";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ 
++const corsHeaders = {
++  "Access-Control-Allow-Origin": "*",
++  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
++  "Access-Control-Allow-Methods": "POST, OPTIONS",
++};
++
+ const VAPID_PUBLIC = Deno.env.get("VAPID_PUBLIC_KEY")!;
+ const VAPID_PRIVATE = Deno.env.get("VAPID_PRIVATE_KEY")!;
+ const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") || "mailto:admin@strato.app";
+ 
+ webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
+ 
+-const supabase = createClient(
++const supabaseAdmin = createClient(
+   Deno.env.get("SUPABASE_URL")!,
+   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+ );
+ 
++function json(body: unknown, status = 200) {
++  return new Response(JSON.stringify(body), {
++    status,
++    headers: { ...corsHeaders, "Content-Type": "application/json" },
++  });
++}
++
+ Deno.serve(async (req) => {
++  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
++  if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
++
+   try {
++    const authHeader = req.headers.get("Authorization") || "";
++    const token = authHeader.replace("Bearer ", "").trim();
++    if (!token) return json({ error: "missing_auth_token" }, 401);
++
++    const { data: authData, error: authError } = await supabaseAdmin.auth.getUser(token);
++    if (authError || !authData?.user) return json({ error: "invalid_auth_token" }, 401);
++
++    const { data: profile, error: profileError } = await supabaseAdmin
++      .from("profiles")
++      .select("is_admin")
++      .eq("id", authData.user.id)
++      .maybeSingle();
++
++    if (profileError) return json({ error: profileError.message }, 500);
++    if (!profile?.is_admin) return json({ error: "admin_required" }, 403);
++
+     const { user_id, title, body, url } = await req.json();
+-    if (!user_id) return new Response("user_id mancante", { status: 400 });
++    if (!user_id) return json({ error: "user_id mancante" }, 400);
+ 
+-    const { data: subs, error } = await supabase
++    const { data: subs, error } = await supabaseAdmin
+       .from("push_subscriptions")
+       .select("id, subscription")
+       .eq("user_id", user_id);
+-    if (error) return new Response(error.message, { status: 500 });
++    if (error) return json({ error: error.message }, 500);
++
++    const payload = JSON.stringify({
++      title: title || "Strato",
++      body: body || "",
++      url: url || "/",
++    });
+ 
+-    const payload = JSON.stringify({ title: title || "Strato", body: body || "", url: url || "/" });
+     const results = await Promise.allSettled(
+-      (subs || []).map(async (s: any) => {
++      (subs || []).map(async (s: { id: string; subscription: webpush.PushSubscription }) => {
+         try {
+           await webpush.sendNotification(s.subscription, payload);
+         } catch (err: any) {
+-          // 404/410 = subscription scaduta: rimuovila
+-          if (err.statusCode === 404 || err.statusCode === 410) {
+-            await supabase.from("push_subscriptions").delete().eq("id", s.id);
++          if (err?.statusCode === 404 || err?.statusCode === 410) {
++            await supabaseAdmin.from("push_subscriptions").delete().eq("id", s.id);
+           }
+           throw err;
+         }
+       })
+     );
++
+     const sent = results.filter((r) => r.status === "fulfilled").length;
+-    return new Response(JSON.stringify({ sent, total: subs?.length || 0 }), {
+-      headers: { "Content-Type": "application/json" },
+-    });
++    return json({ sent, total: subs?.length || 0 });
+   } catch (e) {
+-    return new Response(String(e), { status: 500 });
++    return json({ error: String(e) }, 500);
+   }
+ });
+--- a/db/push_and_admin.sql
++++ b/db/push_and_admin.sql
+@@ -12,6 +12,11 @@
+ alter table public.push_subscriptions enable row level security;
+ 
+ -- ogni utente gestisce solo le proprie subscription
++-- Drop preventivo: consente di rieseguire questo file senza errori se le policy esistono già.
++drop policy if exists "own subs select" on public.push_subscriptions;
++drop policy if exists "own subs insert" on public.push_subscriptions;
++drop policy if exists "own subs delete" on public.push_subscriptions;
++
+ create policy "own subs select" on public.push_subscriptions
+   for select using (auth.uid() = user_id);
+ create policy "own subs insert" on public.push_subscriptions
+@@ -27,11 +32,13 @@
+ -- Nel tuo schema l'admin e' profiles.is_admin = true.
+ -- =====================================================================
+ 
++drop policy if exists "admin delete orders" on public.orders;
+ create policy "admin delete orders" on public.orders
+   for delete using (
+     exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin = true)
+   );
+ 
++drop policy if exists "admin delete order_items" on public.order_items;
+ create policy "admin delete order_items" on public.order_items
+   for delete using (
+     exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin = true)
