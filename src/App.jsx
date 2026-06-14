@@ -302,9 +302,7 @@ const CSS = `
 .px{padding-left:18px;padding-right:18px}
 .kick{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--accent);margin:10px 0 2px}
 .hero{font-size:40px;line-height:1.04;font-weight:800;color:var(--text);margin:0 0 18px}
-/* Hero text area: manifesto della palette */
-.screen > .px:first-child{background:linear-gradient(160deg,rgba(244,239,232,.82) 0%,rgba(239,231,221,.60) 55%,rgba(199,125,107,.10) 100%);border-radius:0 0 28px 28px;padding-bottom:4px;margin-bottom:2px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-body.dark .screen > .px:first-child{background:linear-gradient(160deg,rgba(59,43,37,.70) 0%,rgba(51,39,35,.50) 55%,rgba(199,125,107,.12) 100%)}
+/* Hero text area: tono identitario viene dal kick terracotta e dal wallpaper — no overlay aggiuntivo */
 .herocard{position:relative;margin:0 18px 18px;border-radius:26px;overflow:hidden;box-shadow:var(--elev3);cursor:pointer;aspect-ratio:16/11}
 .herocard img{width:100%;height:100%;object-fit:cover;display:block}
 .herotag{position:absolute;left:14px;bottom:14px;background:rgba(244,236,224,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(199,125,107,.22);border-radius:15px;padding:9px 13px}
