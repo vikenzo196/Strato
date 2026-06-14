@@ -1733,7 +1733,16 @@ export default function App() {
         // sent/total il fallimento resterebbe invisibile.
         if (pushError) {
           console.warn("Push notify error", pushError);
-          toast("Notifica non inviata (errore funzione push)");
+          let detail = "";
+          try {
+            // supabase-js: su risposta non-2xx l'errore espone la Response in .context
+            if (pushError.context && typeof pushError.context.json === "function") {
+              const b = await pushError.context.json();
+              if (b && b.error) detail = String(b.error);
+            }
+          } catch (_) {}
+          if (!detail) detail = pushError.message || "errore funzione";
+          toast("Notifica non inviata: " + detail);
         } else if (pushData && typeof pushData.sent === "number") {
           if (pushData.total === 0) toast("Notifica: nessun dispositivo iscritto per l'utente");
           else if (pushData.sent < pushData.total) toast("Notifica rifiutata dal push server — controlla le chiavi VAPID");
