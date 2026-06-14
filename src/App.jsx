@@ -772,6 +772,82 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dswatches.readonly{pointer-events:none}
 .dswbox.ro{cursor:default}
 
+/* ===================== PROFILO — redesign premium ===================== */
+.profilePage{padding-bottom:8px}
+.profilePage .title{margin-bottom:20px}
+
+/* entrata pagina + stagger sezioni */
+@keyframes profIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:profIn .5s cubic-bezier(.22,1,.36,1) both}
+.profilePage .profileSection:nth-of-type(1){animation-delay:.04s}
+.profilePage .profileSection:nth-of-type(2){animation-delay:.09s}
+.profilePage .profileSection:nth-of-type(3){animation-delay:.14s}
+.profileLogoutWrap{animation-delay:.18s}
+
+/* Card identità */
+.profileHero{display:flex;align-items:center;gap:18px;margin:0 18px;padding:22px;border-radius:26px;background:var(--card);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 10px 30px var(--shcol)}
+.profileAvatar{width:74px;height:74px;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--strokeSoft);box-shadow:0 4px 14px var(--shcol)}
+.profileIdentity{min-width:0;display:flex;flex-direction:column;gap:7px}
+.profileName{font-family:'Inter',system-ui,sans-serif;font-weight:700;font-size:21px;letter-spacing:-.3px;line-height:1.12;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profileRolePill{align-self:flex-start;display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--accent2);background:rgba(199,125,107,.12);border:1px solid rgba(199,125,107,.24)}
+body.dark .profileRolePill{color:var(--accent);background:rgba(199,125,107,.15);border-color:rgba(199,125,107,.30)}
+.profileMicrocopy{margin:1px 0 0;font-size:13px;line-height:1.45;font-weight:400;color:var(--soft)}
+
+/* Sezioni */
+.profileSection{margin-top:26px}
+.profileSectionTitle{margin:0 22px 12px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--soft)}
+
+/* Amministrazione */
+.profileAdminCard{margin:0 18px;padding:8px;border-radius:22px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
+.profileAdminActions{display:flex;flex-direction:column;gap:6px}
+.profileSubtleButton{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 13px;border-radius:16px;border:1px solid transparent;background:transparent;color:var(--text);font-family:inherit;cursor:pointer;transition:background .25s cubic-bezier(.22,1,.36,1),transform .18s cubic-bezier(.22,1,.36,1)}
+.profileSubtleButton:hover{background:var(--glass)}
+.profileSubtleButton:active{transform:scale(.985)}
+.profileSubtleIcon{flex:none;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 12px var(--shcol)}
+.profileSubtleIcon svg{width:19px;height:19px}
+.profileSubtleText{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.profileSubtleT{font-weight:600;font-size:15px;color:var(--text)}
+.profileSubtleS{font-size:12.5px;font-weight:400;color:var(--soft)}
+.profileSubtleArr{flex:none;display:flex;color:var(--soft);opacity:.5}
+.profileSubtleArr svg{width:18px;height:18px}
+
+/* Sfondi app — disclosure premium */
+.profileBgDetails{border-top:1px solid var(--strokeSoft);margin-top:6px}
+.profileBgDetails[open]{padding-bottom:4px}
+.profileBgSummary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 13px;cursor:pointer;font-weight:600;font-size:15px;color:var(--text);border-radius:14px;transition:background .25s}
+.profileBgSummary::-webkit-details-marker{display:none}
+.profileBgSummary:hover{background:var(--glass)}
+.profileBgChev{display:flex;color:var(--soft);opacity:.6;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.profileBgChev svg{width:18px;height:18px}
+.profileBgDetails[open] .profileBgChev{transform:rotate(90deg)}
+.profileBgGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 8px 4px}
+.profileBgNote{margin:10px 10px 4px;font-size:12px;line-height:1.5;color:var(--soft)}
+
+/* Aspetto — segmented control raffinato (scoped) */
+.profilePage .themeseg{margin:0 18px;gap:4px;padding:5px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
+.profilePage .segbtn{transition:background .3s cubic-bezier(.22,1,.36,1),color .3s cubic-bezier(.22,1,.36,1),box-shadow .3s cubic-bezier(.22,1,.36,1),transform .18s cubic-bezier(.22,1,.36,1)}
+.profilePage .segbtn.on{background:var(--card);color:var(--accent);box-shadow:0 2px 8px var(--shcol),inset 0 1px 0 var(--hi)}
+.profilePage .segbtn:active{transform:scale(.97)}
+
+/* App row */
+.profilePage .pwa-prow{box-shadow:inset 0 1px 0 var(--hi)}
+
+/* Logout discreto */
+.profileLogoutWrap{display:flex;justify-content:center;margin:34px 18px 4px}
+.profileLogout{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:14px;border:1px solid var(--strokeSoft);background:transparent;color:var(--soft);font-family:inherit;font-weight:500;font-size:14px;cursor:pointer;transition:background .25s,color .25s,transform .18s}
+.profileLogout svg{width:17px;height:17px}
+.profileLogout:hover{background:var(--glass);color:var(--text)}
+.profileLogout:active{transform:scale(.985)}
+
+/* Focus visibile ed elegante */
+.profilePage button:focus-visible,.profileBgSummary:focus-visible,.profilePage .pwa-prow:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:none!important}
+  .profileBgChev,.profilePage .segbtn,.profileSubtleButton,.profileLogout,.profileBgSummary{transition:none!important}
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2227,45 +2303,89 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
 }
 
 function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall }) {
+  const chevron = (
+    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+  );
+  const onPwaKey = (e) => {
+    if (pwaInstalled) return;
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); onPWAInstall(); }
+  };
   return (
-    <section className="screen on">
+    <section className="screen on profilePage">
       <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
-      <div className="pcard glass">
-        <img className="pav" src={user.avatar || avatarURI(user.name)} alt="" />
-        <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
+
+      {/* Card identità */}
+      <div className="profileHero">
+        <img className="profileAvatar" src={user.avatar || avatarURI(user.name)} alt={"Avatar di " + user.name} />
+        <div className="profileIdentity">
+          <div className="profileName">{user.name}</div>
+          <span className="profileRolePill">{isAdmin ? "Amministratore" : "Cliente"}</span>
+          <p className="profileMicrocopy">{isAdmin ? "Gestisci l'esperienza Strato con cura e coerenza." : "Il tuo spazio personale Strato."}</p>
+        </div>
       </div>
-      {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
-      {isAdmin && <BgUploader onUpload={onUploadBg} />}
-      <div className="psec">Tema</div>
-      <div className="prefrow">
+
+      {/* Amministrazione */}
+      {isAdmin && (
+        <section className="profileSection">
+          <h3 className="profileSectionTitle">Amministrazione</h3>
+          <div className="profileAdminCard">
+            <div className="profileAdminActions">
+              <button type="button" className="profileSubtleButton" onClick={onNewProduct}>
+                <span className="profileSubtleIcon"><Plus /></span>
+                <span className="profileSubtleText">
+                  <span className="profileSubtleT">Nuovo prodotto</span>
+                  <span className="profileSubtleS">Aggiungi un oggetto alla collezione.</span>
+                </span>
+                <span className="profileSubtleArr">{chevron}</span>
+              </button>
+            </div>
+            <details className="profileBgDetails">
+              <summary className="profileBgSummary"><span>Sfondi app</span><span className="profileBgChev">{chevron}</span></summary>
+              <BgUploader onUpload={onUploadBg} />
+            </details>
+          </div>
+        </section>
+      )}
+
+      {/* Aspetto */}
+      <section className="profileSection">
+        <h3 className="profileSectionTitle">Aspetto</h3>
         <div className="themeseg compact">
           {[["light", "Luce", <Sun key="s" />], ["dark", "Buio", <Moon key="m" />], ["auto", "Automatico", <AutoI key="a" />]].map(([t, label, icon]) => (
-            <button key={t} className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
+            <button key={t} type="button" className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
               <span className="segico">{icon}</span><span className="seglbl">{label}</span>
             </button>
           ))}
         </div>
-        <button className="logout side" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
-      </div>
-      {/* Sezione App */}
-      <div className="psec">App</div>
-      <div
-        className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
-        onClick={!pwaInstalled ? onPWAInstall : undefined}
-        role={pwaInstalled ? undefined : "button"}
-        tabIndex={pwaInstalled ? undefined : 0}
-      >
-        <div className="pwa-prowl">
-          <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
-          <div>
-            <div className="pwa-prowt">{pwaInstalled ? "Strato è installata" : "Installa Strato"}</div>
-            <div className="pwa-prows">{pwaInstalled ? "Stai utilizzando la versione app." : "Accesso più rapido e esperienza ottimizzata."}</div>
+      </section>
+
+      {/* App */}
+      <section className="profileSection">
+        <h3 className="profileSectionTitle">App</h3>
+        <div
+          className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
+          onClick={!pwaInstalled ? onPWAInstall : undefined}
+          onKeyDown={!pwaInstalled ? onPwaKey : undefined}
+          role={pwaInstalled ? undefined : "button"}
+          tabIndex={pwaInstalled ? undefined : 0}
+        >
+          <div className="pwa-prowl">
+            <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
+            <div>
+              <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
+              <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
+            </div>
           </div>
+          {pwaInstalled
+            ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            : <span className="pwa-prow-arr">{chevron}</span>
+          }
         </div>
-        {pwaInstalled
-          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
-        }
+      </section>
+
+      {/* Logout */}
+      <div className="profileLogoutWrap">
+        <button type="button" className="profileLogout" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
       </div>
     </section>
   );
@@ -2281,8 +2401,7 @@ function BgUploader({ onUpload }) {
   };
   return (
     <>
-      <div className="psec">Sfondo app</div>
-      <div className="bgup">
+      <div className="profileBgGrid">
         <label className={"bgupbtn" + (busy === "light" ? " busy" : "")}>
           <span className="bgupi"><Sun /></span>
           <span className="bgupt">Sfondo chiaro</span>
@@ -2296,7 +2415,7 @@ function BgUploader({ onUpload }) {
           <input type="file" accept="image/*" onChange={(e) => pick("dark", e.target.files[0])} disabled={!!busy} />
         </label>
       </div>
-      <p className="bgnote">Carica un'immagine ad alta risoluzione: vengono generate in automatico versioni WebP leggere ottimizzate per smartphone e PC.</p>
+      <p className="profileBgNote">Carica un'immagine ad alta risoluzione. Strato genera in automatico versioni leggere e ottimizzate per ogni schermo.</p>
     </>
   );
 }
