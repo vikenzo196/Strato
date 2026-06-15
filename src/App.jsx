@@ -1194,7 +1194,14 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
   .cbody .cp,.cbody .ct,.lk,.herotag,.topbar::after{transition:none!important}
 }
 
-/* ===================== SHEET & DETTAGLIO — premium material ===================== */
+/* ===================== SHEET — scroll lock e safe-area ===================== */
+/* Quando uno sheet è aperto: html/body non scrollano, niente rubber-band iOS */
+html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
+body.sheet-open{touch-action:none!important}
+/* Il contenitore scrollabile interno dello sheet deve poter scrollare */
+.ipick .sheet{touch-action:pan-y}
+/* Backdrop: usa --app-height (window.innerHeight) per coprire il gap dinamico iOS */
+.ipick{min-height:var(--app-height,100dvh)}
 
 /* Backdrop caldo (espresso warm invece di nero freddo) */
 @keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
@@ -1876,28 +1883,24 @@ export default function App() {
   const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
   useEffect(() => {
     if (!anySheetOpen) return;
-    // Blocco scroll sul body usando overflow:hidden + prevenzione touchmove selettiva.
-    // NON usiamo position:fixed su body (causa dock-shift su iOS Safari) né su
-    // main.wrap (causa collasso documento e salto pagina).
-    // Nessuna modifica a position → nessun residuo di top/left/right dopo chiusura.
+    // Approccio class-based: nessun inline style → nessun residuo dopo chiusura.
+    // html.sheet-open/body.sheet-open sono definiti in CSS con overflow:hidden;
+    // overscroll-behavior:none; body anche touch-action:none per iOS rubber-band.
     const html = document.documentElement;
     const body = document.body;
-    const prevHtmlOf = html.style.overflow;
-    const prevBodyOf = body.style.overflow;
-    html.style.overflow = "hidden";
-    body.style.overflow = "hidden";
-    // Previeni rubber-band iOS sui layer sottostanti; il contenuto dello sheet
-    // (.ipick .sheet, .sheetwrap) può ancora scrollare.
+    html.classList.add("sheet-open");
+    body.classList.add("sheet-open");
+    // Previeni touchmove sul backdrop e su aree fuori dallo scroll interno.
+    // .ipick .sheet è il contenitore scrollabile (ha overflow-y:auto e touch-action:pan-y).
     const onTouchMove = (e) => {
-      if (e.target.closest(".ipick .sheet, .ipick .sheetwrap")) return;
+      if (e.target.closest(".ipick .sheet")) return; // lascia scrollare lo sheet
       e.preventDefault();
     };
     document.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
-      html.style.overflow = prevHtmlOf;
-      body.style.overflow = prevBodyOf;
+      html.classList.remove("sheet-open");
+      body.classList.remove("sheet-open");
       document.removeEventListener("touchmove", onTouchMove);
-      // Nessun window.scrollTo necessario: non abbiamo modificato scroll o position.
     };
   }, [anySheetOpen]);
 
@@ -1998,10 +2001,22 @@ export default function App() {
   useEffect(() => { document.body.removeAttribute("data-bg"); }, []);
   useEffect(() => { loadBackgrounds(); }, []);
   useEffect(() => {
+    // --app-height: viewport reale aggiornato su resize/orientation.
+    // Necessario perché 100dvh su iOS a volte non riflette il viewport corrente.
+    const setAppH = () =>
+      document.documentElement.style.setProperty("--app-height", window.innerHeight + "px");
+    setAppH();
+    window.addEventListener("resize", setAppH);
+    window.addEventListener("orientationchange", setAppH);
     let t;
     const onR = () => { clearTimeout(t); t = setTimeout(() => applyWallpaper(null, document.body.classList.contains("dark")), 200); };
     window.addEventListener("resize", onR);
-    return () => { window.removeEventListener("resize", onR); clearTimeout(t); };
+    return () => {
+      window.removeEventListener("resize", setAppH);
+      window.removeEventListener("orientationchange", setAppH);
+      window.removeEventListener("resize", onR);
+      clearTimeout(t);
+    };
   }, []);
 
   // Disabilita lo zoom (pinch su iOS, ctrl+rotella e ctrl +/- su desktop, doppio tap).
