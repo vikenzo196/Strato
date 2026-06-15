@@ -1187,6 +1187,131 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
   .cbody .cp,.cbody .ct,.lk,.herotag,.topbar::after{transition:none!important}
 }
 
+/* ===================== SHEET & DETTAGLIO — premium material ===================== */
+
+/* Backdrop caldo (espresso warm invece di nero freddo) */
+@keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
+@keyframes scrimOut{from{background:rgba(43,33,27,.72)}to{background:rgba(43,33,27,0)}}
+.ipick.on{background:rgba(43,33,27,.72)}
+.ipick.on.closing{background:rgba(43,33,27,0)}
+
+/* Sheet base: più materica, meno glass */
+.ipick .sheet{
+  background:rgba(246,239,228,.96);
+  -webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);
+  border-color:rgba(199,125,107,.14);
+}
+body.dark .ipick .sheet{
+  background:rgba(38,29,24,.97);
+  border-color:rgba(199,125,107,.18);
+}
+
+/* Detailsheet: già usa --detailGlass, riduco blur eccessivo */
+.sheet.detailsheet{
+  -webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%);
+}
+
+/* Sheetclose: più discreto e caldo */
+.sheetclose{
+  width:38px;height:38px;
+  border-color:rgba(199,125,107,.20);
+  background:rgba(246,239,228,.80);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 3px 10px rgba(43,33,27,.12);
+}
+body.dark .sheetclose{
+  background:rgba(55,42,34,.90);
+  border-color:rgba(199,125,107,.24);
+}
+.sheetclose:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* gdot: più raffinato, indicatore attivo terracotta soft */
+.gdot{width:5px;height:5px;background:rgba(199,125,107,.25);border-radius:50%;transition:background .2s}
+.gdot--on{background:rgba(199,125,107,.70);width:14px;border-radius:3px}
+
+/* dkick: categoria leggermente alleggerita */
+.dkick{font-weight:700;letter-spacing:.12em;color:rgba(166,84,53,.85)}
+
+/* Titolo prodotto: più raffinato */
+.dttl{font-size:26px;letter-spacing:-.025em;line-height:1.08}
+
+/* Prezzo: meno dominante */
+.dprice{font-size:24px;font-weight:700}
+
+/* Pill materiale: più morbida */
+.dmat{
+  background:rgba(199,125,107,.08);
+  border-color:rgba(199,125,107,.18);
+  color:var(--soft);
+  font-weight:500;
+  font-size:12px;
+}
+
+/* Label sezione: più elegante */
+.dlabel{font-weight:600;letter-spacing:.05em}
+
+/* CTA Aggiungi: materica, warm */
+.dadd2{
+  background:var(--card);
+  border-color:rgba(199,125,107,.22);
+  box-shadow:inset 0 1px 0 var(--hi),0 6px 18px var(--shcol);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  font-size:14.5px;letter-spacing:.01em;
+  gap:10px;
+}
+.dadd2:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+body.dark .dadd2{
+  background:rgba(55,42,34,.92);
+  border-color:rgba(199,125,107,.26);
+  color:rgba(246,236,220,.95);
+}
+
+/* seg: più caldo in light/dark */
+.seg{
+  background:rgba(246,239,228,.72);
+  border-color:rgba(199,125,107,.14);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+body.dark .seg{background:rgba(38,29,24,.80);border-color:rgba(199,125,107,.18)}
+.seg button{font-size:13px;padding:9px 8px}
+.seg button.on{
+  background:rgba(199,125,107,.12);
+  color:var(--accent2);
+  box-shadow:inset 0 0 0 1px rgba(199,125,107,.28),0 2px 8px rgba(199,125,107,.10);
+}
+body.dark .seg button.on{color:var(--accent);background:rgba(199,125,107,.16)}
+.seg button:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+
+/* Sezione configurazione luce */
+.eleccard{
+  margin:18px 0 0;
+  padding:14px 14px 12px;
+  border-radius:18px;
+  background:rgba(217,194,163,.12);
+  border:1px solid rgba(199,125,107,.14);
+  display:flex;flex-direction:column;gap:12px;
+}
+body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,.18)}
+.eleccard-head{display:flex;flex-direction:column;gap:3px}
+.eleccard-title{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--soft)}
+.eleccard-sub{font-size:12px;color:var(--soft);opacity:.7}
+.elecrow{display:flex;flex-direction:column;gap:6px}
+.eleclbl{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--soft)}
+.eleclbl svg{opacity:.7}
+
+/* qstep: controlli quantità più caldi */
+.qstep button{
+  background:var(--card);
+  border-color:rgba(199,125,107,.18);
+  box-shadow:inset 0 1px 0 var(--hi);
+}
+.qstep button:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+
+/* Reduced motion per drag */
+@media(prefers-reduced-motion:reduce){
+  .sheetwrap{transition:none!important;transform:none!important}
+  .gdot,.dmat,.seg button,.dadd2,.sheetclose{transition:none!important}
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2410,6 +2535,60 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   );
 }
 
+/* ---- Icone opzioni lampada (inline, solo per la scheda dettaglio) ---- */
+const IcoCable  = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4M16 2v4"/><rect x="6" y="6" width="12" height="8" rx="3"/><path d="M12 14v4M9 18h6"/></svg>;
+const IcoBulb   = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14a5 5 0 1 0-6 0"/><path d="M9 18h6M10 21h4"/></svg>;
+const IcoHolder = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="M10 10v4M14 10v4"/></svg>;
+
+/* ---- Hook drag-to-close (touch) per tutti gli sheet ---- */
+function useDragToClose(doClose) {
+  const wrapRef = useRef(null);
+  const sheetRef = useRef(null); // ref all'elemento scrollabile interno
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    // Rispetta prefers-reduced-motion
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    let startY = 0, dy = 0, active = false, startT = 0;
+    const atTop = () => !sheetRef.current || sheetRef.current.scrollTop <= 2;
+    // Non parte da elementi interattivi
+    const isInteractive = (t) => !!t.closest("button,input,select,textarea,[role=button],[role=radio],[role=option]");
+    const onStart = (e) => {
+      if (!atTop() || isInteractive(e.target)) return;
+      startY = e.touches[0].clientY; dy = 0; active = true; startT = Date.now();
+    };
+    const onMove = (e) => {
+      if (!active) return;
+      dy = Math.max(0, e.touches[0].clientY - startY);
+      if (dy > 4) { wrap.style.transform = `translateY(${dy}px)`; wrap.style.transition = "none"; }
+    };
+    const onEnd = () => {
+      if (!active) return; active = false;
+      const vel = dy / Math.max(1, Date.now() - startT);
+      if (dy > 90 || vel > 0.45) {
+        // Supera soglia: anima via e chiudi
+        wrap.style.transform = "translateY(100vh)"; wrap.style.transition = "transform .26s ease";
+        doClose();
+      } else {
+        // Rimbalzo morbido alla posizione 0
+        wrap.style.transform = "translateY(0)"; wrap.style.transition = "transform .3s cubic-bezier(.2,.8,.2,1)";
+        setTimeout(() => { if (wrap) { wrap.style.transform = ""; wrap.style.transition = ""; } }, 320);
+      }
+    };
+    wrap.addEventListener("touchstart", onStart, { passive: true });
+    wrap.addEventListener("touchmove",  onMove,  { passive: true });
+    wrap.addEventListener("touchend",   onEnd);
+    wrap.addEventListener("touchcancel", onEnd);
+    return () => {
+      wrap.removeEventListener("touchstart", onStart);
+      wrap.removeEventListener("touchmove",  onMove);
+      wrap.removeEventListener("touchend",   onEnd);
+      wrap.removeEventListener("touchcancel", onEnd);
+    };
+  }, [doClose]);
+  return { wrapRef, sheetRef };
+}
+
 /* ---- DETTAGLIO ---- */
 function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEdit, onColorPhoto }) {
   const [ci, setCi] = useState(0);
@@ -2423,6 +2602,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [holder, setHolder] = useState(1);
   const [editP, setEditP] = useState(false);
   const [ad, setAd] = useState(p.addons);
+  const { wrapRef, sheetRef } = useDragToClose(doClose);
 
   const c = p.cols[ci] || p.cols[0];
   const adds = [];
@@ -2447,24 +2627,24 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className={"ipick on detailpop" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label={"Dettaglio prodotto: " + p.title} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap">
-        <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronDown /></button>
-        <div className="sheet detailsheet">
-        {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica"><Pencil /></button>}
+    <div className={"ipick on detailpop" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label={"Scheda prodotto: " + p.title} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
+      <div className="sheetwrap" ref={wrapRef}>
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi scheda"><ChevronDown /></button>
+        <div className="sheet detailsheet" ref={sheetRef}>
+        {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica prodotto"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
             <div className="dgallery">
               {(c.imgs && c.imgs.length ? c.imgs : [colImg(c)]).map((src, gi) => (
-                <img key={gi} className="dimg" src={src || colImg(c)} alt="" />
+                <img key={gi} className="dimg" src={src || colImg(c)} alt={p.title} />
               ))}
             </div>
             {c.imgs && c.imgs.length > 1 && (
-              <div className="gdots">{c.imgs.map((_, gi) => <span key={gi} className="gdot" />)}</div>
+              <div className="gdots" aria-hidden="true">{c.imgs.map((_, gi) => <span key={gi} className={"gdot" + (gi === 0 ? " gdot--on" : "")} />)}</div>
             )}
             {isAdmin && onColorPhoto && (
               <>
-                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Aggiungi foto"><Camera /></button>
+                <button className="dphotobtn" onClick={() => photoInput.current && photoInput.current.click()} aria-label="Aggiungi foto colore"><Camera /></button>
                 <input ref={photoInput} type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => { onColorPhoto(p.id, c.id, e.target.files[0]); e.target.value = ""; }} />
               </>
             )}
@@ -2477,35 +2657,63 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
               {p.material && <span className="dmat">{p.material}</span>}
             </div>
             {p.desc && <p className="ddesc">{p.desc}</p>}
-            <div className="dlabel dcolor">Colori</div>
-            <div className="dswatches readonly">
+
+            {/* Colore */}
+            <div className="dlabel dcolor">Colore</div>
+            <div className="dswatches readonly" role="list">
               {p.cols.map((cc, k) => (
-                <div key={k} className="dswbox ro">
+                <div key={k} className="dswbox ro" role="listitem" aria-label={cc.name}>
                   <span className="dsw" style={{ background: "linear-gradient(135deg," + cc.a + " 0%," + cc.a + " 50%," + cc.b + " 50%," + cc.b + " 100%)" }} />
                   <span className="dswn">{cc.name}</span>
                 </div>
               ))}
             </div>
+
+            {/* Configurazione luce (solo prodotti elettrici) */}
             {p.isElectrical && (
-              <div>
-                <div className="dlabel">Cavo</div>
-                <div className="seg">
-                  <button className={cable === "Normale" ? "on" : ""} onClick={() => setCable("Normale")}>Normale <i>incluso</i></button>
-                  {p.allowBraided && <button className={cable === "Intrecciato" ? "on" : ""} onClick={() => setCable("Intrecciato")}>Intrecciato <i>+{eur(ad.braided)}</i></button>}
+              <div className="eleccard">
+                <div className="eleccard-head">
+                  <span className="eleccard-title">Configurazione luce</span>
+                  <span className="eleccard-sub">Scegli i dettagli.</span>
                 </div>
-                <div className="dlabel">Lampadina</div>
-                <div className="seg">
-                  <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)}>No</button>
-                  <button className={bulb ? "on" : ""} onClick={() => setBulb(1)}>Sì <i>+{eur(ad.bulb)}</i></button>
+
+                <div className="elecrow">
+                  <span className="eleclbl"><IcoCable /> Cavo</span>
+                  <div className="seg" role="group" aria-label="Tipo cavo">
+                    <button
+                      className={cable === "Normale" ? "on" : ""}
+                      onClick={() => setCable("Normale")}
+                      aria-pressed={cable === "Normale"}
+                    >Standard <i>incluso</i></button>
+                    {p.allowBraided && (
+                      <button
+                        className={cable === "Intrecciato" ? "on" : ""}
+                        onClick={() => setCable("Intrecciato")}
+                        aria-pressed={cable === "Intrecciato"}
+                      >Tessuto intrecciato <i>+{eur(ad.braided)}</i></button>
+                    )}
+                  </div>
                 </div>
-                <div className="dlabel">Portalampada</div>
-                <div className="seg">
-                  <button className={!holder ? "on" : ""} onClick={() => setHolder(0)}>No</button>
-                  <button className={holder ? "on" : ""} onClick={() => setHolder(1)}>Sì <i>+{eur(ad.holder)}</i></button>
+
+                <div className="elecrow">
+                  <span className="eleclbl"><IcoBulb /> Lampadina</span>
+                  <div className="seg" role="group" aria-label="Lampadina">
+                    <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)} aria-pressed={!bulb}>Senza</button>
+                    <button className={bulb ? "on" : ""} onClick={() => setBulb(1)} aria-pressed={!!bulb}>Con lampadina <i>+{eur(ad.bulb)}</i></button>
+                  </div>
                 </div>
+
+                <div className="elecrow">
+                  <span className="eleclbl"><IcoHolder /> Portalampada</span>
+                  <div className="seg" role="group" aria-label="Portalampada">
+                    <button className={!holder ? "on" : ""} onClick={() => setHolder(0)} aria-pressed={!holder}>Senza</button>
+                    <button className={holder ? "on" : ""} onClick={() => setHolder(1)} aria-pressed={!!holder}>Con portalampada <i>+{eur(ad.holder)}</i></button>
+                  </div>
+                </div>
+
                 {isAdmin && (
                   <>
-                    <button className="elecedit" onClick={() => setEditP(!editP)}>✎ Prezzi aggiunte (admin)</button>
+                    <button className="elecedit" onClick={() => setEditP(!editP)}>✎ Prezzi aggiunte</button>
                     {editP && (
                       <div className="elecprices">
                         <div className="epp"><span>Cavo intrecciato</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.braided} onChange={(e) => setAd({ ...ad, braided: e.target.value })} /> €</span></div>
@@ -2519,10 +2727,22 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
               </div>
             )}
           </div>
+
+          {/* Quantità e CTA */}
           <div className="dbuy">
             <div className="dlabel dctr">Quantità</div>
-            <div className="qstep dqty"><button onClick={() => setQty(Math.max(1, qty - 1))}>−</button><span>{qty}</span><button onClick={() => setQty(Math.min(99, qty + 1))}>+</button></div>
-            <button className="dadd2" onClick={doAdd}><CartIcon /> {eur(unit * qty)}</button>
+            <div className="qstep dqty">
+              <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Diminuisci quantità">−</button>
+              <span aria-live="polite" aria-label={"Quantità: " + qty}>{qty}</span>
+              <button onClick={() => setQty(Math.min(99, qty + 1))} aria-label="Aumenta quantità">+</button>
+            </div>
+            <button
+              className="dadd2"
+              onClick={doAdd}
+              aria-label={"Aggiungi al carrello, totale " + eur(unit * qty).replace(",", " virgola").replace("€", "euro")}
+            >
+              <CartIcon /> Aggiungi — {eur(unit * qty)}
+            </button>
           </div>
         </div>
         </div>
@@ -2536,11 +2756,12 @@ function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   useEffect(() => { const onKey = (e) => { if (e.key === "Escape") doClose(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
+  const { wrapRef, sheetRef } = useDragToClose(doClose);
   return (
     <div className={"ipick on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Carrello" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap">
-        <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
-        <div className="sheet">
+      <div className="sheetwrap" ref={wrapRef}>
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi carrello"><ChevronDown /></button>
+        <div className="sheet" ref={sheetRef}>
           <h4><CartIcon /> Carrello</h4>
           <div className="cartitems">
             {cart.length === 0 && <div className="cempty">Il carrello è vuoto.</div>}
@@ -2552,7 +2773,7 @@ function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
                   <div className="cp">{c.col}{c.opt ? " · " + c.opt : ""}</div>
                   <div className="cprice">{eur(c.price)} · tot {eur(c.price * c.qty)}</div>
                 </div>
-                <div className="qstep csmall"><button onClick={() => onStep(i, -1)}>−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)}>+</button></div>
+                <div className="qstep csmall"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
               </div>
             ))}
           </div>
@@ -2642,11 +2863,12 @@ function AuthGate({ reason, onGoogle, onClose }) {
 function InvoiceSheet({ o, isAdmin, onClose }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
+  const { wrapRef, sheetRef } = useDragToClose(doClose);
   return (
     <div className={"ipick on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Dettaglio ordine" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap">
-        <button className="sheetclose" onClick={doClose}><ChevronDown /></button>
-        <div className="sheet inv">
+      <div className="sheetwrap" ref={wrapRef}>
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi dettaglio ordine"><ChevronDown /></button>
+        <div className="sheet inv" ref={sheetRef}>
           <div className="invhead">
             {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
             <div className="invwho">
@@ -3168,10 +3390,11 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
 function NotifSheet({ notifs, onClose, onItemClick, onClear }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
+  const { wrapRef, sheetRef } = useDragToClose(doClose);
   return (
     <div className={"ipick top on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Notifiche" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap">
-        <div className="sheet">
+      <div className="sheetwrap" ref={wrapRef}>
+        <div className="sheet" ref={sheetRef}>
           <div className="notifhead">
             <h4><Bell /> Notifiche</h4>
             {notifs.length > 0 && <button className="notifclear" onClick={onClear}><Trash /> Elimina tutte</button>}
@@ -3187,7 +3410,7 @@ function NotifSheet({ notifs, onClose, onItemClick, onClear }) {
             ))}
           </div>
         </div>
-        <button className="sheetclose" onClick={doClose} aria-label="Chiudi"><ChevronUp /></button>
+        <button className="sheetclose" onClick={doClose} aria-label="Chiudi notifiche"><ChevronUp /></button>
       </div>
     </div>
   );
