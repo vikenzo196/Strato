@@ -1272,7 +1272,7 @@ body.dark .dadd2{
   -webkit-backdrop-filter:none;backdrop-filter:none;
 }
 body.dark .seg{background:rgba(38,29,24,.80);border-color:rgba(199,125,107,.18)}
-.seg button{font-size:13px;padding:9px 8px}
+.seg button{font-size:13px;padding:9px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 .seg button.on{
   background:rgba(199,125,107,.12);
   color:var(--accent2);
@@ -1280,6 +1280,10 @@ body.dark .seg{background:rgba(38,29,24,.80);border-color:rgba(199,125,107,.18)}
 }
 body.dark .seg button.on{color:var(--accent);background:rgba(199,125,107,.16)}
 .seg button:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+/* Struttura interna opzione: nome su riga, prezzo/meta su riga sotto */
+.segopt{display:block;line-height:1.2;font-weight:600}
+.seg button i{font-style:normal;font-weight:500;font-size:11px;opacity:.6;white-space:nowrap;display:block;line-height:1.2}
+.seg button.on i{opacity:.85;color:inherit}
 
 /* Sezione configurazione luce */
 .eleccard{
@@ -1295,8 +1299,8 @@ body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,
 .eleccard-title{font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--soft)}
 .eleccard-sub{font-size:12px;color:var(--soft);opacity:.7}
 .elecrow{display:flex;flex-direction:column;gap:6px}
-.eleclbl{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--soft)}
-.eleclbl svg{opacity:.7}
+.eleclbl{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--soft)}
+.eleclbl svg{opacity:.7;width:17px;height:17px}
 
 /* qstep: controlli quantità più caldi */
 .qstep button{
@@ -1734,7 +1738,7 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   const isLiked = context === "liked";
   const isHome  = context === "home";
   const quietCnt = isLiked || isHome; // nascondi badge conteggio in Home e Piaciuti
-  const ctaLabel = isLiked ? "Dettagli" : isHome ? "Scopri" : "Configura";
+  const ctaLabel = isLiked ? "Scopri" : isHome ? "Scopri" : "Configura";
   const ctaCls   = isLiked ? "liked-configbtn" : "configbtn";
   const handleCardKey = (e) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(); }
@@ -1823,6 +1827,31 @@ export default function App() {
     const dark = t === "dark" || (t === "auto" && mq && mq.matches);
     document.body.classList.toggle("dark", !!dark);
   };
+
+  /* ---- scroll lock: quando uno sheet è aperto blocca lo scroll del body ---- */
+  const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
+  useEffect(() => {
+    if (!anySheetOpen) return;
+    // Tecnica iOS-safe: salviamo scrollY e fissiamo il body con top negativo
+    // in modo che la pagina non si sposti ma appaia visivamente ferma.
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = { position: body.style.position, top: body.style.top, left: body.style.left, right: body.style.right, overflowY: body.style.overflowY };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.overflowY = "scroll"; // mantieni larghezza scrollbar per evitare salti layout
+    return () => {
+      // Ripristino: rimuovo il lock e torno esattamente alla posizione precedente
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.overflowY = prev.overflowY;
+      window.scrollTo(0, scrollY);
+    };
+  }, [anySheetOpen]);
 
   const syncBackstop = () => {
     try {
@@ -2536,9 +2565,9 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
 }
 
 /* ---- Icone opzioni lampada (inline, solo per la scheda dettaglio) ---- */
-const IcoCable  = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2v4M16 2v4"/><rect x="6" y="6" width="12" height="8" rx="3"/><path d="M12 14v4M9 18h6"/></svg>;
-const IcoBulb   = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14a5 5 0 1 0-6 0"/><path d="M9 18h6M10 21h4"/></svg>;
-const IcoHolder = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="M10 10v4M14 10v4"/></svg>;
+const IcoCable  = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3c0 0-4 2-4 5s3 4 4 4 4-1 4-4-4-5-4-5z"/><path d="M12 12v4M10 18h4M11 21h2"/></svg>;
+const IcoBulb   = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14a5 5 0 1 0-6 0"/><path d="M9 18h6M10 21h4"/></svg>;
+const IcoHolder = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3h6"/><rect x="8" y="3" width="8" height="5" rx="2"/><path d="M8 8c0 0-2 1-2 4h12c0-3-2-4-2-4"/><path d="M6 12h12M8 12v2M16 12v2M10 14h4M11 14v4M13 14v4M11 18h2"/></svg>
 
 /* ---- Hook drag-to-close (touch) per tutti gli sheet ---- */
 function useDragToClose(doClose) {
@@ -2684,13 +2713,13 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                       className={cable === "Normale" ? "on" : ""}
                       onClick={() => setCable("Normale")}
                       aria-pressed={cable === "Normale"}
-                    >Standard <i>incluso</i></button>
+                    ><span className="segopt">Standard</span><i>incluso</i></button>
                     {p.allowBraided && (
                       <button
                         className={cable === "Intrecciato" ? "on" : ""}
                         onClick={() => setCable("Intrecciato")}
                         aria-pressed={cable === "Intrecciato"}
-                      >Tessuto intrecciato <i>+{eur(ad.braided)}</i></button>
+                      ><span className="segopt">Tessuto intrecciato</span><i>+{eur(ad.braided)}</i></button>
                     )}
                   </div>
                 </div>
@@ -2698,16 +2727,16 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                 <div className="elecrow">
                   <span className="eleclbl"><IcoBulb /> Lampadina</span>
                   <div className="seg" role="group" aria-label="Lampadina">
-                    <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)} aria-pressed={!bulb}>Senza</button>
-                    <button className={bulb ? "on" : ""} onClick={() => setBulb(1)} aria-pressed={!!bulb}>Con lampadina <i>+{eur(ad.bulb)}</i></button>
+                    <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)} aria-pressed={!bulb}><span className="segopt">Senza</span></button>
+                    <button className={bulb ? "on" : ""} onClick={() => setBulb(1)} aria-pressed={!!bulb}><span className="segopt">Con lampadina</span><i>+{eur(ad.bulb)}</i></button>
                   </div>
                 </div>
 
                 <div className="elecrow">
                   <span className="eleclbl"><IcoHolder /> Portalampada</span>
                   <div className="seg" role="group" aria-label="Portalampada">
-                    <button className={!holder ? "on" : ""} onClick={() => setHolder(0)} aria-pressed={!holder}>Senza</button>
-                    <button className={holder ? "on" : ""} onClick={() => setHolder(1)} aria-pressed={!!holder}>Con portalampada <i>+{eur(ad.holder)}</i></button>
+                    <button className={!holder ? "on" : ""} onClick={() => setHolder(0)} aria-pressed={!holder}><span className="segopt">Senza</span></button>
+                    <button className={holder ? "on" : ""} onClick={() => setHolder(1)} aria-pressed={!!holder}><span className="segopt">Con portalampada</span><i>+{eur(ad.holder)}</i></button>
                   </div>
                 </div>
 
