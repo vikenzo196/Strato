@@ -954,6 +954,79 @@ body.dark .push-toggle-knob{background:rgba(255,255,255,.92)}
   .push-toggle,.push-toggle-knob,.push-row{transition:none!important}
 }
 
+/* ===================== ORDINI — premium redesign ===================== */
+
+/* Pagina wrapper */
+.ordersPage{padding-bottom:0}
+
+/* Hero header */
+.ordersHero{padding:0 0 20px}
+.ordersSubtitle{margin:5px 0 0;font-size:13.5px;font-weight:400;color:var(--soft);line-height:1.4}
+
+/* Section label */
+.ordersSectionLabel{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.75;margin:22px 22px 10px;user-select:none}
+
+/* Card ordine */
+.orderCard{display:flex;align-items:flex-start;gap:14px;border-radius:22px;padding:14px 14px 14px 14px;margin:0 14px 10px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s}
+.orderCard:active{transform:scale(.985)}
+.orderCard:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* Thumbnail */
+.orderThumb{flex:none;width:62px;height:62px;border-radius:16px;object-fit:cover;box-shadow:0 3px 10px var(--shcol),inset 0 1px 0 rgba(255,255,255,.25);border:1px solid var(--strokeSoft)}
+
+/* Avatar admin */
+.orderAvatar{flex:none;width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 2px 8px var(--shcol)}
+
+/* Body */
+.orderBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;padding-top:1px}
+.orderTitle{font-weight:700;font-size:15.5px;letter-spacing:-.15px;line-height:1.2;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderMeta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.orderMetaChip{font-size:12px;font-weight:500;color:var(--soft);background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.12);border-radius:8px;padding:2px 8px;white-space:nowrap}
+body.dark .orderMetaChip{background:rgba(199,125,107,.10);border-color:rgba(199,125,107,.18)}
+.orderNote{margin:2px 0 0;font-size:12px;line-height:1.5;color:var(--soft);font-weight:400}
+
+/* Colonna destra */
+.orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:2px}
+
+/* Status pill premium */
+.ostat{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;border:1px solid transparent}
+/* confirmed — salvia desaturata */
+.ostat--confirmed{background:rgba(110,145,110,.13);color:#4a7a52;border-color:rgba(110,145,110,.22)}
+body.dark .ostat--confirmed{background:rgba(110,145,110,.15);color:#8fbd8f;border-color:rgba(110,145,110,.28)}
+/* pending — sabbia calda */
+.ostat--pending{background:rgba(185,145,80,.12);color:#8c6820;border-color:rgba(185,145,80,.22)}
+body.dark .ostat--pending{background:rgba(185,145,80,.14);color:#d4a84b;border-color:rgba(185,145,80,.28)}
+/* rejected — terracotta soft */
+.ostat--rejected{background:rgba(176,106,82,.11);color:#8b4a36;border-color:rgba(176,106,82,.20)}
+body.dark .ostat--rejected{background:rgba(176,106,82,.14);color:#c4856a;border-color:rgba(176,106,82,.26)}
+
+/* Admin actions inline */
+.orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.orderCard--pend .orderSide{min-width:88px}
+
+/* Empty state */
+.ordersEmpty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:52px 28px 36px;gap:14px}
+.ordersEmptyIcon{width:56px;height:56px;border-radius:50%;background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.20);display:grid;place-items:center;color:var(--accent);opacity:.7}
+.ordersEmptyIcon svg{width:26px;height:26px;stroke:var(--accent)}
+.ordersEmptyTitle{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.2px;line-height:1.2;margin:0}
+.ordersEmptyText{font-size:14px;font-weight:400;color:var(--soft);line-height:1.5;margin:0;max-width:260px}
+.ordersExploreCta{margin-top:6px;padding:12px 26px;border-radius:14px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;transition:background .25s,transform .15s}
+.ordersExploreCta:hover{background:var(--glass)}
+.ordersExploreCta:active{transform:scale(.985)}
+.ordersExploreCta:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* Spacer dock */
+.ordersBottomSpacer{height:calc(80px + env(safe-area-inset-bottom, 0px))}
+
+/* Stagger e animazioni */
+.orderCard.in{animation:itemIn .45s cubic-bezier(.22,1,.36,1) both}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .orderCard{transition:none!important;animation:none!important}
+  .ordersExploreCta{transition:none!important}
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2009,7 +2082,8 @@ export default function App() {
           <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
             onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
             onDelete={deleteOrder}
-            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)} />
+            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
+            onGoExplore={() => open("explore")} />
         )}
         {tab === "profile" && user && (
           <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
@@ -2440,7 +2514,7 @@ function Liked({ likedPrints, onOpen, onLike, onEdit }) {
 }
 
 /* ---- PROFILO ---- */
-function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete, orderFocus, clearFocus }) {
+function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete, orderFocus, clearFocus, onGoExplore }) {
   const orderRefs = useRef({});
   useEffect(() => {
     if (orderFocus && orderRefs.current[orderFocus]) {
@@ -2449,50 +2523,133 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
       return () => clearTimeout(t);
     }
   }, [orderFocus]);
+
   const oTitle = (o) => o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
-  const pend = orders.filter((o) => o.status === "pending");
-  const done = orders.filter((o) => o.status === "confirmed");
-  const rej = orders.filter((o) => o.status === "rejected");
   const setRef = (id) => (el) => { orderRefs.current[id] = el; };
+
+  const pend = orders.filter((o) => o.status === "pending");
+  const conf = orders.filter((o) => o.status === "confirmed");
+  const rej  = orders.filter((o) => o.status === "rejected");
+
+  const STATUS_META = {
+    confirmed: { label: "Confermato",  cls: "ostat--confirmed", note: "La richiesta è stata accolta e sarà preparata con cura." },
+    pending:   { label: "In attesa",   cls: "ostat--pending",   note: "Stiamo valutando la tua richiesta." },
+    rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
+  };
+
+  const OrderCard = ({ o, idx }) => {
+    const st = STATUS_META[o.status] || STATUS_META.pending;
+    const thumb = o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79");
+    return (
+      <article
+        className={"orderCard glass ord in" + (orderFocus === o.id ? " ofocus" : "")}
+        ref={setRef(o.id)}
+        style={{ animationDelay: idx * 55 + "ms" }}
+        onClick={() => onOpenOrder(o.id)}
+        role="button"
+        tabIndex={0}
+        aria-label={"Ordine: " + oTitle(o) + ", stato: " + st.label}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenOrder(o.id); } }}
+      >
+        <img className="orderThumb" src={thumb} alt={oTitle(o)} />
+        <div className="orderBody">
+          <div className="orderTitle">{oTitle(o)}</div>
+          <div className="orderMeta">
+            {isAdmin && <span className="orderMetaChip">{o.who}</span>}
+            <span className="orderMetaChip">{eur(o.total)}</span>
+            {o.date && <span className="orderMetaChip">{fmtDate(o.date)}</span>}
+          </div>
+          {!isAdmin && <p className="orderNote">{st.note}</p>}
+        </div>
+        <div className="orderSide">
+          <span className={"ostat " + st.cls}>{st.label}</span>
+          {isAdmin && o.status === "rejected" && (
+            <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>
+          )}
+        </div>
+      </article>
+    );
+  };
+
+  // Banner pendenti (admin: con azioni; cliente: card unificata)
+  const PendCard = ({ o, idx }) => {
+    const thumb = o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79");
+    return (
+      <article
+        className={"orderCard glass orderCard--pend ord in" + (orderFocus === o.id ? " ofocus" : "")}
+        ref={setRef(o.id)}
+        style={{ animationDelay: idx * 55 + "ms" }}
+        onClick={() => onOpenOrder(o.id)}
+        role="button" tabIndex={0}
+        aria-label={"Richiesta in attesa: " + oTitle(o)}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpenOrder(o.id); } }}
+      >
+        {isAdmin && <img className="orderAvatar" src={o.avatar || avatarURI(o.who)} alt={o.who} />}
+        {!isAdmin && <img className="orderThumb" src={thumb} alt={oTitle(o)} />}
+        <div className="orderBody">
+          <div className="orderTitle">{isAdmin ? o.who : oTitle(o)}</div>
+          <div className="orderMeta">
+            {isAdmin && <span className="orderMetaChip">{oTitle(o)}</span>}
+            <span className="orderMetaChip">{eur(o.total)}</span>
+            {o.date && <span className="orderMetaChip">{fmtDate(o.date)}</span>}
+          </div>
+          <p className="orderNote">{isAdmin ? "Tocca per il dettaglio. Puoi confermare o rifiutare." : "Stiamo valutando la tua richiesta."}</p>
+        </div>
+        <div className="orderSide">
+          <span className="ostat ostat--pending">In attesa</span>
+          {isAdmin && (
+            <div className="orderAdminActions" onClick={(e) => e.stopPropagation()}>
+              <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>
+              <button className="btnN" onClick={() => onReject(o.id)}>Rifiuta</button>
+            </div>
+          )}
+        </div>
+      </article>
+    );
+  };
+
+  const allOrdered = [...pend, ...conf, ...rej];
+
   return (
-    <section className="screen on">
-      <h2 className="title px"><span className="ticon"><OrdersI /></span>I miei ordini</h2>
-      {orders.length === 0 && <p className="empty">Nessun ordine ancora.</p>}
-      {pend.length > 0 && <h3 className="osec">In attesa</h3>}
-      {pend.map((o) => (
-        <div className={"banner glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)}>
-          {isAdmin && <img className="bnav" src={o.avatar || avatarURI(o.who)} alt="" />}
-          <div className="txt" onClick={() => onOpenOrder(o.id)} style={{ cursor: "pointer" }}>
-            <b>{isAdmin ? "Nuova richiesta" : "La tua richiesta"}</b> · {oTitle(o)} · {eur(o.total)}{isAdmin ? " da " + o.who : ""}<br />
-            <span style={{ color: "var(--soft)", fontSize: "12.5px" }}>Tocca per il dettaglio{isAdmin ? " · conferma per avvisare il cliente" : ""}</span>
-          </div>
-          {isAdmin && <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>}
-          {isAdmin && <button className="btnN" onClick={() => onReject(o.id)}>Rifiuta</button>}
+    <section className="screen on ordersPage">
+      <div className="ordersHero px">
+        <h2 className="title" style={{ margin: 0 }}><span className="ticon"><OrdersI /></span>I miei ordini</h2>
+        <p className="ordersSubtitle">Le tue richieste, aggiornate con discrezione.</p>
+      </div>
+
+      {/* Empty state */}
+      {orders.length === 0 && (
+        <div className="ordersEmpty">
+          <div className="ordersEmptyIcon" aria-hidden="true"><OrdersI /></div>
+          <h3 className="ordersEmptyTitle">Nessuna richiesta ancora</h3>
+          <p className="ordersEmptyText">Quando sceglierai il tuo primo oggetto, lo troverai qui.</p>
+          {onGoExplore && (
+            <button type="button" className="ordersExploreCta" onClick={onGoExplore}>Esplora la collezione</button>
+          )}
         </div>
-      ))}
-      {done.length > 0 && <h3 className="osec">Effettuati</h3>}
-      {done.map((o) => (
-        <div className={"ord glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)} onClick={() => onOpenOrder(o.id)}>
-          <img src={o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79")} alt="" />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t">{oTitle(o)}</div>
-            <div className="s">{isAdmin ? o.who + " · " : ""}{eur(o.total)}{o.date ? " · " + fmtDate(o.date) : ""}</div>
-          </div>
-          <span className="badge bc">Confermato</span>
-        </div>
-      ))}
-      {rej.length > 0 && <h3 className="osec">Non accettati</h3>}
-      {rej.map((o) => (
-        <div className={"ord glass" + (orderFocus === o.id ? " ofocus" : "")} key={o.id} ref={setRef(o.id)} onClick={() => onOpenOrder(o.id)}>
-          <img src={o.items[0] ? (o.items[0].img || gimg("#cfc4b4", "#9a8d79")) : gimg("#cfc4b4", "#9a8d79")} alt="" />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="t">{oTitle(o)}</div>
-            <div className="s">{isAdmin ? o.who + " · " : ""}{eur(o.total)}{o.date ? " · " + fmtDate(o.date) : ""}</div>
-          </div>
-          <span className="badge br">Rifiutato</span>
-          {isAdmin && <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>}
-        </div>
-      ))}
+      )}
+
+      {/* Lista unificata con section label per stato */}
+      {pend.length > 0 && (
+        <>
+          <div className="ordersSectionLabel">In attesa di conferma</div>
+          {pend.map((o, i) => <PendCard key={o.id} o={o} idx={i} />)}
+        </>
+      )}
+      {conf.length > 0 && (
+        <>
+          <div className="ordersSectionLabel">{pend.length > 0 ? "Confermati" : "Le tue richieste"}</div>
+          {conf.map((o, i) => <OrderCard key={o.id} o={o} idx={i} />)}
+        </>
+      )}
+      {rej.length > 0 && (
+        <>
+          <div className="ordersSectionLabel">Non accettati</div>
+          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i} />)}
+        </>
+      )}
+
+      <div className="ordersBottomSpacer" />
     </section>
   );
 }
