@@ -231,7 +231,7 @@ const CSS = `
   .ipick .ib.on{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
 
   /* ===== DOCK (versione pulita: icone standard allineate + riquadro vetro sull'attiva) ===== */
-  .dockwrap{position:fixed;left:0;right:0;bottom:13px;z-index:72;display:flex;justify-content:center;pointer-events:none}
+  .dockwrap{position:fixed;left:0;right:0;bottom:8px;z-index:72;display:flex;justify-content:center;pointer-events:none}
   .dock{pointer-events:auto;display:flex;align-items:center;gap:5px;padding:8px 11px;border-radius:30px;
     background:var(--glassDock);
     -webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);
@@ -529,7 +529,7 @@ body.dark .pcard{background:rgba(90,64,48,.28);border-color:rgba(199,125,107,.22
 /* ---- safe-area / full screen ---- */
 .topbar{padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
 .wrap{padding-top:calc(62px + env(safe-area-inset-top))}
-.dockwrap{bottom:calc(13px + env(safe-area-inset-bottom))}
+.dockwrap{bottom:calc(8px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
@@ -759,7 +759,7 @@ button:active{transform:scale(.97)}
 .card:active,.cat:active,.herocard:active{transform:scale(.985)}
 
 /* ---- dock sempre ancorata al bordo visibile (no jitter con barra Safari) ---- */
-.dockwrap{position:fixed;bottom:calc(13px + env(safe-area-inset-bottom))}
+.dockwrap{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom))}
 
 /* ---- testo aspetto profilo ---- */
 .paspect{color:var(--soft);font-size:13.5px;margin:2px 2px 18px;line-height:1.5}
@@ -1875,26 +1875,28 @@ export default function App() {
   const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
   useEffect(() => {
     if (!anySheetOpen) return;
-    // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
-    // Risolve <main.wrap> in modo lazy: può montare dopo (boot/login iniziale).
-    // Usare body.position=fixed creerebbe un nuovo containing block per i fixed
-    // elements (dock inclusa) in alcuni browser — usiamo wrap invece.
-    const wrap = document.querySelector("main.wrap");
-    const scrollY = window.scrollY;
-    if (!wrap) {
-      // Fallback minimo se wrap non ancora nel DOM
-      document.documentElement.style.overflow = "hidden";
-      return () => { document.documentElement.style.overflow = ""; };
-    }
-    const prev = { position: wrap.style.position, top: wrap.style.top, left: wrap.style.left, right: wrap.style.right, width: wrap.style.width };
-    wrap.style.cssText += ";position:fixed;top:" + (-scrollY) + "px;left:0;right:0;width:100%;";
+    // Blocco scroll sul body usando overflow:hidden + prevenzione touchmove selettiva.
+    // NON usiamo position:fixed su body (causa dock-shift su iOS Safari) né su
+    // main.wrap (causa collasso documento e salto pagina).
+    // Nessuna modifica a position → nessun residuo di top/left/right dopo chiusura.
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOf = html.style.overflow;
+    const prevBodyOf = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    // Previeni rubber-band iOS sui layer sottostanti; il contenuto dello sheet
+    // (.ipick .sheet, .sheetwrap) può ancora scrollare.
+    const onTouchMove = (e) => {
+      if (e.target.closest(".ipick .sheet, .ipick .sheetwrap")) return;
+      e.preventDefault();
+    };
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
-      wrap.style.position = prev.position;
-      wrap.style.top = prev.top;
-      wrap.style.left = prev.left;
-      wrap.style.right = prev.right;
-      wrap.style.width = prev.width;
-      window.scrollTo(0, scrollY);
+      html.style.overflow = prevHtmlOf;
+      body.style.overflow = prevBodyOf;
+      document.removeEventListener("touchmove", onTouchMove);
+      // Nessun window.scrollTo necessario: non abbiamo modificato scroll o position.
     };
   }, [anySheetOpen]);
 
