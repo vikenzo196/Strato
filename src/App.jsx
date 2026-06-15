@@ -231,7 +231,7 @@ const CSS = `
   .ipick .ib.on{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
 
   /* ===== DOCK (versione pulita: icone standard allineate + riquadro vetro sull'attiva) ===== */
-  .dockwrap{position:fixed;left:0;right:0;bottom:18px;z-index:72;display:flex;justify-content:center;pointer-events:none}
+  .dockwrap{position:fixed;left:0;right:0;bottom:13px;z-index:72;display:flex;justify-content:center;pointer-events:none}
   .dock{pointer-events:auto;display:flex;align-items:center;gap:5px;padding:8px 11px;border-radius:30px;
     background:var(--glassDock);
     -webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);
@@ -529,7 +529,7 @@ body.dark .pcard{background:rgba(90,64,48,.28);border-color:rgba(199,125,107,.22
 /* ---- safe-area / full screen ---- */
 .topbar{padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
 .wrap{padding-top:calc(62px + env(safe-area-inset-top))}
-.dockwrap{bottom:calc(18px + env(safe-area-inset-bottom))}
+.dockwrap{bottom:calc(13px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 
@@ -759,7 +759,7 @@ button:active{transform:scale(.97)}
 .card:active,.cat:active,.herocard:active{transform:scale(.985)}
 
 /* ---- dock sempre ancorata al bordo visibile (no jitter con barra Safari) ---- */
-.dockwrap{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom))}
+.dockwrap{position:fixed;bottom:calc(13px + env(safe-area-inset-bottom))}
 
 /* ---- testo aspetto profilo ---- */
 .paspect{color:var(--soft);font-size:13.5px;margin:2px 2px 18px;line-height:1.5}
@@ -1875,23 +1875,25 @@ export default function App() {
   const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
   useEffect(() => {
     if (!anySheetOpen) return;
-    // Tecnica iOS-safe: salviamo scrollY e fissiamo il body con top negativo
-    // in modo che la pagina non si sposti ma appaia visivamente ferma.
+    // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
+    // Risolve <main.wrap> in modo lazy: può montare dopo (boot/login iniziale).
+    // Usare body.position=fixed creerebbe un nuovo containing block per i fixed
+    // elements (dock inclusa) in alcuni browser — usiamo wrap invece.
+    const wrap = document.querySelector("main.wrap");
     const scrollY = window.scrollY;
-    const body = document.body;
-    const prev = { position: body.style.position, top: body.style.top, left: body.style.left, right: body.style.right, overflowY: body.style.overflowY };
-    body.style.position = "fixed";
-    body.style.top = `-${scrollY}px`;
-    body.style.left = "0";
-    body.style.right = "0";
-    body.style.overflowY = "scroll"; // mantieni larghezza scrollbar per evitare salti layout
+    if (!wrap) {
+      // Fallback minimo se wrap non ancora nel DOM
+      document.documentElement.style.overflow = "hidden";
+      return () => { document.documentElement.style.overflow = ""; };
+    }
+    const prev = { position: wrap.style.position, top: wrap.style.top, left: wrap.style.left, right: wrap.style.right, width: wrap.style.width };
+    wrap.style.cssText += ";position:fixed;top:" + (-scrollY) + "px;left:0;right:0;width:100%;";
     return () => {
-      // Ripristino: rimuovo il lock e torno esattamente alla posizione precedente
-      body.style.position = prev.position;
-      body.style.top = prev.top;
-      body.style.left = prev.left;
-      body.style.right = prev.right;
-      body.style.overflowY = prev.overflowY;
+      wrap.style.position = prev.position;
+      wrap.style.top = prev.top;
+      wrap.style.left = prev.left;
+      wrap.style.right = prev.right;
+      wrap.style.width = prev.width;
       window.scrollTo(0, scrollY);
     };
   }, [anySheetOpen]);
@@ -2771,30 +2773,32 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                       className={cable === "Normale" ? "on" : ""}
                       onClick={() => setCable("Normale")}
                       aria-pressed={cable === "Normale"}
+                      aria-label="Cavo standard incluso"
                     ><span className="segopt">Standard</span><i>incluso</i></button>
                     {p.allowBraided && (
                       <button
                         className={cable === "Intrecciato" ? "on" : ""}
                         onClick={() => setCable("Intrecciato")}
                         aria-pressed={cable === "Intrecciato"}
+                        aria-label={"Cavo tessuto intrecciato, più " + eur(ad.braided)}
                       ><span className="segopt">Tessuto intrecciato</span><i>+{eur(ad.braided)}</i></button>
                     )}
                   </div>
                 </div>
 
                 <div className="elecrow">
-                  <span className="eleclbl"><IcoBulb /> Lampadina</span>
-                  <div className="seg" role="group" aria-label="Lampadina">
-                    <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)} aria-pressed={!bulb}><span className="segopt">Senza</span></button>
-                    <button className={bulb ? "on" : ""} onClick={() => setBulb(1)} aria-pressed={!!bulb}><span className="segopt">Con lampadina</span><i>+{eur(ad.bulb)}</i></button>
+                  <span className="eleclbl"><IcoHolder /> Portalampada</span>
+                  <div className="seg" role="group" aria-label="Portalampada">
+                    <button className={!holder ? "on" : ""} onClick={() => setHolder(0)} aria-pressed={!holder} aria-label="Portalampada standard incluso"><span className="segopt">Standard</span><i>incluso</i></button>
+                    <button className={holder ? "on" : ""} onClick={() => setHolder(1)} aria-pressed={!!holder} aria-label={"Portalampada premium, più " + eur(ad.holder)}><span className="segopt">Premium</span><i>+{eur(ad.holder)}</i></button>
                   </div>
                 </div>
 
                 <div className="elecrow">
-                  <span className="eleclbl"><IcoHolder /> Portalampada</span>
-                  <div className="seg" role="group" aria-label="Portalampada">
-                    <button className={!holder ? "on" : ""} onClick={() => setHolder(0)} aria-pressed={!holder}><span className="segopt">Senza</span></button>
-                    <button className={holder ? "on" : ""} onClick={() => setHolder(1)} aria-pressed={!!holder}><span className="segopt">Con portalampada</span><i>+{eur(ad.holder)}</i></button>
+                  <span className="eleclbl"><IcoBulb /> Lampadina</span>
+                  <div className="seg" role="group" aria-label="Lampadina">
+                    <button className={!bulb ? "on" : ""} onClick={() => setBulb(0)} aria-pressed={!bulb} aria-label="Senza lampadina"><span className="segopt">Senza</span></button>
+                    <button className={bulb ? "on" : ""} onClick={() => setBulb(1)} aria-pressed={!!bulb} aria-label={"Con lampadina, più " + eur(ad.bulb)}><span className="segopt">Con lampadina</span><i>+{eur(ad.bulb)}</i></button>
                   </div>
                 </div>
 
