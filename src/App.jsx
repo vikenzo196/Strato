@@ -954,17 +954,70 @@ body.dark .push-toggle-knob{background:rgba(255,255,255,.92)}
   .push-toggle,.push-toggle-knob,.push-row{transition:none!important}
 }
 
+/* ===================== PIACIUTI — redesign premium ===================== */
+
+/* Sottotitolo condizionale */
+.liked-page-sub{margin:-6px 0 18px;font-size:14px;font-weight:400;color:var(--soft);line-height:1.45;font-style:italic}
+
+/* Griglia wrapper: respiro leggermente aumentato */
+.liked-grid-wrap{padding:0 18px}
+.liked-grid-wrap .grid{gap:16px}
+
+/* Card variante liked: più editoriale */
+.liked-card{border-radius:24px}
+/* dark mode: bordo caldo appena più leggibile */
+body.dark .liked-card{box-shadow:inset 0 0 0 1px rgba(199,125,107,.14),var(--elev2)}
+
+/* Categoria: più raffinata */
+.liked-card .cbody .cardcat{font-size:9.5px;letter-spacing:.12em;color:var(--soft);opacity:.75}
+
+/* Materiale: più morbido */
+.liked-card .cbody .mat{font-size:11px;color:var(--soft);opacity:.8}
+
+/* Prezzo: visibile ma meno dominante */
+.liked-card .cbody .cp{font-size:15px;font-weight:600;letter-spacing:.005em;color:var(--text);opacity:.85;margin-bottom:12px}
+
+/* CTA editoriale "Dettagli" */
+.liked-configbtn{
+  width:100%;padding:10px;border-radius:12px;
+  border:1px solid rgba(199,125,107,.28);
+  background:transparent;
+  color:var(--accent2);
+  font-family:inherit;font-weight:600;font-size:12.5px;letter-spacing:.03em;
+  cursor:pointer;
+  transition:background .24s cubic-bezier(.22,1,.36,1),transform .16s cubic-bezier(.22,1,.36,1),box-shadow .24s;
+}
+.liked-configbtn:hover{background:rgba(199,125,107,.08)}
+.liked-configbtn:active{transform:scale(.985)}
+.liked-configbtn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+body.dark .liked-configbtn{border-color:rgba(199,125,107,.30);color:var(--accent)}
+body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
+
+/* Focus ring caldo su card e pulsante like */
+.liked-card:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+.liked-card .lk:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
+
+/* Stagger ingresso card piaciuti */
+@keyframes likedCardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.liked-grid-wrap .card.in{animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) both}
+.liked-grid-wrap .card:nth-child(1){animation-delay:0ms}
+.liked-grid-wrap .card:nth-child(2){animation-delay:40ms}
+.liked-grid-wrap .card:nth-child(3){animation-delay:80ms}
+.liked-grid-wrap .card:nth-child(4){animation-delay:120ms}
+.liked-grid-wrap .card:nth-child(5){animation-delay:160ms}
+.liked-grid-wrap .card:nth-child(6){animation-delay:200ms}
+.liked-grid-wrap .card:nth-child(n+7){animation-delay:220ms}
+
+/* Bottom spacer dock */
+.liked-bottom-spacer{height:calc(80px + env(safe-area-inset-bottom, 0px))}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .liked-grid-wrap .card.in{animation:none!important;opacity:1!important;transform:none!important}
+  .liked-configbtn{transition:none!important}
+}
+
 /* ===================== ORDINI — premium redesign ===================== */
-
-/* Pagina wrapper */
-.ordersPage{padding-bottom:0}
-
-/* Hero header */
-.ordersHero{padding-bottom:8px}
-.ordersSubtitle{margin:5px 0 0;font-size:13.5px;font-weight:400;color:var(--soft);line-height:1.4}
-
-/* Section label */
-.ordersSectionLabel{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.75;margin:22px 22px 10px;user-select:none}
 
 /* Card ordine */
 .orderCard{display:flex;align-items:flex-start;gap:14px;border-radius:22px;padding:14px 14px 14px 14px;margin:0 14px 10px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s}
@@ -1442,26 +1495,49 @@ const HeartI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" str
 const OrdersI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h4" /></svg>);
 
 /* ============================ CARD ==================================== */
-function Card({ p, liked, onLike, onOpen, onEdit }) {
+function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   const c0 = p.cols[0];
   const { tap } = useHaptic();
   const lkRef = useRef(null);
+  const isLiked = context === "liked";
+  const handleCardKey = (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(); }
+  };
   return (
-    <div className="card in" onClick={onOpen}>
+    <div
+      className={"card in" + (isLiked ? " liked-card" : "")}
+      onClick={onOpen}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleCardKey}
+      aria-label={p.title}
+    >
       <div className="ph">
         <img src={colImg(c0)} alt={p.title + (p.category ? " · " + p.category : "")} loading="lazy" decoding="async" />
-        <button ref={lkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked ? "unlike" : "like", lkRef.current); onLike(p.id); }}>
+        <button
+          ref={lkRef}
+          className="lk"
+          onClick={(e) => { e.stopPropagation(); tap(liked ? "unlike" : "like", lkRef.current); onLike(p.id); }}
+          aria-label={liked ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
           <span className={"heart" + (liked ? " liked" : "")}><HeartI /></span>
         </button>
-        <div className="cnt"><HeartI /> {p.likeCount}</div>
-        {onEdit && <button className="cedit" onClick={(e) => { e.stopPropagation(); onEdit(p); }} aria-label="Modifica"><Pencil /></button>}
+        {!isLiked && <div className="cnt"><HeartI /> {p.likeCount}</div>}
+        {onEdit && !isLiked && (
+          <button className="cedit" onClick={(e) => { e.stopPropagation(); onEdit(p); }} aria-label="Modifica" onKeyDown={(e) => e.stopPropagation()}><Pencil /></button>
+        )}
       </div>
       <div className="cbody">
         <div className="cardcat"><Raw html={glassIcon(p.categoryIcon, 14)} />{p.categoryName}</div>
         <div className="ct">{p.title}</div>
         <div className="mat">{p.material}</div>
         <div className="cp">{eur(p.price)}</div>
-        <button className="configbtn" onClick={(e) => { e.stopPropagation(); onOpen(); }}>Configura</button>
+        <button
+          className={isLiked ? "liked-configbtn" : "configbtn"}
+          onClick={(e) => { e.stopPropagation(); onOpen(); }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >{isLiked ? "Dettagli" : "Configura"}</button>
       </div>
     </div>
   );
@@ -2503,12 +2579,28 @@ function LikedEmpty() {
 }
 function Liked({ likedPrints, onOpen, onLike, onEdit }) {
   return (
-    <section className="screen on">
+    <section className="screen on liked-screen">
       <h2 className="title px"><span className="ticon"><HeartI /></span>Piaciuti</h2>
+      {likedPrints.length > 0 && (
+        <p className="liked-page-sub px">Ciò che merita di restare.</p>
+      )}
       {likedPrints.length === 0 && <LikedEmpty />}
       {likedPrints.length > 0 && (
-        <Grid>{likedPrints.map((p) => <Card key={p.id} p={p} liked onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} />)}</Grid>
+        <div className="liked-grid-wrap">
+          <Grid>{likedPrints.map((p, i) => (
+            <Card
+              key={p.id}
+              p={p}
+              liked
+              onLike={onLike}
+              onOpen={() => onOpen(p.id)}
+              onEdit={onEdit}
+              context="liked"
+            />
+          ))}</Grid>
+        </div>
       )}
+      <div className="liked-bottom-spacer" />
     </section>
   );
 }
