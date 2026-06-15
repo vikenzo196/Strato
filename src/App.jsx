@@ -2565,9 +2565,24 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
 }
 
 /* ---- Icone opzioni lampada (inline, solo per la scheda dettaglio) ---- */
-const IcoCable  = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3c0 0-4 2-4 5s3 4 4 4 4-1 4-4-4-5-4-5z"/><path d="M12 12v4M10 18h4M11 21h2"/></svg>;
-const IcoBulb   = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 14a5 5 0 1 0-6 0"/><path d="M9 18h6M10 21h4"/></svg>;
-const IcoHolder = () => <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3h6"/><rect x="8" y="3" width="8" height="5" rx="2"/><path d="M8 8c0 0-2 1-2 4h12c0-3-2-4-2-4"/><path d="M6 12h12M8 12v2M16 12v2M10 14h4M11 14v4M13 14v4M11 18h2"/></svg>
+/* Stile identico a IcoBulb: strokeWidth 2, round caps, fill none, viewBox 0 0 24 24, 17px */
+const IcoCable  = () => (
+  /* 3 archi quadratici consecutivi = filo arricciato, stesso arco della dome IcoBulb */
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 17 Q5.5 7 9 17 Q12.5 7 16 17 Q19.5 7 23 17"/>
+  </svg>
+);
+const IcoBulb   = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 14a5 5 0 1 0-6 0"/><path d="M9 18h6M10 21h4"/>
+  </svg>
+);
+const IcoHolder = () => (
+  /* Cupola bezier (come dome lampadina) + corpo rettangolare = portalampada E27 */
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 17 Q12 5 18 17 V21 H6 Z"/>
+  </svg>
+);
 
 /* ---- Hook drag-to-close (touch) per tutti gli sheet ---- */
 function useDragToClose(doClose) {
@@ -2627,8 +2642,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   useEffect(() => { const onKey = (e) => { if (e.key === "Escape") doClose(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
-  const [bulb, setBulb] = useState(1);
-  const [holder, setHolder] = useState(1);
+  const [bulb, setBulb] = useState(0);
+  const [holder, setHolder] = useState(0);
   const [editP, setEditP] = useState(false);
   const [ad, setAd] = useState(p.addons);
   const { wrapRef, sheetRef } = useDragToClose(doClose);
