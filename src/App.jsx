@@ -1080,6 +1080,113 @@ body.dark .ostat--rejected{background:rgba(176,106,82,.14);color:#c4856a;border-
   .ordersExploreCta{transition:none!important}
 }
 
+/* ===================== HOME — premium editorial ===================== */
+
+/* Headline hero: leggermente alleggerita (800→700, 40px→37px) */
+.hero{font-size:37px;font-weight:700;line-height:1.07}
+
+/* Label A COLPO D'OCCHIO sotto headline */
+.homekick{margin:10px 0 14px}
+
+/* Respiro tra hero image e sezione Lasciati ispirare */
+.herocard{margin-bottom:26px}
+
+/* Titolo sezione "Lasciati ispirare": meno dominante */
+.home-sec-title{font-size:22px;font-weight:700;letter-spacing:-.3px;margin-top:4px;margin-bottom:14px}
+
+/* Herotag — targhetta materica, meno glass */
+.herotag{
+  background:rgba(246,239,228,.90);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(199,125,107,.16);
+  box-shadow:0 4px 18px rgba(70,45,25,.10);
+}
+body.dark .herotag{
+  background:rgba(43,33,27,.92);
+  border-color:rgba(199,125,107,.20);
+  box-shadow:0 4px 18px rgba(0,0,0,.32);
+}
+.herotag .ht{font-size:14px;font-weight:700;letter-spacing:-.1px}
+.herotag .hp{font-size:12.5px;font-weight:500;color:var(--soft)}
+
+/* Hero image: crop più intenzionale */
+.herocard img{object-position:center 35%}
+
+/* ===================== TOPBAR — più calda, meno glass ===================== */
+
+/* Override del topbar::after per luce e buio */
+.topbar::after{
+  background:linear-gradient(to bottom, rgba(244,236,222,.94) 0%, rgba(244,236,222,.68) 44%, transparent 100%);
+  -webkit-backdrop-filter:blur(5px) saturate(130%);backdrop-filter:blur(5px) saturate(130%);
+}
+body.dark .topbar::after{
+  background:linear-gradient(to bottom, rgba(43,33,27,.94) 0%, rgba(43,33,27,.68) 44%, transparent 100%);
+}
+
+/* ===================== CARD — scaffold stabile + raffinamenti ===================== */
+
+/* cbody: flex:1 per riempire l'altezza disponibile della card */
+.cbody{flex:1}
+
+/* Titolo: spazio riservato a 2 righe, line-clamp */
+.cbody .ct{
+  min-height:calc(1.18em * 2);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* Prezzo: meno dominante */
+.cbody .cp{
+  font-size:15px;
+  font-weight:600;
+  margin-top:auto;
+  opacity:.9;
+}
+
+/* CTA → prezzo spinge tutto in basso, cta segue subito */
+.configbtn,.liked-configbtn{margin-top:0}
+
+/* Categoria: più raffinata */
+.cbody .cardcat{
+  font-size:9.5px;
+  letter-spacing:.12em;
+  opacity:.7;
+}
+
+/* Materiale: più morbido */
+.cbody .mat{opacity:.72}
+
+/* Cuore: più discreto */
+.lk{
+  background:rgba(246,239,228,.78);
+  border-color:rgba(199,125,107,.18);
+}
+body.dark .lk{
+  background:rgba(55,42,36,.82);
+  border-color:rgba(199,125,107,.22);
+}
+
+/* Card dark mode: bordo caldo per separazione dal fondo */
+body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44),inset 0 0 0 1px rgba(199,125,107,.10)}
+
+/* Card light mode: ombre più diffuse */
+.card{box-shadow:0 1px 3px rgba(70,45,30,.04),0 8px 22px var(--shcol),0 20px 44px rgba(90,55,35,.04)}
+
+/* ===================== SCREEN TRANSITION — translateY leggero ===================== */
+@keyframes scrIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===================== GLOBAL WRAP PADDING ===================== */
+/* .wrap ha già 132px → sufficiente per la dock. Qui solo sicurezza mobile. */
+.wrap{padding-bottom:max(132px, calc(80px + env(safe-area-inset-bottom, 24px)))}
+
+/* Reduced motion — nuove animazioni */
+@media(prefers-reduced-motion:reduce){
+  @keyframes scrIn{from{opacity:1;transform:none}to{opacity:1;transform:none}}
+  .cbody .cp,.cbody .ct,.lk,.herotag,.topbar::after{transition:none!important}
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1500,6 +1607,10 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   const { tap } = useHaptic();
   const lkRef = useRef(null);
   const isLiked = context === "liked";
+  const isHome  = context === "home";
+  const quietCnt = isLiked || isHome; // nascondi badge conteggio in Home e Piaciuti
+  const ctaLabel = isLiked ? "Dettagli" : isHome ? "Scopri" : "Configura";
+  const ctaCls   = isLiked ? "liked-configbtn" : "configbtn";
   const handleCardKey = (e) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(); }
   };
@@ -1523,7 +1634,7 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
         >
           <span className={"heart" + (liked ? " liked" : "")}><HeartI /></span>
         </button>
-        {!isLiked && <div className="cnt"><HeartI /> {p.likeCount}</div>}
+        {!quietCnt && <div className="cnt"><HeartI /> {p.likeCount}</div>}
         {onEdit && !isLiked && (
           <button className="cedit" onClick={(e) => { e.stopPropagation(); onEdit(p); }} aria-label="Modifica" onKeyDown={(e) => e.stopPropagation()}><Pencil /></button>
         )}
@@ -1534,10 +1645,10 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
         <div className="mat">{p.material}</div>
         <div className="cp">{eur(p.price)}</div>
         <button
-          className={isLiked ? "liked-configbtn" : "configbtn"}
+          className={ctaCls}
           onClick={(e) => { e.stopPropagation(); onOpen(); }}
           onKeyDown={(e) => e.stopPropagation()}
-        >{isLiked ? "Dettagli" : "Configura"}</button>
+        >{ctaLabel}</button>
       </div>
     </div>
   );
@@ -2277,23 +2388,23 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   return (
     <section className="screen on">
       <div className="px">
-        <div className="kick">OGGETTI DA ABITARE</div>
         <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
+        <div className="kick homekick">A COLPO D'OCCHIO</div>
       </div>
       {hero && (
         <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
           <img src={colImg(hero.cols[0])} alt={hero.title} loading="lazy" decoding="async" />
-          <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label="Mi piace">
+          <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label={liked(hero.id) ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}>
             <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
           </button>
           <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
           {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
         </div>
       )}
-      <h2 className="title px">Catalogo</h2>
+      <h2 className="title px home-sec-title">Lasciati ispirare</h2>
       {prints.length === 0 && <p className="empty">Nessun prodotto ancora.</p>}
       <Grid>
-        {prints.map((p) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} />)}
+        {prints.map((p) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" />)}
       </Grid>
     </section>
   );
