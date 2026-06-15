@@ -10,7 +10,7 @@ function canUseWebPush() {
     && "Notification" in window;
 }
 
-function urlB64ToUint8(b64) {
+function urlB64ToUint8Array(b64) {
   const padding = "=".repeat((4 - (b64.length % 4)) % 4);
   const base64 = (b64 + padding).replace(/-/g, "+").replace(/_/g, "/");
   const raw = window.atob(base64);
@@ -25,41 +25,70 @@ function sameAppServerKey(existing, current) {
   return true;
 }
 
-async function enablePush(supabaseClient, userId) {
-  if (!VAPID_PUBLIC_KEY) throw new Error("missing-vapid-public-key");
+async function getPushRegistration() {
+  return (await navigator.serviceWorker.getRegistration("/sw.js"))
+    || (await navigator.serviceWorker.getRegistration())
+    || null;
+}
+
+// Stato corrente delle notifiche, riflesso anche dopo refresh pagina.
+async function checkPushStatus() {
+  const supported = canUseWebPush();
+  if (!supported) return { supported: false, permission: "unsupported", subscribed: false };
+  const permission = Notification.permission;
+  let subscribed = false;
+  try {
+    const reg = await getPushRegistration();
+    const sub = reg ? await reg.pushManager.getSubscription() : null;
+    subscribed = !!sub;
+  } catch (_) {}
+  return { supported, permission, subscribed };
+}
+
+async function enablePushNotifications(supabaseClient, userId) {
   if (!canUseWebPush()) throw new Error("push-not-supported");
+  if (!VAPID_PUBLIC_KEY) throw new Error("missing-vapid-public-key");
 
   const permission = await Notification.requestPermission();
   if (permission !== "granted") throw new Error(permission === "denied" ? "push-denied" : "push-dismissed");
 
-  const appKey = urlB64ToUint8(VAPID_PUBLIC_KEY);
+  const appKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY);
   const reg = await navigator.serviceWorker.register("/sw.js");
   let sub = await reg.pushManager.getSubscription();
 
-  // Se esiste già una subscription legata a una VAPID key DIVERSA (es. chiavi
-  // rigenerate dopo il primo test), il push server rifiuta gli invii pur risultando
-  // "attivata": la disiscriviamo e ne creiamo una nuova con la chiave corrente.
+  // Subscription legata a una VAPID key diversa (chiavi rigenerate): la rimuoviamo
+  // e ne creiamo una nuova, così il push server non la rifiuta.
   if (sub && sameAppServerKey(sub.options?.applicationServerKey, appKey) === false) {
+    const oldEndpoint = sub.endpoint;
     try { await sub.unsubscribe(); } catch (_) {}
-    try { await supabaseClient.from("push_subscriptions").delete().eq("user_id", userId); } catch (_) {}
+    try { await supabaseClient.from("push_subscriptions").delete().eq("user_id", userId).eq("endpoint", oldEndpoint); } catch (_) {}
     sub = null;
   }
 
   if (!sub) {
-    sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: appKey,
-    });
+    sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: appKey });
   }
 
   const { error } = await supabaseClient
     .from("push_subscriptions")
-    .upsert(
-      { user_id: userId, subscription: sub.toJSON() },
-      { onConflict: "user_id,subscription" }
-    );
+    .upsert({ user_id: userId, subscription: sub.toJSON() }, { onConflict: "user_id,endpoint" });
   if (error) throw error;
-  return sub;
+  return true;
+}
+
+// Disattiva SOLO la subscription del dispositivo corrente (non quelle di altri device).
+async function disablePushNotifications(supabaseClient, userId) {
+  if (!canUseWebPush()) return false;
+  try {
+    const reg = await getPushRegistration();
+    const sub = reg ? await reg.pushManager.getSubscription() : null;
+    if (sub) {
+      const endpoint = sub.endpoint;
+      try { await supabaseClient.from("push_subscriptions").delete().eq("user_id", userId).eq("endpoint", endpoint); } catch (_) {}
+      try { await sub.unsubscribe(); } catch (_) {}
+    }
+  } catch (_) {}
+  return false;
 }
 
 
@@ -840,6 +869,91 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dswatches.readonly{pointer-events:none}
 .dswbox.ro{cursor:default}
 
+/* ===================== PROFILO — premium ===================== */
+@keyframes profIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.profilePage .title{margin-bottom:20px}
+.profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:profIn .5s cubic-bezier(.22,1,.36,1) both}
+.profilePage .profileSection:nth-of-type(1){animation-delay:.04s}
+.profilePage .profileSection:nth-of-type(2){animation-delay:.09s}
+.profilePage .profileSection:nth-of-type(3){animation-delay:.14s}
+.profileLogoutWrap{animation-delay:.18s}
+.profileHero{display:flex;align-items:center;gap:18px;margin:0 18px;padding:22px;border-radius:26px;background:var(--card);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi),0 10px 30px var(--shcol)}
+.profileAvatar{width:74px;height:74px;border-radius:50%;object-fit:cover;flex:none;border:1px solid var(--strokeSoft);box-shadow:0 4px 14px var(--shcol)}
+.profileIdentity{min-width:0;display:flex;flex-direction:column;gap:7px}
+.profileName{font-weight:700;font-size:21px;letter-spacing:-.3px;line-height:1.12;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profileRolePill{align-self:flex-start;display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.04em;color:var(--accent2);background:rgba(199,125,107,.12);border:1px solid rgba(199,125,107,.24)}
+body.dark .profileRolePill{color:var(--accent);background:rgba(199,125,107,.15);border-color:rgba(199,125,107,.30)}
+.profileMicrocopy{margin:1px 0 0;font-size:13px;line-height:1.45;color:var(--soft)}
+.profileSection{margin-top:26px}
+.profileSectionTitle{margin:0 22px 12px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--soft)}
+.profileAdminCard{margin:0 18px;padding:8px;border-radius:22px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
+.profileAdminActions{display:flex;flex-direction:column;gap:6px}
+.profileSubtleButton{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px;border-radius:16px;border:1px solid transparent;background:transparent;color:var(--text);font-family:inherit;cursor:pointer;transition:background .25s cubic-bezier(.22,1,.36,1),transform .18s}
+.profileSubtleButton:hover{background:var(--glass)}
+.profileSubtleButton:active{transform:scale(.985)}
+.profileSubtleIcon{flex:none;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 12px var(--shcol)}
+.profileSubtleIcon svg{width:19px;height:19px}
+.profileSubtleText{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.profileSubtleT{font-weight:600;font-size:15px;color:var(--text)}
+.profileSubtleS{font-size:12.5px;color:var(--soft)}
+.profileSubtleArr{flex:none;display:flex;color:var(--soft);opacity:.5}
+.profileSubtleArr svg{width:18px;height:18px}
+.profileBgDetails{border-top:1px solid var(--strokeSoft);margin-top:6px}
+.profileBgDetails[open]{padding-bottom:4px}
+.profileBgSummary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 13px;cursor:pointer;font-weight:600;font-size:15px;color:var(--text);border-radius:14px;transition:background .25s}
+.profileBgSummary::-webkit-details-marker{display:none}
+.profileBgSummary:hover{background:var(--glass)}
+.profileBgChev{display:flex;color:var(--soft);opacity:.6;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.profileBgChev svg{width:18px;height:18px}
+.profileBgDetails[open] .profileBgChev{transform:rotate(90deg)}
+.profileBgGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:2px 8px 4px}
+.profileBgNote{margin:10px 10px 4px;font-size:12px;line-height:1.5;color:var(--soft)}
+.profilePage .themeseg{margin:0 18px;gap:4px;padding:5px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi)}
+.profilePage .segbtn{transition:background .3s cubic-bezier(.22,1,.36,1),color .3s,box-shadow .3s,transform .18s}
+.profilePage .segbtn.on{background:var(--card);color:var(--accent);box-shadow:0 2px 8px var(--shcol),inset 0 1px 0 var(--hi)}
+.profilePage .segbtn:active{transform:scale(.97)}
+.profilePage .pwa-prow{box-shadow:inset 0 1px 0 var(--hi);margin-bottom:0}
+.profileLogoutWrap{display:flex;justify-content:center;margin:34px 18px 4px}
+.profileLogout{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:14px;border:1px solid var(--strokeSoft);background:transparent;color:var(--soft);font-family:inherit;font-weight:500;font-size:14px;cursor:pointer;transition:background .25s,color .25s,transform .18s}
+.profileLogout svg{width:17px;height:17px}
+.profileLogout:hover{background:var(--glass);color:var(--text)}
+.profileLogout:active{transform:scale(.985)}
+.profilePage button:focus-visible,.profileBgSummary:focus-visible,.profilePage .pwa-prow:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+@media(prefers-reduced-motion:reduce){
+  .profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:none!important}
+  .profileBgChev,.profilePage .segbtn,.profileSubtleButton,.profileLogout,.profileBgSummary{transition:none!important}
+}
+
+/* ===================== NOTIFICHE — push-row + toggle switch ===================== */
+.push-row{display:flex;align-items:center;gap:14px;padding:13px 16px;margin:0 18px;border-radius:18px;background:var(--glass2);border:1px solid var(--strokeSoft);box-shadow:inset 0 1px 0 var(--hi);transition:opacity .25s}
+.push-row--denied{opacity:.6}
+.push-row--busy{opacity:.75;pointer-events:none}
+.push-row-ico{flex:none;display:flex;color:var(--accent);opacity:.85}
+.push-row-ico svg{width:20px;height:20px}
+.push-row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.push-row-title{font-size:15px;font-weight:600;color:var(--text);line-height:1.2}
+.push-row-sub{font-size:12.5px;font-weight:400;color:var(--soft);line-height:1.4}
+
+/* Toggle switch */
+.push-toggle{flex:none;position:relative;width:46px;height:27px;border-radius:999px;border:none;padding:0;cursor:pointer;background:var(--bg2);box-shadow:inset 0 0 0 1.5px var(--strokeSoft);transition:background .3s cubic-bezier(.22,1,.36,1),box-shadow .3s cubic-bezier(.22,1,.36,1),transform .15s cubic-bezier(.22,1,.36,1)}
+.push-toggle--on{background:var(--accent);box-shadow:inset 0 0 0 1.5px transparent,0 2px 8px var(--shcol)}
+.push-toggle--busy{opacity:.55;cursor:default}
+.push-toggle:disabled{cursor:default}
+.push-toggle:active:not(:disabled){transform:scale(.955)}
+.push-toggle-knob{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.18);transition:transform .28s cubic-bezier(.22,1,.36,1),box-shadow .28s cubic-bezier(.22,1,.36,1)}
+.push-toggle--on .push-toggle-knob{transform:translateX(19px);box-shadow:0 2px 6px rgba(0,0,0,.22)}
+.push-toggle:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+
+/* Dark overrides */
+body.dark .push-toggle{background:var(--bg2)}
+body.dark .push-toggle--on{background:var(--accent)}
+body.dark .push-toggle-knob{background:rgba(255,255,255,.92)}
+
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  .push-toggle,.push-toggle-knob,.push-row{transition:none!important}
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -1579,17 +1693,8 @@ export default function App() {
 
 
   const refreshPushInfo = useCallback(async () => {
-    const supported = canUseWebPush();
-    const permission = supported ? Notification.permission : "unsupported";
-    let subscribed = false;
-    if (supported) {
-      try {
-        const reg = await navigator.serviceWorker.getRegistration("/sw.js") || await navigator.serviceWorker.getRegistration();
-        const sub = reg ? await reg.pushManager.getSubscription() : null;
-        subscribed = !!sub;
-      } catch (_) {}
-    }
-    setPushInfo((prev) => ({ ...prev, supported, permission, subscribed }));
+    const st = await checkPushStatus();
+    setPushInfo((prev) => ({ ...prev, ...st }));
   }, []);
 
   useEffect(() => {
@@ -1597,27 +1702,41 @@ export default function App() {
     refreshPushInfo();
   }, [user, pwaInstalled, refreshPushInfo]);
 
-  const enableOrderPush = async () => {
+  // Deep-link dalle notifiche: ?tab=orders[&order=...] apre la sezione ordini.
+  useEffect(() => {
     if (!user) return;
-    if (pwaPlatform === "ios" && !pwaInstalled) {
-      toast("Su iPhone installa Strato sulla schermata Home per attivare le notifiche.");
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const t = params.get("tab");
+      const o = params.get("order");
+      if (t === "orders") { setTab("orders"); if (o) setOrderFocus(o); }
+      if (t || o) window.history.replaceState({}, "", window.location.pathname);
+    } catch (_) {}
+  }, [user]);
+
+  const togglePush = async () => {
+    if (!user || pushInfo.busy) return;
+    // Permesso negato: nessun tentativo (la card mostra lo stato bloccato).
+    if (pushInfo.permission === "denied") return;
+    // Attivazione su iOS richiede la PWA installata: apriamo la guida con garbo.
+    if (!pushInfo.subscribed && pwaPlatform === "ios" && !pwaInstalled) {
       setPwaModal("ios");
       return;
     }
     setPushInfo((prev) => ({ ...prev, busy: true }));
     try {
-      await enablePush(supabase, user.id);
-      setPushInfo({ supported: true, permission: "granted", subscribed: true, busy: false });
-      toast("Notifiche ordini attivate");
+      if (pushInfo.subscribed) {
+        await disablePushNotifications(supabase, user.id);
+        setPushInfo({ supported: true, permission: Notification.permission, subscribed: false, busy: false });
+      } else {
+        await enablePushNotifications(supabase, user.id);
+        setPushInfo({ supported: true, permission: "granted", subscribed: true, busy: false });
+      }
     } catch (e) {
+      console.warn("Push toggle error", e);
       await refreshPushInfo();
       setPushInfo((prev) => ({ ...prev, busy: false }));
-      const msg = String(e?.message || e);
-      if (msg.includes("missing-vapid")) toast("Manca VITE_VAPID_PUBLIC_KEY su Vercel.");
-      else if (msg.includes("not-supported")) toast("Push non supportate su questo browser.");
-      else if (msg.includes("denied")) toast("Notifiche bloccate nelle impostazioni del browser.");
-      else if (msg.includes("dismissed")) toast("Permesso notifiche non concesso.");
-      else toast("Errore attivazione notifiche");
+      toast("Non è stato possibile aggiornare le notifiche.");
     }
   };
 
@@ -1703,6 +1822,13 @@ export default function App() {
     }));
     const { error: e2 } = await supabase.from("order_items").insert(rows);
     if (e2) { toast("Errore righe ordine"); return; }
+    // Notifica agli admin (non blocca la UX se fallisce).
+    try {
+      supabase.functions
+        .invoke("push-notify", { body: { type: "new_order", order_id: ord.id } })
+        .then(({ error }) => { if (error) console.warn("new_order push", error); })
+        .catch((err) => console.warn("new_order push", err));
+    } catch (err) { console.warn("new_order push", err); }
     tap("confirm");
     saveCart([]);
     setCartOpen(false);
@@ -1716,26 +1842,16 @@ export default function App() {
     if (error) { toast("Errore aggiornamento"); return; }
 
     if (order?.user_id && (status === "confirmed" || status === "rejected")) {
-      const firstItem = order.items?.[0]?.t || "Ordine";
-      const isConfirmed = status === "confirmed";
       try {
         const { data: pushData, error: pushError } = await supabase.functions.invoke("push-notify", {
-          body: {
-            user_id: order.user_id,
-            title: isConfirmed ? "Ordine confermato" : "Richiesta non accettata",
-            body: isConfirmed
-              ? firstItem + " · La tua richiesta è stata confermata."
-              : firstItem + " · La tua richiesta non è stata accettata.",
-            url: "/?tab=orders&order=" + encodeURIComponent(id),
-          },
+          body: { type: "order_status", order_id: id, status },
         });
-        // La function risponde 200 anche quando non recapita nulla: senza leggere
-        // sent/total il fallimento resterebbe invisibile.
+        // La function risponde 200 anche quando non recapita nulla: leggiamo sent/total
+        // per non lasciare invisibile un fallimento di consegna.
         if (pushError) {
           console.warn("Push notify error", pushError);
           let detail = "";
           try {
-            // supabase-js: su risposta non-2xx l'errore espone la Response in .context
             if (pushError.context && typeof pushError.context.json === "function") {
               const b = await pushError.context.json();
               if (b && b.error) detail = String(b.error);
@@ -1902,7 +2018,7 @@ export default function App() {
             pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
             pushSupported={pushInfo.supported} pushPermission={pushInfo.permission}
             pushSubscribed={pushInfo.subscribed} pushBusy={pushInfo.busy}
-            onEnablePush={enableOrderPush} />
+            onTogglePush={togglePush} />
         )}
       </main>
 
@@ -2381,84 +2497,133 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
   );
 }
 
-function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushPermission, pushSubscribed, pushBusy, onEnablePush }) {
-  const pushDisabled = pushSubscribed || !pushSupported || pushBusy || pushPermission === "denied";
-  const pushTitle = pushSubscribed ? "Notifiche ordini attive" : "Attiva notifiche ordini";
-  const pushCopy = pushSubscribed
-    ? "Riceverai aggiornamenti quando un ordine viene confermato o rifiutato."
-    : pushPermission === "denied"
+function Profile({ user, theme, onTheme, onLogout, isAdmin, onNewProduct, onUploadBg, likedPrints, onOpenProduct, onLike, onEditProduct, pwaInstalled, onPWAInstall, pushSupported, pushPermission, pushSubscribed, pushBusy, onTogglePush }) {
+  const denied  = pushPermission === "denied";
+  const iosLock = pushPermission !== "granted" && typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent) && !pwaInstalled;
+
+  const pushSubtitle = pushBusy
+    ? "Aggiornamento notifiche…"
+    : denied
       ? "Le notifiche sono bloccate nelle impostazioni del browser."
-      : !pushSupported
-        ? "Push non disponibili su questo browser o dispositivo."
-        : "Aggiornamenti discreti anche quando Strato è chiusa.";
-  const activatePush = () => { if (!pushDisabled) onEnablePush(); };
-  const onPushKey = (e) => {
-    if (!pushDisabled && (e.key === "Enter" || e.key === " ")) {
-      e.preventDefault();
-      onEnablePush();
-    }
+      : iosLock
+        ? "Su iPhone le notifiche sono disponibili aprendo Strato dalla schermata Home."
+        : pushSubscribed
+          ? (isAdmin ? "Ti avviseremo quando arriva una richiesta da confermare." : "Ti avviseremo quando una richiesta viene aggiornata.")
+          : "Ricevi aggiornamenti discreti sulle richieste Strato.";
+
+  const canToggle = pushSupported && !denied && !pushBusy;
+
+  const handleToggleKey = (e) => {
+    if (canToggle && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onTogglePush(); }
+  };
+
+  const chevron = <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>;
+
+  const onPwaKey = (e) => {
+    if (!pwaInstalled && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); onPWAInstall(); }
   };
 
   return (
-    <section className="screen on">
+    <section className="screen on profilePage">
       <h2 className="title px"><span className="ticon"><User /></span>Profilo</h2>
-      <div className="pcard glass">
-        <img className="pav" src={user.avatar || avatarURI(user.name)} alt="" />
-        <div><div className="pname">{user.name}</div><div className="prole">{isAdmin ? "Amministratore" : "Cliente"}</div></div>
+
+      {/* Card identità */}
+      <div className="profileHero">
+        <img className="profileAvatar" src={user.avatar || avatarURI(user.name)} alt={"Avatar di " + user.name} />
+        <div className="profileIdentity">
+          <div className="profileName">{user.name}</div>
+          <span className="profileRolePill">{isAdmin ? "Amministratore" : "Cliente"}</span>
+          <p className="profileMicrocopy">{isAdmin ? "Gestisci l'esperienza Strato con cura e coerenza." : "Il tuo spazio personale Strato."}</p>
+        </div>
       </div>
-      {isAdmin && <button className="qsend" style={{ marginTop: 14 }} onClick={onNewProduct}><Plus /> Nuovo prodotto</button>}
-      {isAdmin && <BgUploader onUpload={onUploadBg} />}
-      <div className="psec">Tema</div>
-      <div className="prefrow">
+
+      {/* Amministrazione */}
+      {isAdmin && (
+        <section className="profileSection">
+          <h3 className="profileSectionTitle">Amministrazione</h3>
+          <div className="profileAdminCard">
+            <div className="profileAdminActions">
+              <button type="button" className="profileSubtleButton" onClick={onNewProduct}>
+                <span className="profileSubtleIcon"><Plus /></span>
+                <span className="profileSubtleText">
+                  <span className="profileSubtleT">Nuovo prodotto</span>
+                  <span className="profileSubtleS">Aggiungi un oggetto alla collezione.</span>
+                </span>
+                <span className="profileSubtleArr">{chevron}</span>
+              </button>
+            </div>
+            <details className="profileBgDetails">
+              <summary className="profileBgSummary"><span>Sfondi app</span><span className="profileBgChev">{chevron}</span></summary>
+              <BgUploader onUpload={onUploadBg} />
+            </details>
+          </div>
+        </section>
+      )}
+
+      {/* Aspetto */}
+      <section className="profileSection">
+        <h3 className="profileSectionTitle">Aspetto</h3>
         <div className="themeseg compact">
           {[["light", "Luce", <Sun key="s" />], ["dark", "Buio", <Moon key="m" />], ["auto", "Automatico", <AutoI key="a" />]].map(([t, label, icon]) => (
-            <button key={t} className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
+            <button key={t} type="button" className={"segbtn" + (theme === t ? " on" : "")} onClick={() => onTheme(t)} aria-pressed={theme === t} aria-label={label}>
               <span className="segico">{icon}</span><span className="seglbl">{label}</span>
             </button>
           ))}
         </div>
-        <button className="logout side" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
-      </div>
-      {/* Sezione App */}
-      <div className="psec">App</div>
-      <div
-        className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
-        onClick={!pwaInstalled ? onPWAInstall : undefined}
-        onKeyDown={!pwaInstalled ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPWAInstall(); } } : undefined}
-        role={pwaInstalled ? undefined : "button"}
-        tabIndex={pwaInstalled ? undefined : 0}
-      >
-        <div className="pwa-prowl">
-          <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
-          <div>
-            <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
-            <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
+      </section>
+
+      {/* App */}
+      <section className="profileSection">
+        <h3 className="profileSectionTitle">App</h3>
+        <div
+          className={"pwa-prow" + (pwaInstalled ? " installed" : "")}
+          onClick={!pwaInstalled ? onPWAInstall : undefined}
+          onKeyDown={!pwaInstalled ? onPwaKey : undefined}
+          role={pwaInstalled ? undefined : "button"}
+          tabIndex={pwaInstalled ? undefined : 0}
+        >
+          <div className="pwa-prowl">
+            <img src="/icon-192.png" alt="Strato" className="pwa-prow-ico" />
+            <div>
+              <div className="pwa-prowt">{pwaInstalled ? "Esperienza app attiva" : "Installa Strato"}</div>
+              <div className="pwa-prows">{pwaInstalled ? "Strato è aperta in modalità app." : "Accesso rapido, fluido e senza distrazioni."}</div>
+            </div>
           </div>
+          {pwaInstalled
+            ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+            : <span className="pwa-prow-arr">{chevron}</span>
+          }
         </div>
-        {pwaInstalled
-          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
-        }
-      </div>
-      <div
-        className={"pwa-prow push-prow" + (pushSubscribed ? " installed" : "") + (pushBusy ? " busy" : "") + (!pushSupported || pushPermission === "denied" ? " disabled" : "")}
-        onClick={activatePush}
-        onKeyDown={onPushKey}
-        role={!pushDisabled ? "button" : undefined}
-        tabIndex={!pushDisabled ? 0 : undefined}
-        aria-disabled={pushDisabled ? "true" : undefined}
-      >
-        <div className="pwa-prowl">
-          <span className="push-prow-ico"><Bell /></span>
-          <div>
-            <div className="pwa-prowt">{pushBusy ? "Attivazione in corso…" : pushTitle}</div>
-            <div className="pwa-prows">{pushCopy}</div>
+
+        {/* Notifiche ordini — toggle persistente */}
+        {pushSupported && (
+          <div className={"push-row" + (denied ? " push-row--denied" : "") + (pushBusy ? " push-row--busy" : "")}>
+            <span className="push-row-ico"><Bell /></span>
+            <div className="push-row-body">
+              <span className="push-row-title">Notifiche ordini</span>
+              <span className="push-row-sub">{pushSubtitle}</span>
+            </div>
+            {!denied && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={pushSubscribed}
+                aria-label={pushSubscribed ? "Disattiva notifiche ordini" : "Attiva notifiche ordini"}
+                disabled={pushBusy || !canToggle}
+                className={"push-toggle" + (pushSubscribed ? " push-toggle--on" : "") + (pushBusy ? " push-toggle--busy" : "")}
+                onClick={canToggle ? onTogglePush : undefined}
+                onKeyDown={handleToggleKey}
+              >
+                <span className="push-toggle-knob" />
+              </button>
+            )}
           </div>
-        </div>
-        {pushSubscribed
-          ? <span className="pwa-prow-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
-          : <span className="pwa-prow-arr"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
-        }
+        )}
+      </section>
+
+      {/* Logout */}
+      <div className="profileLogoutWrap">
+        <button type="button" className="profileLogout" onClick={onLogout} aria-label="Esci"><LogOut /><span>Esci</span></button>
       </div>
     </section>
   );
