@@ -960,7 +960,7 @@ body.dark .push-toggle-knob{background:rgba(255,255,255,.92)}
 .ordersPage{padding-bottom:0}
 
 /* Hero header */
-.ordersHero{padding:0 0 20px}
+.ordersHero{padding-bottom:8px}
 .ordersSubtitle{margin:5px 0 0;font-size:13.5px;font-weight:400;color:var(--soft);line-height:1.4}
 
 /* Section label */
@@ -2612,9 +2612,9 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
 
   return (
     <section className="screen on ordersPage">
-      <div className="ordersHero px">
-        <h2 className="title" style={{ margin: 0 }}><span className="ticon"><OrdersI /></span>I miei ordini</h2>
-        <p className="ordersSubtitle">Le tue richieste, aggiornate con discrezione.</p>
+      <div className="ordersHero">
+        <h2 className="title px" style={{ marginBottom: 4 }}><span className="ticon"><OrdersI /></span>I miei ordini</h2>
+        <p className="ordersSubtitle px">Le tue richieste, aggiornate con discrezione.</p>
       </div>
 
       {/* Empty state */}
