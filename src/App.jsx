@@ -529,6 +529,7 @@ body.dark .pcard{background:rgba(90,64,48,.28);border-color:rgba(199,125,107,.22
 /* ---- safe-area / full screen ---- */
 .topbar{padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(14px + env(safe-area-inset-left));padding-right:calc(14px + env(safe-area-inset-right))}
 .wrap{padding-top:calc(62px + env(safe-area-inset-top))}
+  .sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .dockwrap{bottom:calc(8px + env(safe-area-inset-bottom))}
 #toast{bottom:calc(120px + env(safe-area-inset-bottom))}
 .sheet{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
@@ -2632,51 +2633,83 @@ const IcoHolder = () => (
 );
 
 /* ---- Hook drag-to-close (touch) per tutti gli sheet ---- */
-function useDragToClose(doClose) {
-  const wrapRef = useRef(null);
+// dir: "down" per sheet dal basso (Carrello, Dettaglio, Ordine)
+//      "up"   per sheet dall'alto (Notifiche)
+function useDragToClose(doClose, dir = "down") {
+  const wrapRef  = useRef(null);
   const sheetRef = useRef(null); // ref all'elemento scrollabile interno
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    // Rispetta prefers-reduced-motion
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+
     let startY = 0, dy = 0, active = false, startT = 0;
-    const atTop = () => !sheetRef.current || sheetRef.current.scrollTop <= 2;
-    // Non parte da elementi interattivi
-    const isInteractive = (t) => !!t.closest("button,input,select,textarea,[role=button],[role=radio],[role=option]");
-    const onStart = (e) => {
-      if (!atTop() || isInteractive(e.target)) return;
-      startY = e.touches[0].clientY; dy = 0; active = true; startT = Date.now();
+
+    // Controlla se lo scroll interno ha raggiunto il bordo corretto per avviare il drag.
+    const atBoundary = () => {
+      const s = sheetRef.current;
+      if (!s) return true;
+      if (dir === "down") return s.scrollTop <= 2;
+      // "up": alla fine dello scroll
+      return s.scrollTop + s.clientHeight >= s.scrollHeight - 8;
     };
+
+    // Non parte da elementi interattivi (bottoni, input, ecc.).
+    const isInteractive = (t) =>
+      !!t.closest("button,input,select,textarea,[role=button],[role=radio],[role=option]");
+
+    const onStart = (e) => {
+      if (!atBoundary() || isInteractive(e.target)) return;
+      startY = e.touches[0].clientY;
+      dy = 0; active = true; startT = Date.now();
+    };
+
     const onMove = (e) => {
       if (!active) return;
-      dy = Math.max(0, e.touches[0].clientY - startY);
-      if (dy > 4) { wrap.style.transform = `translateY(${dy}px)`; wrap.style.transition = "none"; }
+      const raw = e.touches[0].clientY - startY;
+      // Cancella il drag se l'utente si muove nella direzione opposta
+      if (dir === "down" && raw <= 0) { active = false; return; }
+      if (dir === "up"   && raw >= 0) { active = false; return; }
+      dy = Math.abs(raw);
+      if (dy > 4) {
+        // Blocca lo scroll nativo del browser durante il drag
+        // (richiede passive:false sull'addEventListener)
+        e.preventDefault();
+        const tx = dir === "down" ? dy : -dy;
+        wrap.style.transform  = `translateY(${tx}px)`;
+        wrap.style.transition = "none";
+      }
     };
+
     const onEnd = () => {
-      if (!active) return; active = false;
+      if (!active) return;
+      active = false;
       const vel = dy / Math.max(1, Date.now() - startT);
       if (dy > 90 || vel > 0.45) {
-        // Supera soglia: anima via e chiudi
-        wrap.style.transform = "translateY(100vh)"; wrap.style.transition = "transform .26s ease";
+        // Sopra soglia: anima via e chiudi
+        const tx = dir === "down" ? "100vh" : "-100vh";
+        wrap.style.transform  = `translateY(${tx})`;
+        wrap.style.transition = "transform .26s ease";
         doClose();
       } else {
-        // Rimbalzo morbido alla posizione 0
-        wrap.style.transform = "translateY(0)"; wrap.style.transition = "transform .3s cubic-bezier(.2,.8,.2,1)";
+        // Sotto soglia: rimbalzo morbido a zero
+        wrap.style.transform  = "translateY(0)";
+        wrap.style.transition = "transform .3s cubic-bezier(.2,.8,.2,1)";
         setTimeout(() => { if (wrap) { wrap.style.transform = ""; wrap.style.transition = ""; } }, 320);
       }
     };
-    wrap.addEventListener("touchstart", onStart, { passive: true });
-    wrap.addEventListener("touchmove",  onMove,  { passive: true });
-    wrap.addEventListener("touchend",   onEnd);
+
+    wrap.addEventListener("touchstart",  onStart, { passive: true });
+    wrap.addEventListener("touchmove",   onMove,  { passive: false }); // non-passive: serve preventDefault
+    wrap.addEventListener("touchend",    onEnd);
     wrap.addEventListener("touchcancel", onEnd);
     return () => {
-      wrap.removeEventListener("touchstart", onStart);
-      wrap.removeEventListener("touchmove",  onMove);
-      wrap.removeEventListener("touchend",   onEnd);
+      wrap.removeEventListener("touchstart",  onStart);
+      wrap.removeEventListener("touchmove",   onMove);
+      wrap.removeEventListener("touchend",    onEnd);
       wrap.removeEventListener("touchcancel", onEnd);
     };
-  }, [doClose]);
+  }, [doClose, dir]);
   return { wrapRef, sheetRef };
 }
 
@@ -3483,7 +3516,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
 function NotifSheet({ notifs, onClose, onItemClick, onClear }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
-  const { wrapRef, sheetRef } = useDragToClose(doClose);
+  const { wrapRef, sheetRef } = useDragToClose(doClose, "up");
   return (
     <div className={"ipick top on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Notifiche" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
       <div className="sheetwrap" ref={wrapRef}>
