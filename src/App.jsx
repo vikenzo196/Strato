@@ -1343,6 +1343,20 @@ body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,
   .gdot,.dmat,.seg button,.dadd2,.sheetclose{transition:none!important}
 }
 
+
+/* ===================== DEBUG TEMPORANEO SAFE-AREA / PWA =====================
+   NON È DESIGN. Serve solo a capire se la barra bassa appartiene al contenuto web.
+   Se la barra diventa fucsia: è controllabile via CSS/layout.
+   Se la barra NON diventa fucsia: è fuori dal contenuto web o la PWA non ha aggiornato la build. */
+html,
+body,
+#root,
+#appbg{
+  background:#ff00ff!important;
+  background-color:#ff00ff!important;
+  background-image:none!important;
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
