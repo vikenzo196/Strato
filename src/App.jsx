@@ -741,10 +741,13 @@ body.dark{
 /* ======================= SFONDO — brand Earth Tone stabile ==================
    Lo sfondo Strato non è più configurabile da admin: è parte del brand.
    #appbg resta un layer fisso puramente decorativo, governato da CSS. */
-html,body,#root{margin:0;width:100%;height:100%;min-height:100%;background:var(--app-bg-solid);overflow:hidden;overscroll-behavior:none}
-body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--app-bg-solid)!important;background-image:none!important;overflow:hidden!important;position:relative;touch-action:pan-x pan-y}
-#root{position:relative;z-index:1;height:100%;min-height:100%;overflow:hidden;background:transparent}
-#appbg{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
+html,body,#root{margin:0;width:100%;height:100%;min-height:100%;background-color:var(--app-bg-solid);background-image:var(--app-bg-gradient);background-repeat:no-repeat;background-size:cover;background-position:center;overflow:hidden;overscroll-behavior:none}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background-color:var(--app-bg-solid)!important;background-image:var(--app-bg-gradient)!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important;overflow:hidden!important;position:relative;touch-action:pan-x pan-y}
+#root{position:fixed;inset:0;z-index:1;width:100%;height:100%;min-height:100%;overflow:hidden;background:transparent}
+#appbg{position:fixed;inset:-1px 0;z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
+@supports (height:100dvh){#root{height:100dvh}}
+@supports (height:100svh){#root{min-height:100svh}}
+@supports (height:100lvh){#appbg{height:100lvh}}
 
 /* ---- vetro: frosted ceramic — Earth Tone ---- */
 .glass{background:rgba(239,231,221,.38);-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%);border:1px solid rgba(199,125,107,.12)}
