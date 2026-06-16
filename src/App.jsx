@@ -1105,6 +1105,24 @@ body.dark .ordersExploreCta:hover{background:rgba(199,125,107,.24)}
   .ordersExploreCta{transition:none!important}
 }
 
+
+/* ===================== DETTAGLIO ORDINE — vista interna, no sheet ===================== */
+.orderDetailPage{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))}
+.orderDetailHero{margin:0 0 16px}
+.orderDetailTitle{margin:0;color:var(--text);font-size:28px;font-weight:760;letter-spacing:-.62px;line-height:1.05}
+.orderDetailSubtitle{margin:7px 0 0;color:var(--soft);font-size:14.5px;line-height:1.45;font-weight:420}
+.orderDetailCard{margin:0 14px;border-radius:28px;padding:16px;border:1px solid var(--strokeSoft);box-shadow:0 10px 30px rgba(72,50,32,.10),inset 0 1px 0 var(--hi)}
+body.dark .orderDetailCard{box-shadow:0 12px 34px rgba(0,0,0,.24),inset 0 1px 0 var(--hi)}
+.orderDetailCard .invhead{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--strokeSoft)}
+.orderDetailCard .invitems{margin-top:4px}
+.orderDetailCard .iitem{padding:14px 0}
+.orderDetailCard .ithumb{width:52px;height:52px;border-radius:15px}
+.orderDetailCard .iline{gap:11px}
+.orderDetailCard .ibd{margin-left:64px}
+.orderDetailCard .invtotrow{margin-top:10px}
+.orderDetailNote{margin:14px 14px 0;padding:14px 16px;border-radius:22px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-size:13.5px;line-height:1.45}
+@media(prefers-reduced-motion:reduce){.orderDetailPage{animation:none!important}}
+
 /* ===================== HOME — premium editorial ===================== */
 
 /* Headline hero: leggermente alleggerita (800→700, 40px→37px) */
@@ -2037,7 +2055,7 @@ export default function App() {
   };
 
   /* ---- scroll lock: quando uno sheet è aperto blocca lo scroll del body ---- */
-  const anySheetOpen = !!(invId || editing || editingCat);
+  const anySheetOpen = !!(editing || editingCat);
   useEffect(() => {
     if (!anySheetOpen) return;
     const html = document.documentElement;
@@ -2422,7 +2440,7 @@ export default function App() {
   /* ---- navigazione ---- */
   const open = (t) => {
     if ((t === "orders" || t === "profile" || t === "liked") && !user) { setAuthGate(t === "orders" ? "per vedere i tuoi ordini" : (t === "liked" ? "per vedere i tuoi preferiti" : "per accedere al profilo")); return; }
-    setDetailId(null); setTab(t); window.scrollTo(0, 0);
+    setDetailId(null); setInvId(null); setTab(t); window.scrollTo(0, 0);
   };
 
   const allNotifs = orders
@@ -2439,9 +2457,9 @@ export default function App() {
   const unread = notifs.filter((n) => !notifSeen.includes(notifSig(n))).length;
   const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen((prev) => { const m = [...new Set([...prev, ...all])]; try { localStorage.setItem("strato_notif_seen", JSON.stringify(m)); } catch (e) {} return m; }); };
   const clearNotifs = () => { const sigs = notifs.map(notifSig); setNotifCleared((prev) => { const m = [...new Set([...prev, ...sigs])]; try { localStorage.setItem("strato_notif_cleared", JSON.stringify(m)); } catch (e) {} return m; }); };
-  const openNotifs = () => { setUpdatesReturnTab(tab === "updates" ? "home" : tab); setDetailId(null); setTab("updates"); markNotifsSeen(); window.scrollTo(0, 0); };
+  const openNotifs = () => { setUpdatesReturnTab(tab === "updates" ? "home" : tab); setDetailId(null); setInvId(null); setTab("updates"); markNotifsSeen(); window.scrollTo(0, 0); };
   const onNotifClick = (id) => { setDetailId(null); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
-  const openDetail = (id) => { setDetailId(id); window.scrollTo(0, 0); };
+  const openDetail = (id) => { setInvId(null); setDetailId(id); window.scrollTo(0, 0); };
   const byId = (id) => prints.find((p) => p.id === id);
 
   if (!ready) {
@@ -2484,8 +2502,8 @@ export default function App() {
 
       <div className="topscrim" aria-hidden="true" />
       <header className="topbar">
-        {detailId
-          ? <button className="tb-btn left tb-back" onClick={() => setDetailId(null)} aria-label="Torna indietro"><ChevronLeft /></button>
+        {(detailId || inv)
+          ? <button className="tb-btn left tb-back" onClick={() => detailId ? setDetailId(null) : setInvId(null)} aria-label="Torna indietro"><ChevronLeft /></button>
           : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
@@ -2554,11 +2572,15 @@ export default function App() {
               <CartView cart={cart} total={cartTotal} onStep={cartStep} onConfirm={placeOrder} onGoExplore={() => open("search")} />
             )}
             {tab === "orders" && (
-              <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
-                onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
-                onDelete={deleteOrder}
-                orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
-                onGoExplore={() => open("search")} />
+              inv ? (
+                <OrderDetailView o={inv} isAdmin={isAdmin} />
+              ) : (
+                <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => { setInvId(id); window.scrollTo(0, 0); }}
+                  onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+                  onDelete={deleteOrder}
+                  orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
+                  onGoExplore={() => open("search")} />
+              )
             )}
             {tab === "updates" && (
               <UpdatesView notifs={notifs} onItemClick={onNotifClick} onClear={clearNotifs} isAdmin={isAdmin} />
@@ -2606,10 +2628,6 @@ export default function App() {
         <PWAInstallIOSGuide
           onClose={() => { setPwaModal(null); localStorage.setItem("pwa-install-dismissed","1"); }}
         />
-      )}
-
-      {inv && (
-        <InvoiceSheet o={inv} isAdmin={isAdmin} onClose={() => setInvId(null)} />
       )}
 
       {editing && (
@@ -3096,41 +3114,48 @@ function AuthGate({ reason, onGoogle, onClose }) {
   );
 }
 
-function InvoiceSheet({ o, isAdmin, onClose }) {
-  const [closing, setClosing] = useState(false);
-  const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
-  const { wrapRef, sheetRef } = useDragToClose(doClose);
+function OrderDetailView({ o, isAdmin }) {
+  const STATUS_META = {
+    confirmed: { label: "Confermato", cls: "ostat--confirmed", note: "La richiesta è stata accolta e sarà preparata con cura." },
+    pending:   { label: "Ricevuto", cls: "ostat--pending", note: "Stiamo valutando la tua richiesta." },
+    rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
+  };
+  const st = STATUS_META[o.status] || STATUS_META.pending;
+  const title = o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
+  const dateLine = o.date ? "Richiesta del " + fmtDate(o.date) : "Dettaglio della richiesta";
   return (
-    <div className={"ipick on" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label="Dettaglio ordine" onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap" ref={wrapRef}>
-        <button className="sheetclose" onClick={doClose} aria-label="Chiudi dettaglio ordine"><ChevronDown /></button>
-        <div className="sheet inv" ref={sheetRef}>
-          <div className="invhead">
-            {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
-            <div className="invwho">
-              <div className="invtt">{isAdmin ? o.who : "Il tuo ordine"}</div>
-              <div className="invmeta"><span className={"badge " + (o.status === "confirmed" ? "bc" : "bp")}>{o.status === "confirmed" ? "Confermato" : "In attesa di conferma"}</span>{o.date ? " · " + fmtDate(o.date) : ""}</div>
-            </div>
-          </div>
-          <div className="invitems">
-            {o.items.map((it, i) => {
-              const base = it.base != null ? it.base : it.price;
-              const adds = it.adds || [];
-              return (
-                <div className="iitem" key={i}>
-                  <div className="iline"><img className="ithumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" /><b className="iname">{it.t}{it.col ? " · " + it.col : ""}</b><span className="ix">×{it.qty}</span></div>
-                  <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
-                  {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
-                  {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
-                  <div className="ibd isub"><span>Subtotale{it.qty > 1 ? " (×" + it.qty + ")" : ""}</span><span>{eur(it.price * it.qty)}</span></div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="cttot invtotrow"><span>Totale</span><span className="invtot">{eur(o.total)}</span></div>
-        </div>
+    <section className="screen on orderDetailPage">
+      <div className="orderDetailHero px">
+        <h2 className="orderDetailTitle">Dettaglio ordine</h2>
+        <p className="orderDetailSubtitle">{dateLine}{isAdmin && o.who ? " · " + o.who : ""}</p>
       </div>
-    </div>
+      <div className="orderDetailCard glass inv">
+        <div className="invhead">
+          {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
+          <div className="invwho">
+            <div className="invtt">{isAdmin ? o.who : title}</div>
+            <div className="invmeta"><span className={"ostat " + st.cls}>{st.label}</span></div>
+          </div>
+        </div>
+        <div className="invitems">
+          {o.items.map((it, i) => {
+            const base = it.base != null ? it.base : it.price;
+            const adds = it.adds || [];
+            return (
+              <div className="iitem" key={i}>
+                <div className="iline"><img className="ithumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" /><b className="iname">{it.t}{it.col ? " · " + it.col : ""}</b><span className="ix">×{it.qty}</span></div>
+                <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
+                {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
+                {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
+                <div className="ibd isub"><span>Subtotale{it.qty > 1 ? " (×" + it.qty + ")" : ""}</span><span>{eur(it.price * it.qty)}</span></div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="cttot invtotrow"><span>Totale</span><span className="invtot">{eur(o.total)}</span></div>
+      </div>
+      {!isAdmin && <p className="orderDetailNote">{st.note}</p>}
+    </section>
   );
 }
 
