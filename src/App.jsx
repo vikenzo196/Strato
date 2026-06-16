@@ -567,10 +567,9 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 /* ---- parallasse leggera su scroll (solo immagine hero) ---- */
 .herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
 
-/* ---- scrim sfumato in alto (home, primi ~125px) allo scroll ---- */
-.topscrim{position:fixed;top:0;left:0;right:0;height:calc(84px + env(safe-area-inset-top));z-index:49;pointer-events:none;background:linear-gradient(180deg,var(--scrimTop) 0%,var(--scrimTop) 34%,var(--scrimMid) 68%,var(--scrimClear) 100%);-webkit-backdrop-filter:none;backdrop-filter:none;-webkit-mask:none;mask:none;opacity:min(1,calc(var(--par,0) / 96));transition:opacity .12s linear}
-:root{--scrimTop:rgba(244,239,232,.96);--scrimMid:rgba(244,239,232,.54);--scrimClear:rgba(244,239,232,0)}
-body.dark{--scrimTop:rgba(45,36,32,.96);--scrimMid:rgba(45,36,32,.54);--scrimClear:rgba(45,36,32,0)}
+/* ---- topbar: frosted glass trasparente e corto allo scroll ----
+   Non colora la status bar: sfoca soltanto ciò che passa sotto. */
+.topscrim{position:fixed;top:0;left:0;right:0;height:calc(72px + env(safe-area-inset-top,0px));z-index:49;pointer-events:none;background:rgba(128,128,128,.001);-webkit-backdrop-filter:blur(15px) saturate(128%);backdrop-filter:blur(15px) saturate(128%);-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 56%,rgba(0,0,0,.58) 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 56%,rgba(0,0,0,.58) 78%,transparent 100%);opacity:min(.96,calc(var(--par,0) / 84));transition:opacity .14s linear}
 
 /* ---- animazione apertura carrello dal basso ---- */
 .ipick.on .sheet{animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
@@ -1152,8 +1151,6 @@ body.dark .herotag{
 body.dark .topbar::after{
   background:linear-gradient(to bottom, rgba(43,33,27,.94) 0%, rgba(43,33,27,.68) 44%, transparent 100%);
 }
-.topbar.scrolled::after{opacity:0!important}
-
 
 /* ===================== CARD — scaffold stabile + raffinamenti ===================== */
 
