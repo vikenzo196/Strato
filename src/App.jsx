@@ -1071,12 +1071,12 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 
 .orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:2px}
 .ostat{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:1px solid transparent}
-.ostat--confirmed{background:rgba(110,145,110,.13);color:#4a7a52;border-color:rgba(110,145,110,.22)}
-body.dark .ostat--confirmed{background:rgba(110,145,110,.15);color:#8fbd8f;border-color:rgba(110,145,110,.28)}
-.ostat--pending{background:rgba(185,145,80,.12);color:#8c6820;border-color:rgba(185,145,80,.22)}
-body.dark .ostat--pending{background:rgba(185,145,80,.14);color:#d4a84b;border-color:rgba(185,145,80,.28)}
-.ostat--rejected{background:rgba(126,104,92,.12);color:#795a4d;border-color:rgba(126,104,92,.22)}
-body.dark .ostat--rejected{background:rgba(126,104,92,.18);color:#c7aa9e;border-color:rgba(126,104,92,.32)}
+.ostat--confirmed{background:rgba(199,125,107,.16);color:#9E553F;border-color:rgba(199,125,107,.34)}
+body.dark .ostat--confirmed{background:rgba(199,125,107,.18);color:#D99A82;border-color:rgba(199,125,107,.36)}
+.ostat--pending{background:rgba(184,154,119,.16);color:#7D654B;border-color:rgba(184,154,119,.30)}
+body.dark .ostat--pending{background:rgba(184,154,119,.18);color:#CDB79A;border-color:rgba(184,154,119,.34)}
+.ostat--rejected{background:rgba(126,104,92,.14);color:#715A4E;border-color:rgba(126,104,92,.28)}
+body.dark .ostat--rejected{background:rgba(126,104,92,.20);color:#C6AA9C;border-color:rgba(126,104,92,.36)}
 
 .orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px}
 .orderCard--pend .orderSide{min-width:88px}
@@ -1116,7 +1116,7 @@ body.dark .orderDetailCard{box-shadow:0 14px 38px rgba(0,0,0,.25),inset 0 1px 0 
 .orderDetailHead{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--strokeSoft)}
 .orderDetailIdentity{display:flex;align-items:center;gap:12px;min-width:0}
 .orderDetailIdentityText{min-width:0}
-.orderDetailName{font-family:'Inter',system-ui,sans-serif;font-weight:760;font-size:22px;letter-spacing:-.35px;line-height:1.08;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderDetailName{font-family:'Inter',system-ui,sans-serif;font-weight:760;font-size:20px;letter-spacing:-.35px;line-height:1.08;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .orderDetailDate{margin-top:5px;font-size:13.5px;line-height:1.35;color:var(--soft);font-weight:430}
 .orderDetailStatus{justify-self:end;align-self:center;display:flex;align-items:center;min-height:48px}
 .orderDetailStatus .ostat{padding:7px 11px;font-size:10.5px}
@@ -1138,16 +1138,16 @@ body.dark .orderDetailThumb{box-shadow:0 10px 26px rgba(0,0,0,.28),inset 0 1px 0
 .orderDetailCard .ibd span:first-child{color:var(--soft)}
 .orderDetailCard .isub{padding-top:7px;margin-top:4px}
 .orderDetailCard .invtotrow{margin-top:16px;padding-top:16px;border-top:1px solid var(--strokeSoft)}
-.orderDetailCard .invtot{font-size:34px;letter-spacing:-.7px}
+.orderDetailCard .invtot{font-size:31px;letter-spacing:-.62px}
 .orderDetailNote{margin:14px 14px 0;padding:14px 16px;border-radius:22px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-size:13.5px;line-height:1.45}
 @media(max-width:390px){
   .orderDetailCard{margin:0 10px;padding:15px;border-radius:27px}
   .orderDetailHead{gap:10px}
-  .orderDetailName{font-size:20px}
+  .orderDetailName{font-size:18px}
   .orderDetailItemTop{grid-template-columns:82px minmax(0,1fr);gap:12px}
   .orderDetailThumb{width:82px;height:82px;border-radius:19px}
   .orderDetailProductName{font-size:20px}
-  .orderDetailCard .invtot{font-size:30px}
+  .orderDetailCard .invtot{font-size:27px}
 }
 @media(prefers-reduced-motion:reduce){.orderDetailPage{animation:none!important}}
 
