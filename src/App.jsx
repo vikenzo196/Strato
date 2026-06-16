@@ -729,7 +729,7 @@ body.dark{
   --elev3:0 4px 12px rgba(0,0,0,.34), 0 28px 60px rgba(0,0,0,.52);
   --card:rgba(51,39,35,.54); --sheetbg:#3B2B25;
   --scrim:rgba(45,36,32,.9); --scrim2:rgba(45,36,32,.5);
-  --app-bg-solid:#1d1716;
+  --app-bg-solid:#312720;
   --app-bg-gradient:
     radial-gradient(circle at 18% 8%, rgba(154,101,72,.18), transparent 34%),
     radial-gradient(circle at 86% 16%, rgba(119,103,82,.14), transparent 34%),
@@ -2020,6 +2020,20 @@ export default function App() {
   const applyTheme = (t) => {
     const dark = t === "dark" || (t === "auto" && mq && mq.matches);
     document.body.classList.toggle("dark", !!dark);
+
+    // Mantiene la status bar mobile nello stesso tono del canvas Strato.
+    // Non modifica fullscreen, root, dock o sfondo: aggiorna solo il colore
+    // che browser/PWA usano per l'area di sistema sopra la WebView.
+    const statusColor = dark ? "#312720" : "#eadccf";
+    document.documentElement.style.backgroundColor = statusColor;
+    document.body.style.backgroundColor = statusColor;
+    let themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (!themeMeta) {
+      themeMeta = document.createElement("meta");
+      themeMeta.setAttribute("name", "theme-color");
+      document.head.appendChild(themeMeta);
+    }
+    themeMeta.setAttribute("content", statusColor);
   };
 
   /* ---- scroll lock: quando uno sheet è aperto blocca lo scroll del body ---- */
