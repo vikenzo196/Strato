@@ -1254,6 +1254,32 @@ body.dark .sheetclose{
 /* dkick: categoria leggermente alleggerita */
 .dkick{font-weight:700;letter-spacing:.12em;color:rgba(166,84,53,.85)}
 
+/* ===================== VISTE INTERNE — no sheet per prodotto, carrello, aggiornamenti ===================== */
+.appview{padding:0 18px 12px;animation:scrIn .3s cubic-bezier(.22,1,.36,1) both}
+.viewhead{display:flex;align-items:flex-start;gap:13px;margin:4px 0 16px}
+.viewback{width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);display:grid;place-items:center;box-shadow:inset 0 1px 0 var(--hi),0 5px 16px var(--shcol);cursor:pointer;flex:none}
+.viewback svg{width:21px;height:21px}
+.viewback:active{transform:scale(.985)}
+.viewback:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+.vieweyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin:0 0 3px}
+.viewtitle{margin:0;font-family:'Inter',system-ui,sans-serif;font-size:25px;line-height:1.08;letter-spacing:-.03em;color:var(--text)}
+.viewsub{margin:5px 0 0;color:var(--soft);font-size:13.5px;line-height:1.45}
+.productview .viewhead{margin-bottom:14px}
+.detailview-card{border-radius:30px;border:1px solid var(--detailBorder);background:var(--detailGlass);box-shadow:inset 0 1px 0 var(--hi),0 12px 34px rgba(74,45,28,.12);padding:14px;overflow:hidden}
+body.dark .detailview-card{box-shadow:inset 0 1px 0 var(--hi),0 18px 46px rgba(0,0,0,.38)}
+.detailview-card .dgrid{margin-top:0}
+.cartview-card,.updatesview-card{border-radius:28px;border:1px solid var(--strokeSoft);background:var(--glassDock);box-shadow:var(--elev2);padding:14px 14px 16px;overflow:hidden}
+.cartview .cartitems,.updatesview .cartitems{margin-top:4px}
+.cartview .cempty,.updatesview .cempty{padding:38px 8px 28px}
+.cartview .qsend{width:100%;margin:12px 0 0}
+.cartview .cttot{margin:16px 2px 8px}
+.cartempty-action{width:100%;margin:4px 0 0;border:1px solid rgba(199,125,107,.22);background:rgba(199,125,107,.08);color:var(--text);font-family:inherit;font-weight:650;padding:13px;border-radius:16px;cursor:pointer}
+.updatesview .notifclear{margin-left:auto}
+.updatesview .notifrow{background:rgba(246,239,228,.54)}
+body.dark .updatesview .notifrow{background:rgba(55,42,34,.62)}
+@media(min-width:720px){.appview{padding-left:22px;padding-right:22px}.detailview-card,.cartview-card,.updatesview-card{padding:18px}}
+
+
 /* Titolo prodotto: più raffinato */
 .dttl{font-size:26px;letter-spacing:-.025em;line-height:1.08}
 
@@ -1830,13 +1856,12 @@ export default function App() {
   const [likes, setLikes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [tab, setTab] = useState("home");
-  const [notifOpen, setNotifOpen] = useState(false);
+  const [updatesReturnTab, setUpdatesReturnTab] = useState("home");
   const [orderFocus, setOrderFocus] = useState(null);
   const [notifSeen, setNotifSeen] = useState(() => { try { return JSON.parse(localStorage.getItem("strato_notif_seen") || "[]"); } catch (e) { return []; } });
   const [notifCleared, setNotifCleared] = useState(() => { try { return JSON.parse(localStorage.getItem("strato_notif_cleared") || "[]"); } catch (e) { return []; } });
   const [detailId, setDetailId] = useState(null);
   const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
   const [authGate, setAuthGate] = useState(null);
   const [invId, setInvId] = useState(null);
   const [orderDone, setOrderDone] = useState(false);
@@ -1861,7 +1886,7 @@ export default function App() {
   };
 
   /* ---- scroll lock: quando uno sheet è aperto blocca lo scroll del body ---- */
-  const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
+  const anySheetOpen = !!(invId || editing || editingCat);
   useEffect(() => {
     if (!anySheetOpen) return;
     const html = document.documentElement;
@@ -2170,7 +2195,7 @@ export default function App() {
     saveCart(next);
   };
   const placeOrder = async () => {
-    if (!user) { setCartOpen(false); setAuthGate("per inviare la richiesta d'ordine"); return; }
+    if (!user) { setAuthGate("per inviare la richiesta d'ordine"); return; }
     if (!cart.length) return;
     const { data: ord, error } = await supabase.from("orders").insert({
       user_id: user.id, customer_name: user.name, customer_avatar: user.avatar || "",
@@ -2192,7 +2217,6 @@ export default function App() {
     } catch (err) { console.warn("new_order push", err); }
     tap("confirm");
     saveCart([]);
-    setCartOpen(false);
     await loadOrders();
     setTab("orders");
     setOrderDone(true);
@@ -2264,9 +2288,9 @@ export default function App() {
   const unread = notifs.filter((n) => !notifSeen.includes(notifSig(n))).length;
   const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen((prev) => { const m = [...new Set([...prev, ...all])]; try { localStorage.setItem("strato_notif_seen", JSON.stringify(m)); } catch (e) {} return m; }); };
   const clearNotifs = () => { const sigs = notifs.map(notifSig); setNotifCleared((prev) => { const m = [...new Set([...prev, ...sigs])]; try { localStorage.setItem("strato_notif_cleared", JSON.stringify(m)); } catch (e) {} return m; }); };
-  const openNotifs = () => { setNotifOpen(true); markNotifsSeen(); };
-  const onNotifClick = (id) => { setNotifOpen(false); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
-  const openDetail = (id) => { setDetailId(id); };
+  const openNotifs = () => { setUpdatesReturnTab(tab === "updates" ? "home" : tab); setDetailId(null); setTab("updates"); markNotifsSeen(); window.scrollTo(0, 0); };
+  const onNotifClick = (id) => { setDetailId(null); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
+  const openDetail = (id) => { setDetailId(id); window.scrollTo(0, 0); };
   const byId = (id) => prints.find((p) => p.id === id);
 
   if (!ready) {
@@ -2309,8 +2333,8 @@ export default function App() {
 
       <div className="topscrim" aria-hidden="true" />
       <header className="topbar">
-        {tab !== "home"
-          ? <button className="tb-btn left tb-back" onClick={() => open("home")} aria-label="Home"><ChevronLeft /></button>
+        {(detailId || tab !== "home")
+          ? <button className="tb-btn left tb-back" onClick={() => { if (detailId) setDetailId(null); else if (tab === "updates") open(updatesReturnTab || "home"); else open("home"); }} aria-label={detailId ? "Torna indietro" : "Home"}><ChevronLeft /></button>
           : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
@@ -2330,67 +2354,83 @@ export default function App() {
       </header>
 
       <main className="wrap">
-        {tab === "home" && (
-          <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} />
-        )}
-        {tab === "search" && (
-          <Screen title="Esplora" icon={<SearchI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
-            <input className="searchbox" placeholder="Cerca per nome, materiale, categoria…" value={q} onChange={(e) => setQ(e.target.value)} />
-            {!q.trim() && (
-              <>
-                <h3 className="osec">Categorie</h3>
-                {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
-                <div className="catgrid">
-                  {cats.map((c) => (
-                    <button key={c.id} className="cat glass" onClick={() => setQ(c.name)}>
-                      {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
-                      <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
-                      <span className="catn">{c.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
+        {detail ? (
+          <Detail
+            key={detail.id} p={detail} cats={cats} prints={prints}
+            onClose={() => setDetailId(null)} onOpen={openDetail}
+            onAdd={addToCart} isAdmin={isAdmin} onEdit={adminEdit} onColorPhoto={changeColorPhoto}
+            onSaveAddons={async (patch) => { await supabase.from("prints").update(patch).eq("id", detail.id); await loadPrints(); toast("Prezzi aggiornati"); }}
+          />
+        ) : (
+          <>
+            {tab === "home" && (
+              <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} />
             )}
-            {q.trim() && (
-              <>
-                <Grid>
-                  {prints.filter((p) => matchQ(p, q)).map((p) => (
-                    <Card key={p.id} p={p} liked={liked(p.id)} onLike={toggleLike} onOpen={() => openDetail(p.id)} onEdit={adminEdit} />
-                  ))}
-                </Grid>
-                {prints.filter((p) => matchQ(p, q)).length === 0 && <p className="empty">Nessun risultato.</p>}
-              </>
+            {tab === "search" && (
+              <Screen title="Esplora" icon={<SearchI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
+                <input className="searchbox" placeholder="Cerca per nome, materiale, categoria…" value={q} onChange={(e) => setQ(e.target.value)} />
+                {!q.trim() && (
+                  <>
+                    <h3 className="osec">Categorie</h3>
+                    {cats.length === 0 && <p className="empty">Nessuna categoria.{isAdmin ? " Tocca + per aggiungerne." : ""}</p>}
+                    <div className="catgrid">
+                      {cats.map((c) => (
+                        <button key={c.id} className="cat glass" onClick={() => setQ(c.name)}>
+                          {isAdmin && <span className="cedit catedit2" onClick={(e) => { e.stopPropagation(); setEditingCat(c); }}><Pencil /></span>}
+                          <span className="ci"><Raw html={glassIcon(c.icon, 50)} /></span>
+                          <span className="catn">{c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {q.trim() && (
+                  <>
+                    <Grid>
+                      {prints.filter((p) => matchQ(p, q)).map((p) => (
+                        <Card key={p.id} p={p} liked={liked(p.id)} onLike={toggleLike} onOpen={() => openDetail(p.id)} onEdit={adminEdit} />
+                      ))}
+                    </Grid>
+                    {prints.filter((p) => matchQ(p, q)).length === 0 && <p className="empty">Nessun risultato.</p>}
+                  </>
+                )}
+              </Screen>
             )}
-          </Screen>
-        )}
-        {tab === "liked" && (
-          <Liked likedPrints={prints.filter((p) => liked(p.id))} onOpen={openDetail} onLike={toggleLike} onEdit={adminEdit} />
-        )}
-        {tab === "orders" && (
-          <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
-            onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
-            onDelete={deleteOrder}
-            orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
-            onGoExplore={() => open("explore")} />
-        )}
-        {tab === "profile" && user && (
-          <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
-            isAdmin={isAdmin} onNewProduct={() => setEditing({})}
-            likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
-            pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
-            pushSupported={pushInfo.supported} pushPermission={pushInfo.permission}
-            pushSubscribed={pushInfo.subscribed} pushBusy={pushInfo.busy}
-            onTogglePush={togglePush} />
+            {tab === "liked" && (
+              <Liked likedPrints={prints.filter((p) => liked(p.id))} onOpen={openDetail} onLike={toggleLike} onEdit={adminEdit} />
+            )}
+            {tab === "cart" && (
+              <CartView cart={cart} total={cartTotal} onStep={cartStep} onConfirm={placeOrder} onGoExplore={() => open("search")} />
+            )}
+            {tab === "orders" && (
+              <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => setInvId(id)}
+                onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+                onDelete={deleteOrder}
+                orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
+                onGoExplore={() => open("explore")} />
+            )}
+            {tab === "updates" && (
+              <UpdatesView notifs={notifs} onItemClick={onNotifClick} onClear={clearNotifs} isAdmin={isAdmin} />
+            )}
+            {tab === "profile" && user && (
+              <Profile user={user} theme={theme} onTheme={pickTheme} onLogout={logout}
+                isAdmin={isAdmin} onNewProduct={() => setEditing({})}
+                likedPrints={prints.filter((p) => liked(p.id))} onOpenProduct={openDetail} onLike={toggleLike} onEditProduct={adminEdit}
+                pwaInstalled={pwaInstalled} onPWAInstall={() => setPwaModal("main")}
+                pushSupported={pushInfo.supported} pushPermission={pushInfo.permission}
+                pushSubscribed={pushInfo.subscribed} pushBusy={pushInfo.busy}
+                onTogglePush={togglePush} />
+            )}
+          </>
         )}
       </main>
-
       {/* DOCK */}
       <div className="dockwrap">
         <div className="dock dock5">
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
-          <button className="dnav cart" onClick={(e) => { tap("nav", e.currentTarget); setCartOpen(true); }} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
+          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
@@ -2415,23 +2455,6 @@ export default function App() {
         <PWAInstallIOSGuide
           onClose={() => { setPwaModal(null); localStorage.setItem("pwa-install-dismissed","1"); }}
         />
-      )}
-
-      {detail && (
-        <Detail
-          key={detail.id} p={detail} cats={cats} prints={prints}
-          onClose={() => setDetailId(null)} onOpen={openDetail}
-          onAdd={addToCart} isAdmin={isAdmin} onEdit={adminEdit} onColorPhoto={changeColorPhoto}
-          onSaveAddons={async (patch) => { await supabase.from("prints").update(patch).eq("id", detail.id); await loadPrints(); toast("Prezzi aggiornati"); }}
-        />
-      )}
-
-      {notifOpen && (
-        <NotifSheet notifs={notifs} onClose={() => setNotifOpen(false)} onItemClick={onNotifClick} onClear={clearNotifs} />
-      )}
-
-      {cartOpen && (
-        <CartSheet cart={cart} total={cartTotal} onClose={() => setCartOpen(false)} onStep={cartStep} onConfirm={placeOrder} />
       )}
 
       {inv && (
@@ -2625,7 +2648,6 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [holder, setHolder] = useState(0);
   const [editP, setEditP] = useState(false);
   const [ad, setAd] = useState(p.addons);
-  const { wrapRef, sheetRef } = useDragToClose(doClose);
 
   const c = p.cols[ci] || p.cols[0];
   const adds = [];
@@ -2650,10 +2672,15 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <div className={"ipick on detailpop" + (closing ? " closing" : "")} role="dialog" aria-modal="true" aria-label={"Scheda prodotto: " + p.title} onClick={(e) => { if (e.target.classList.contains("ipick") || e.target.classList.contains("sheetwrap")) doClose(); }}>
-      <div className="sheetwrap" ref={wrapRef}>
-        <button className="sheetclose" onClick={doClose} aria-label="Chiudi scheda"><ChevronDown /></button>
-        <div className="sheet detailsheet" ref={sheetRef}>
+    <section className="screen on appview productview" aria-label={"Scheda prodotto: " + p.title}>
+      <div className="viewhead">
+        <button className="viewback" onClick={onClose} aria-label="Torna agli oggetti"><ChevronLeft /></button>
+        <div>
+          <div className="vieweyebrow">Dettaglio articolo</div>
+          <h2 className="viewtitle">{p.title}</h2>
+        </div>
+      </div>
+      <div className="detailview-card detailsheet">
         {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica prodotto"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
@@ -2770,13 +2797,50 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
             </button>
           </div>
         </div>
-        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 /* ---- CARRELLO ---- */
+
+function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
+  return (
+    <section className="screen on appview cartview" aria-label="Carrello">
+      <div className="viewhead">
+        <div>
+          <div className="vieweyebrow">Richiesta</div>
+          <h2 className="viewtitle">Carrello</h2>
+          <p className="viewsub">Controlla i dettagli della tua scelta prima di inviare la richiesta.</p>
+        </div>
+      </div>
+      <div className="cartview-card">
+        <div className="cartitems">
+          {cart.length === 0 && (
+            <>
+              <div className="cempty">Gli oggetti scelti appariranno qui.</div>
+              <button className="cartempty-action" onClick={onGoExplore}>Esplora gli oggetti</button>
+            </>
+          )}
+          {cart.map((c, i) => (
+            <div className="crow" key={c.key}>
+              <img src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
+              <div className="cinfo">
+                <div className="cn">{c.t}</div>
+                <div className="cp">{c.col}{c.opt ? " · " + c.opt : ""}</div>
+                <div className="cprice">{eur(c.price)} · tot {eur(c.price * c.qty)}</div>
+              </div>
+              <div className="qstep csmall"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
+            </div>
+          ))}
+        </div>
+        <div className="cttot"><span>Totale</span><span>{eur(total)}</span></div>
+        {cart.length > 0 && <button className="qsend" onClick={onConfirm}><Check /> Invia richiesta</button>}
+      </div>
+    </section>
+  );
+}
+
 function CartSheet({ cart, total, onClose, onStep, onConfirm }) {
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
@@ -3374,6 +3438,34 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
         )}
       </div>
     </div>
+  );
+}
+
+
+function UpdatesView({ notifs, onItemClick, onClear, isAdmin }) {
+  return (
+    <section className="screen on appview updatesview" aria-label="Aggiornamenti">
+      <div className="viewhead">
+        <div>
+          <div className="vieweyebrow">{isAdmin ? "Richieste" : "Aggiornamenti"}</div>
+          <h2 className="viewtitle">{isAdmin ? "Richieste da confermare" : "Aggiornamenti"}</h2>
+          <p className="viewsub">{isAdmin ? "Controlla i dettagli quando vuoi." : "Le tue richieste, aggiornate con discrezione."}</p>
+        </div>
+        {notifs.length > 0 && <button className="notifclear" onClick={onClear}><Trash /> Elimina tutte</button>}
+      </div>
+      <div className="updatesview-card">
+        <div className="cartitems">
+          {notifs.length === 0 && <div className="cempty">Nessun aggiornamento al momento.</div>}
+          {notifs.map((n) => (
+            <button className="notifrow" key={n.id + n.status} onClick={() => onItemClick(n.id)}>
+              <span className={"notifdot s-" + n.status} />
+              <span className="notiftxt"><b>{n.title}</b><span className="notifb">{n.body}</span></span>
+              <span className="notifarrow">›</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
