@@ -199,7 +199,7 @@ const CSS = `
   .cathint{margin:16px 4px 14px;color:var(--soft,#9a8d7d);font-size:13px}
   .ipick{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .28s ease, background .28s ease, visibility .28s}
   .ipick.on{visibility:visible;opacity:1;pointer-events:auto;background:rgba(0,0,0,.4)}
-  .ipick .sheet{width:100%;max-width:520px;max-height:86vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid var(--strokeSoft);box-shadow:0 -12px 40px rgba(0,0,0,.32);padding:16px 18px calc(26px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
+  .ipick .sheet{width:100%;max-width:520px;max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-radius:28px;border:1px solid var(--strokeSoft);box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);padding:16px 18px 20px;transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
   .iplabel{display:block;font-size:12px;font-weight:700;color:var(--soft);letter-spacing:.05em;text-transform:uppercase;margin:6px 2px 8px}
   .catinput{width:100%;border:1px solid var(--strokeSoft);background:var(--glass2);border-radius:14px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--text);outline:none;margin-bottom:6px;box-shadow:inset 0 1px 0 var(--hi)}
   .catinput:focus{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
@@ -631,7 +631,7 @@ button:active{transform:scale(.93)}
 
 /* ---- foglio dall'ALTO (notifiche): identico al carrello ma scende dall'alto ---- */
 .ipick.top{align-items:flex-start}
-.ipick.top .sheet{border-top-left-radius:0;border-top-right-radius:0;border-bottom-left-radius:24px;border-bottom-right-radius:24px;box-shadow:0 12px 40px rgba(0,0,0,.32);transform:translateY(-100%);padding:calc(16px + env(safe-area-inset-top)) 18px 20px}
+.ipick.top .sheet{border-radius:28px;box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);transform:translateY(-100%);padding:16px 18px 20px}
 .ipick.top.on .sheet{transform:translateY(0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
 .ipick.top.on.closing .sheet{animation:sheetTopOut .34s cubic-bezier(.4,0,.7,.4) both}
 @keyframes sheetTopIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
@@ -1197,16 +1197,36 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 /* ===================== SHEET — scroll lock e safe-area ===================== */
 html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
 body.sheet-open{touch-action:none!important}
-/* .ipick torna a inset:0 (definito a riga ~200): copre l'intero viewport.
-   overflow:hidden clipa il contenuto animato del sheetwrap durante
-   slide-in/out e drag-to-close senza lasciare residui fuori dal viewport. */
+/* .ipick: inset:0 copre tutto il viewport (inclusa la dock, z-index:85 > 72).
+   overflow:hidden clipa il contenuto animato durante slide e drag-to-close. */
 .ipick{overflow:hidden}
 /* scroll interno dello sheet */
 .ipick .sheet{touch-action:pan-y}
-/* Dock: si nasconde in modo discreto durante sheet aperto.
-   Non viene spostata né cambia il suo bottom/safe-area.
-   Riappare automaticamente alla chiusura dello sheet. */
-body.sheet-open .dockwrap{opacity:0;pointer-events:none;transform:none!important}
+
+/* ===================== FLOATING SHEET — pannello premium ==================
+   Il padding sul wrapper crea il gap intenzionale tra sheet e bordo display.
+   La dock resta ferma sotto lo scrim: non viene nascosta né spostata.
+   Border-radius completo. Nessun pseudo-elemento, nessun cerotto. */
+
+/* Wrapper bottom: gap visivo intenzionale dal bordo inferiore del display */
+.ipick:not(.top) .sheetwrap{
+  padding:0 10px calc(12px + env(safe-area-inset-bottom));
+  box-sizing:border-box;
+}
+/* Wrapper top (notifiche): gap visivo intenzionale dal bordo superiore */
+.ipick.top .sheetwrap{
+  padding:calc(12px + env(safe-area-inset-top)) 10px 0;
+  box-sizing:border-box;
+}
+/* Detailsheet: border-radius completo, max-height allineato al dvh */
+.sheet.detailsheet{
+  border-radius:28px;
+  max-height:calc(100dvh - 20px - env(safe-area-inset-top));
+}
+/* Dark mode: ombra più profonda su sfondo scuro */
+body.dark .ipick .sheet{
+  box-shadow:0 8px 40px rgba(0,0,0,.50),0 2px 8px rgba(0,0,0,.30);
+}
 
 /* Backdrop caldo (espresso warm invece di nero freddo) */
 @keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
