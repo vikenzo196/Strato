@@ -744,8 +744,23 @@ body.dark{
 html,body,#root{min-height:100%;background:var(--app-bg-solid)}
 body{background:var(--app-bg-solid)!important;background-image:none!important;overflow-x:hidden}
 #root{position:relative;z-index:1}
-#appbg{position:fixed;top:0;left:0;right:0;height:118vh;min-height:calc(100vh + 96px);z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
-@supports (height:100dvh){#appbg{min-height:calc(100dvh + 96px)}}
+/* Background unico Strato: il layer fisso viene esteso sotto il viewport per coprire
+   anche la safe-area iOS, senza colorare una fascia separata e senza toccare root/body scroll. */
+#appbg{
+  position:fixed;
+  top:0;left:0;right:0;
+  bottom:calc(-140px - env(safe-area-inset-bottom,0px));
+  height:auto;
+  min-height:0;
+  z-index:0;
+  pointer-events:none;
+  background:var(--app-bg-gradient);
+  background-size:100% 100%;
+  background-position:top center;
+  background-repeat:no-repeat;
+  transform:translateZ(0);
+  will-change:auto;
+}
 
 /* ---- vetro: frosted ceramic — Earth Tone ---- */
 .glass{background:rgba(239,231,221,.38);-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%);border:1px solid rgba(199,125,107,.12)}
