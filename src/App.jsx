@@ -741,13 +741,12 @@ body.dark{
 /* ======================= SFONDO — brand Earth Tone stabile ==================
    Lo sfondo Strato non è più configurabile da admin: è parte del brand.
    #appbg resta un layer fisso puramente decorativo, governato da CSS. */
-html,body,#root{margin:0;width:100%;height:100%;min-height:100%;background-color:var(--app-bg-solid);background-image:var(--app-bg-gradient);background-repeat:no-repeat;background-size:cover;background-position:center;overflow:hidden;overscroll-behavior:none}
+html,body{margin:0;width:100%;height:100%;min-height:100%;background-color:var(--app-bg-solid);background-image:var(--app-bg-gradient);background-repeat:no-repeat;background-size:cover;background-position:center;overflow:hidden;overscroll-behavior:none}
 body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background-color:var(--app-bg-solid)!important;background-image:var(--app-bg-gradient)!important;background-repeat:no-repeat!important;background-size:cover!important;background-position:center!important;overflow:hidden!important;position:relative;touch-action:pan-x pan-y}
-#root{position:fixed;inset:0;z-index:1;width:100%;height:100%;min-height:100%;overflow:hidden;background:transparent}
-#appbg{position:fixed;inset:-1px 0;z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
-@supports (height:100dvh){#root{height:100dvh}}
-@supports (height:100svh){#root{min-height:100svh}}
-@supports (height:100lvh){#appbg{height:100lvh}}
+#root{position:fixed;inset:0;z-index:1;width:100%;height:100vh;min-height:100vh;overflow:hidden;background-color:var(--app-bg-solid);background-image:var(--app-bg-gradient);background-repeat:no-repeat;background-size:cover;background-position:center}
+#appbg{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
+@supports (height:100dvh){#root,#appbg{height:100dvh;min-height:100dvh}}
+@supports (height:100lvh){#root,#appbg{height:100lvh;min-height:100lvh}}
 
 /* ---- vetro: frosted ceramic — Earth Tone ---- */
 .glass{background:rgba(239,231,221,.38);-webkit-backdrop-filter:blur(26px) saturate(125%);backdrop-filter:blur(26px) saturate(125%);border:1px solid rgba(199,125,107,.12)}
@@ -1175,8 +1174,7 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 .wrap{padding-bottom:max(132px, calc(80px + env(safe-area-inset-bottom, 24px)))}
 /* App shell: lo scroll principale vive dentro main.wrap, non su body/window.
    Questo evita rubber-band e fondi scoperti di iOS dietro sheet e fine scroll. */
-@supports (height:100dvh){.wrap{height:100dvh}}
-@supports (height:100svh){.wrap{min-height:100svh}}
+.wrap{height:100%}
 html,body,#root{overscroll-behavior:none}
 
 /* Reduced motion — nuove animazioni */
@@ -1903,7 +1901,15 @@ export default function App() {
       }
       bg.removeAttribute("style");
       const r = document.getElementById("root");
-      if (r) { r.style.position = "relative"; r.style.zIndex = "1"; }
+      if (r) {
+        // Lascia che sia il CSS a governare la app shell fullscreen.
+        // Evita inline style che possono annullare #root{position:fixed;inset:0}.
+        r.style.removeProperty("position");
+        r.style.removeProperty("z-index");
+        r.style.removeProperty("inset");
+        r.style.removeProperty("height");
+        r.style.removeProperty("min-height");
+      }
     } catch (e) {}
   };
 
