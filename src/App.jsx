@@ -1055,21 +1055,21 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 .ordersList{display:flex;flex-direction:column;gap:12px;margin-top:16px}
 
 /* Card ordine: meno dashboard, più richiesta editoriale */
-.orderCard{display:flex;align-items:flex-start;gap:14px;border-radius:24px;padding:14px;margin:0 14px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s,border-color .3s}
+.orderCard{display:flex;align-items:center;gap:14px;border-radius:24px;padding:15px 14px;margin:0 14px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s,border-color .3s}
 .orderCard:active{transform:scale(.985)}
 .orderCard:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
 
-.orderThumb{flex:none;width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 4px 14px rgba(72,50,32,.12),inset 0 1px 0 rgba(255,255,255,.25);border:1px solid var(--strokeSoft);background:var(--glass2)}
-.orderAvatar{flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 3px 12px rgba(72,50,32,.13)}
+.orderThumb{flex:none;width:64px;height:64px;border-radius:18px;object-fit:cover;align-self:center;box-shadow:0 4px 14px rgba(72,50,32,.12),inset 0 1px 0 rgba(255,255,255,.25);border:1px solid var(--strokeSoft);background:var(--glass2)}
+.orderAvatar{flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;align-self:center;border:1px solid var(--strokeSoft);box-shadow:0 3px 12px rgba(72,50,32,.13)}
 
-.orderBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:1px}
+.orderBody{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px;padding-top:0;align-self:center}
 .orderTitle{font-weight:750;font-size:16px;letter-spacing:-.22px;line-height:1.18;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .orderMeta{font-size:12.8px;font-weight:450;color:var(--soft);line-height:1.35;white-space:normal}
 .orderMeta strong{font-weight:650;color:var(--text)}
 .orderNote{margin:2px 0 0;font-size:12.5px;line-height:1.45;color:var(--soft);font-weight:400;max-width:96%}
-.orderCta{margin-top:5px;font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.01em}
+.orderCta{font-size:12.5px;font-weight:750;color:var(--accent);letter-spacing:.01em;text-align:right;white-space:nowrap}
 
-.orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:2px}
+.orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:9px;align-self:stretch;min-width:76px;padding-top:0}
 .ostat{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:1px solid transparent}
 .ostat--confirmed{background:rgba(199,125,107,.16);color:#9E553F;border-color:rgba(199,125,107,.34)}
 body.dark .ostat--confirmed{background:rgba(199,125,107,.18);color:#D99A82;border-color:rgba(199,125,107,.36)}
@@ -1078,7 +1078,7 @@ body.dark .ostat--pending{background:rgba(184,154,119,.18);color:#CDB79A;border-
 .ostat--rejected{background:rgba(126,104,92,.14);color:#715A4E;border-color:rgba(126,104,92,.28)}
 body.dark .ostat--rejected{background:rgba(126,104,92,.20);color:#C6AA9C;border-color:rgba(126,104,92,.36)}
 
-.orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px;align-items:flex-end}
 .orderCard--pend .orderSide{min-width:88px}
 
 .ordersEmpty{min-height:calc(100vh - 360px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 28px 42px;gap:16px}
@@ -1096,8 +1096,9 @@ body.dark .ordersExploreCta:hover{background:rgba(199,125,107,.24)}
 .orderCard.in{animation:itemIn .45s cubic-bezier(.22,1,.36,1) both}
 
 @media(max-width:390px){
-  .orderCard{gap:12px;padding:12px}
+  .orderCard{gap:12px;padding:13px 12px}
   .orderThumb{width:58px;height:58px;border-radius:16px}
+  .orderSide{min-width:68px;gap:8px}
   .ostat{font-size:10px;padding:4px 8px}
 }
 @media(prefers-reduced-motion:reduce){
@@ -3297,10 +3298,10 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
           <div className="orderTitle">{oTitle(o)}</div>
           <div className="orderMeta">{orderMetaText(o)}</div>
           {!isAdmin && <p className="orderNote">{st.note}</p>}
-          <div className="orderCta">Dettagli</div>
         </div>
         <div className="orderSide">
           <span className={"ostat " + st.cls}>{st.label}</span>
+          <div className="orderCta">Dettagli</div>
           {isAdmin && o.status === "rejected" && (
             <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>
           )}
@@ -3328,10 +3329,10 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
           <div className="orderTitle">{isAdmin ? o.who : oTitle(o)}</div>
           <div className="orderMeta">{isAdmin ? [oTitle(o), orderMetaText(o)].filter(Boolean).join(" · ") : orderMetaText(o)}</div>
           <p className="orderNote">{isAdmin ? "Apri il dettaglio per controllare la richiesta." : "Stiamo valutando la tua richiesta."}</p>
-          {!isAdmin && <div className="orderCta">Dettagli</div>}
         </div>
         <div className="orderSide">
           <span className="ostat ostat--pending">Ricevuto</span>
+          {!isAdmin && <div className="orderCta">Dettagli</div>}
           {isAdmin && (
             <div className="orderAdminActions" onClick={(e) => e.stopPropagation()}>
               <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>
