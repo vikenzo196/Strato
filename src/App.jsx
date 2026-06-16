@@ -568,9 +568,19 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 .herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
 
 /* ---- scrim sfumato in alto (home, primi ~125px) allo scroll ---- */
-.topscrim{position:fixed;top:0;left:0;right:0;height:calc(125px + env(safe-area-inset-top));z-index:49;pointer-events:none;background:linear-gradient(180deg,var(--scrim) 0%,var(--scrim2) 52%,transparent 100%);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);-webkit-mask:linear-gradient(180deg,#000 0%,#000 52%,transparent 100%);mask:linear-gradient(180deg,#000 0%,#000 52%,transparent 100%);opacity:min(1,calc(var(--par,0) / 60));transition:opacity .08s linear}
-:root{--scrim:rgba(244,239,232,.9);--scrim2:rgba(244,239,232,.5)}
-body.dark{--scrim:rgba(45,36,32,.9);--scrim2:rgba(45,36,32,.5)}
+/* ---- velo topbar: un unico respiro tra status bar e contenuto ---- */
+.topscrim{position:fixed;top:-1px;left:0;right:0;height:calc(172px + env(safe-area-inset-top));z-index:49;pointer-events:none;
+  background:linear-gradient(180deg,
+    var(--scrim0) 0%,
+    var(--scrim0) 18%,
+    var(--scrim1) 44%,
+    var(--scrim2) 72%,
+    transparent 100%);
+  -webkit-backdrop-filter:blur(8px) saturate(135%);backdrop-filter:blur(8px) saturate(135%);
+  -webkit-mask:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);mask:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);
+  opacity:min(1,calc(var(--par,0) / 56));transition:opacity .12s linear}
+:root{--scrim0:rgba(244,239,232,.98);--scrim1:rgba(244,239,232,.78);--scrim2:rgba(244,239,232,.30)}
+body.dark{--scrim0:rgba(45,36,32,.96);--scrim1:rgba(45,36,32,.74);--scrim2:rgba(45,36,32,.28)}
 
 /* ---- animazione apertura carrello dal basso ---- */
 .ipick.on .sheet{animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
@@ -1144,14 +1154,8 @@ body.dark .herotag{
 
 /* ===================== TOPBAR — più calda, meno glass ===================== */
 
-/* Override del topbar::after per luce e buio */
-.topbar::after{
-  background:linear-gradient(to bottom, rgba(244,236,222,.94) 0%, rgba(244,236,222,.68) 44%, transparent 100%);
-  -webkit-backdrop-filter:blur(5px) saturate(130%);backdrop-filter:blur(5px) saturate(130%);
-}
-body.dark .topbar::after{
-  background:linear-gradient(to bottom, rgba(43,33,27,.94) 0%, rgba(43,33,27,.68) 44%, transparent 100%);
-}
+/* Il velo della topbar è gestito da .topscrim: evitiamo un secondo layer che crei bande. */
+.topbar::after{display:none}
 
 /* ===================== CARD — scaffold stabile + raffinamenti ===================== */
 
