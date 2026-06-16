@@ -1048,62 +1048,58 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 
 /* ===================== ORDINI — premium redesign ===================== */
 
-/* Card ordine */
-.orderCard{display:flex;align-items:flex-start;gap:14px;border-radius:22px;padding:14px 14px 14px 14px;margin:0 14px 10px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s}
+.ordersPage{padding-bottom:0}
+.ordersHero{margin:0 0 18px}
+.ordersHero .title{margin-bottom:4px!important}
+.ordersSubtitle{margin:0;color:var(--soft);font-size:15px;font-weight:400;line-height:1.45;letter-spacing:-.08px}
+.ordersList{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+
+/* Card ordine: meno dashboard, più richiesta editoriale */
+.orderCard{display:flex;align-items:flex-start;gap:14px;border-radius:24px;padding:14px;margin:0 14px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s,border-color .3s}
 .orderCard:active{transform:scale(.985)}
 .orderCard:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
 
-/* Thumbnail */
-.orderThumb{flex:none;width:62px;height:62px;border-radius:16px;object-fit:cover;box-shadow:0 3px 10px var(--shcol),inset 0 1px 0 rgba(255,255,255,.25);border:1px solid var(--strokeSoft)}
+.orderThumb{flex:none;width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 4px 14px rgba(72,50,32,.12),inset 0 1px 0 rgba(255,255,255,.25);border:1px solid var(--strokeSoft);background:var(--glass2)}
+.orderAvatar{flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 3px 12px rgba(72,50,32,.13)}
 
-/* Avatar admin */
-.orderAvatar{flex:none;width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 2px 8px var(--shcol)}
+.orderBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;padding-top:1px}
+.orderTitle{font-weight:750;font-size:16px;letter-spacing:-.22px;line-height:1.18;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderMeta{font-size:12.8px;font-weight:450;color:var(--soft);line-height:1.35;white-space:normal}
+.orderMeta strong{font-weight:650;color:var(--text)}
+.orderNote{margin:2px 0 0;font-size:12.5px;line-height:1.45;color:var(--soft);font-weight:400;max-width:96%}
+.orderCta{margin-top:5px;font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.01em}
 
-/* Body */
-.orderBody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;padding-top:1px}
-.orderTitle{font-weight:700;font-size:15.5px;letter-spacing:-.15px;line-height:1.2;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.orderMeta{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
-.orderMetaChip{font-size:12px;font-weight:500;color:var(--soft);background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.12);border-radius:8px;padding:2px 8px;white-space:nowrap}
-body.dark .orderMetaChip{background:rgba(199,125,107,.10);border-color:rgba(199,125,107,.18)}
-.orderNote{margin:2px 0 0;font-size:12px;line-height:1.5;color:var(--soft);font-weight:400}
-
-/* Colonna destra */
 .orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:2px}
-
-/* Status pill premium */
-.ostat{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap;border:1px solid transparent}
-/* confirmed — salvia desaturata */
+.ostat{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:1px solid transparent}
 .ostat--confirmed{background:rgba(110,145,110,.13);color:#4a7a52;border-color:rgba(110,145,110,.22)}
 body.dark .ostat--confirmed{background:rgba(110,145,110,.15);color:#8fbd8f;border-color:rgba(110,145,110,.28)}
-/* pending — sabbia calda */
 .ostat--pending{background:rgba(185,145,80,.12);color:#8c6820;border-color:rgba(185,145,80,.22)}
 body.dark .ostat--pending{background:rgba(185,145,80,.14);color:#d4a84b;border-color:rgba(185,145,80,.28)}
-/* rejected — terracotta soft */
-.ostat--rejected{background:rgba(176,106,82,.11);color:#8b4a36;border-color:rgba(176,106,82,.20)}
-body.dark .ostat--rejected{background:rgba(176,106,82,.14);color:#c4856a;border-color:rgba(176,106,82,.26)}
+.ostat--rejected{background:rgba(126,104,92,.12);color:#795a4d;border-color:rgba(126,104,92,.22)}
+body.dark .ostat--rejected{background:rgba(126,104,92,.18);color:#c7aa9e;border-color:rgba(126,104,92,.32)}
 
-/* Admin actions inline */
 .orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px}
 .orderCard--pend .orderSide{min-width:88px}
 
-/* Empty state */
-.ordersEmpty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:52px 28px 36px;gap:14px}
-.ordersEmptyIcon{width:56px;height:56px;border-radius:50%;background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.20);display:grid;place-items:center;color:var(--accent);opacity:.7}
-.ordersEmptyIcon svg{width:26px;height:26px;stroke:var(--accent)}
-.ordersEmptyTitle{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.2px;line-height:1.2;margin:0}
-.ordersEmptyText{font-size:14px;font-weight:400;color:var(--soft);line-height:1.5;margin:0;max-width:260px}
-.ordersExploreCta{margin-top:6px;padding:12px 26px;border-radius:14px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--text);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;transition:background .25s,transform .15s}
-.ordersExploreCta:hover{background:var(--glass)}
+.ordersEmpty{min-height:calc(100vh - 360px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 28px 42px;gap:16px}
+.ordersEmptyIcon{width:60px;height:60px;border-radius:50%;background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.20);display:grid;place-items:center;color:var(--accent);opacity:.76}
+.ordersEmptyIcon svg{width:27px;height:27px;stroke:var(--accent)}
+.ordersEmptyText{font-size:15px;font-weight:430;color:var(--soft);line-height:1.5;margin:0;max-width:280px}
+.ordersExploreCta{margin-top:2px;padding:12px 28px;border-radius:15px;border:1px solid rgba(199,125,107,.28);background:rgba(199,125,107,.13);color:var(--accent);font-family:inherit;font-weight:750;font-size:14px;cursor:pointer;transition:background .25s,transform .15s,box-shadow .25s,border-color .25s}
+.ordersExploreCta:hover{background:rgba(199,125,107,.18);border-color:rgba(199,125,107,.36)}
 .ordersExploreCta:active{transform:scale(.985)}
 .ordersExploreCta:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
+body.dark .ordersExploreCta{background:rgba(199,125,107,.18);border-color:rgba(199,125,107,.34);color:#d9957d}
+body.dark .ordersExploreCta:hover{background:rgba(199,125,107,.24)}
 
-/* Spacer dock */
 .ordersBottomSpacer{height:calc(80px + env(safe-area-inset-bottom, 0px))}
-
-/* Stagger e animazioni */
 .orderCard.in{animation:itemIn .45s cubic-bezier(.22,1,.36,1) both}
 
-/* Reduced motion */
+@media(max-width:390px){
+  .orderCard{gap:12px;padding:12px}
+  .orderThumb{width:58px;height:58px;border-radius:16px}
+  .ostat{font-size:10px;padding:4px 8px}
+}
 @media(prefers-reduced-motion:reduce){
   .orderCard{transition:none!important;animation:none!important}
   .ordersExploreCta{transition:none!important}
@@ -2562,7 +2558,7 @@ export default function App() {
                 onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
                 onDelete={deleteOrder}
                 orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
-                onGoExplore={() => open("explore")} />
+                onGoExplore={() => open("search")} />
             )}
             {tab === "updates" && (
               <UpdatesView notifs={notifs} onItemClick={onNotifClick} onClear={clearNotifs} isAdmin={isAdmin} />
@@ -3198,8 +3194,16 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
 
   const STATUS_META = {
     confirmed: { label: "Confermato",  cls: "ostat--confirmed", note: "La richiesta è stata accolta e sarà preparata con cura." },
-    pending:   { label: "In attesa",   cls: "ostat--pending",   note: "Stiamo valutando la tua richiesta." },
+    pending:   { label: "Ricevuto",    cls: "ostat--pending",   note: "Stiamo valutando la tua richiesta." },
     rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
+  };
+
+  const orderMetaText = (o) => {
+    const parts = [];
+    if (isAdmin && o.who) parts.push(o.who);
+    if (o.date) parts.push("Richiesta del " + fmtDate(o.date));
+    parts.push(eur(o.total));
+    return parts.join(" · ");
   };
 
   const OrderCard = ({ o, idx }) => {
@@ -3219,12 +3223,9 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
         <img className="orderThumb" src={thumb} alt={oTitle(o)} />
         <div className="orderBody">
           <div className="orderTitle">{oTitle(o)}</div>
-          <div className="orderMeta">
-            {isAdmin && <span className="orderMetaChip">{o.who}</span>}
-            <span className="orderMetaChip">{eur(o.total)}</span>
-            {o.date && <span className="orderMetaChip">{fmtDate(o.date)}</span>}
-          </div>
+          <div className="orderMeta">{orderMetaText(o)}</div>
           {!isAdmin && <p className="orderNote">{st.note}</p>}
+          <div className="orderCta">Dettagli</div>
         </div>
         <div className="orderSide">
           <span className={"ostat " + st.cls}>{st.label}</span>
@@ -3253,15 +3254,12 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
         {!isAdmin && <img className="orderThumb" src={thumb} alt={oTitle(o)} />}
         <div className="orderBody">
           <div className="orderTitle">{isAdmin ? o.who : oTitle(o)}</div>
-          <div className="orderMeta">
-            {isAdmin && <span className="orderMetaChip">{oTitle(o)}</span>}
-            <span className="orderMetaChip">{eur(o.total)}</span>
-            {o.date && <span className="orderMetaChip">{fmtDate(o.date)}</span>}
-          </div>
-          <p className="orderNote">{isAdmin ? "Tocca per il dettaglio. Puoi confermare o rifiutare." : "Stiamo valutando la tua richiesta."}</p>
+          <div className="orderMeta">{isAdmin ? [oTitle(o), orderMetaText(o)].filter(Boolean).join(" · ") : orderMetaText(o)}</div>
+          <p className="orderNote">{isAdmin ? "Apri il dettaglio per controllare la richiesta." : "Stiamo valutando la tua richiesta."}</p>
+          {!isAdmin && <div className="orderCta">Dettagli</div>}
         </div>
         <div className="orderSide">
-          <span className="ostat ostat--pending">In attesa</span>
+          <span className="ostat ostat--pending">Ricevuto</span>
           {isAdmin && (
             <div className="orderAdminActions" onClick={(e) => e.stopPropagation()}>
               <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>
@@ -3278,40 +3276,26 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
   return (
     <section className="screen on ordersPage">
       <div className="ordersHero">
-        <h2 className="title px" style={{ marginBottom: 4 }}><span className="ticon"><OrdersI /></span>I miei ordini</h2>
-        <p className="ordersSubtitle px">Le tue richieste, aggiornate con discrezione.</p>
+        <h2 className="title px" style={{ marginBottom: 4 }}><span className="ticon"><OrdersI /></span>Ordini</h2>
+        <p className="ordersSubtitle px">Segui lo stato delle tue richieste.</p>
       </div>
 
-      {/* Empty state */}
       {orders.length === 0 && (
         <div className="ordersEmpty">
           <div className="ordersEmptyIcon" aria-hidden="true"><OrdersI /></div>
-          <h3 className="ordersEmptyTitle">Nessuna richiesta ancora</h3>
-          <p className="ordersEmptyText">Quando sceglierai il tuo primo oggetto, lo troverai qui.</p>
+          <p className="ordersEmptyText">Quando sceglierai un oggetto, lo ritroverai qui.</p>
           {onGoExplore && (
-            <button type="button" className="ordersExploreCta" onClick={onGoExplore}>Esplora la collezione</button>
+            <button type="button" className="ordersExploreCta" onClick={onGoExplore}>Esplora</button>
           )}
         </div>
       )}
 
-      {/* Lista unificata con section label per stato */}
-      {pend.length > 0 && (
-        <>
-          <div className="ordersSectionLabel">In attesa di conferma</div>
+      {orders.length > 0 && (
+        <div className="ordersList">
           {pend.map((o, i) => <PendCard key={o.id} o={o} idx={i} />)}
-        </>
-      )}
-      {conf.length > 0 && (
-        <>
-          <div className="ordersSectionLabel">{pend.length > 0 ? "Confermati" : "Le tue richieste"}</div>
-          {conf.map((o, i) => <OrderCard key={o.id} o={o} idx={i} />)}
-        </>
-      )}
-      {rej.length > 0 && (
-        <>
-          <div className="ordersSectionLabel">Non accettati</div>
-          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i} />)}
-        </>
+          {conf.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length} />)}
+          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length} />)}
+        </div>
       )}
 
       <div className="ordersBottomSpacer" />
