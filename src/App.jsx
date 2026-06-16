@@ -118,8 +118,8 @@ const CSS = `
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   .bgttl{font-family:'Inter',system-ui,sans-serif;font-weight:600;font-size:17px;color:var(--text);margin:18px 2px 8px}
-  html,body{margin:0;min-height:100%;touch-action:pan-x pan-y;}
-  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;}
+  html,body{margin:0;width:100%;height:100%;min-height:100%;touch-action:pan-x pan-y;overflow:hidden;}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);overflow:hidden;}
 
   .glass{
     background:var(--glass);
@@ -381,7 +381,7 @@ const CSS = `
 
 /* ---- supplemento React (login, hero, admin, stati vuoti) ---- */
 .boot{min-height:100vh;display:grid;place-items:center;color:var(--soft);font-weight:600}
-.wrap{max-width:680px;margin:0 auto;padding:62px 0 132px;min-height:100vh;min-height:100dvh}
+.wrap{position:relative;z-index:1;width:100%;max-width:680px;margin:0 auto;padding:62px 0 132px;height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scroll-behavior:auto;transform:translateZ(0);background:transparent}
 .wrap .grid{padding:0 18px}
 .grid{grid-template-columns:repeat(2,1fr);gap:12px}
 .grid .card{opacity:1}
@@ -741,9 +741,9 @@ body.dark{
 /* ======================= SFONDO — brand Earth Tone stabile ==================
    Lo sfondo Strato non è più configurabile da admin: è parte del brand.
    #appbg resta un layer fisso puramente decorativo, governato da CSS. */
-html,body,#root{min-height:100%;background:var(--app-bg-solid)}
-body{background:var(--app-bg-solid)!important;background-image:none!important;overflow-x:hidden}
-#root{position:relative;z-index:1}
+html,body,#root{margin:0;width:100%;height:100%;min-height:100%;background:var(--app-bg-solid);overflow:hidden;overscroll-behavior:none}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--app-bg-solid)!important;background-image:none!important;overflow:hidden!important;position:relative;touch-action:pan-x pan-y}
+#root{position:relative;z-index:1;height:100%;min-height:100%;overflow:hidden;background:transparent}
 #appbg{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--app-bg-gradient);background-size:cover;background-position:center;background-repeat:no-repeat;transform:translateZ(0);will-change:auto}
 
 /* ---- vetro: frosted ceramic — Earth Tone ---- */
@@ -1170,6 +1170,11 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 /* ===================== GLOBAL WRAP PADDING ===================== */
 /* .wrap ha già 132px → sufficiente per la dock. Qui solo sicurezza mobile. */
 .wrap{padding-bottom:max(132px, calc(80px + env(safe-area-inset-bottom, 24px)))}
+/* App shell: lo scroll principale vive dentro main.wrap, non su body/window.
+   Questo evita rubber-band e fondi scoperti di iOS dietro sheet e fine scroll. */
+@supports (height:100dvh){.wrap{height:100dvh}}
+@supports (height:100svh){.wrap{min-height:100svh}}
+html,body,#root{overscroll-behavior:none}
 
 /* Reduced motion — nuove animazioni */
 @media(prefers-reduced-motion:reduce){
@@ -1181,7 +1186,7 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
 /* .ipick: inset:0 copre tutto il viewport (inclusa la dock, z-index:85 > 72).
    overflow:hidden clipa il contenuto animato durante slide e drag-to-close. */
-.ipick{overflow:hidden}
+.ipick{overflow:hidden;overscroll-behavior:contain}
 /* scroll interno dello sheet */
 .ipick .sheet{touch-action:pan-y}
 
@@ -1950,48 +1955,9 @@ export default function App() {
     };
   }, []);
 
-  // Effetto morbido a molla quando si arriva a battuta (sopra o sotto) scrollando.
-  // Trasla solo <main.wrap>: dock, topbar e sfondo (#appbg) restano fermi.
-  // Risolve <main.wrap> in modo lazy: puo' montare dopo (boot/login iniziale).
-  useEffect(() => {
-    const MAX = 72;
-    let offset = 0, raf = null, settleTO = null;
-    const getWrap = () => document.querySelector("main.wrap");
-    const atTop = () => window.scrollY <= 0;
-    const atBottom = () => Math.ceil(window.scrollY + window.innerHeight) >= document.documentElement.scrollHeight - 1;
-    const apply = () => { const w = getWrap(); if (w) w.style.transform = offset ? "translateY(" + offset.toFixed(1) + "px)" : ""; };
-    const spring = () => {
-      offset *= 0.82;
-      if (Math.abs(offset) < 0.4) { offset = 0; apply(); raf = null; return; }
-      apply();
-      raf = requestAnimationFrame(spring);
-    };
-    const release = () => { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(spring); };
-    const resist = (add) => {
-      const next = offset + add;
-      const r = 1 - Math.min(Math.abs(next) / (MAX * 2.2), 0.86);
-      offset = Math.max(-MAX, Math.min(MAX, offset + add * r));
-    };
-    const onWheel = (e) => {
-      if (e.ctrlKey) return;
-      const dy = e.deltaY;
-      if ((atTop() && dy < 0) || (atBottom() && dy > 0)) {
-        resist(-dy * 0.32);
-        apply();
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-        clearTimeout(settleTO);
-        settleTO = setTimeout(release, 70);
-      } else if (offset) { release(); }
-    };
-    // Solo desktop (rotella): su mobile lo scroll resta nativo (momentum + rimbalzo iOS).
-    window.addEventListener("wheel", onWheel, { passive: true });
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      if (raf) cancelAnimationFrame(raf);
-      clearTimeout(settleTO);
-      const w = getWrap(); if (w) w.style.transform = "";
-    };
-  }, []);
+  // App shell: nessun effetto molla su window/body.
+  // Lo scroll principale è main.wrap; evitare trasformazioni a fine scroll previene
+  // stacchi di background e rubber-band visibili su iOS.
   useEffect(() => {
     if (!mq) return;
     const h = () => { if (theme === "auto") { applyTheme("auto"); syncBackstop(); } };
@@ -2125,21 +2091,26 @@ export default function App() {
     }
   };
 
-  // parallax + scrim su scroll
+  // parallax + scrim su scroll della app shell
   useEffect(() => {
+    const wrap = document.querySelector("main.wrap");
+    if (!wrap) return;
     let raf = 0;
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
-        const sy = window.scrollY || 0;
+        const sy = wrap.scrollTop || 0;
         document.documentElement.style.setProperty("--par", String(sy));
         raf = 0;
       });
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    wrap.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [tab, detailId]);
+    return () => {
+      wrap.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [tab, detailId, ready]);
 
   const changeColorPhoto = async (printId, colorId, file) => {
     if (!file) return;
@@ -2269,9 +2240,14 @@ export default function App() {
   };
 
   /* ---- navigazione ---- */
+  const scrollAppToTop = () => {
+    const wrap = document.querySelector("main.wrap");
+    if (wrap) wrap.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    else window.scrollTo(0, 0);
+  };
   const open = (t) => {
     if ((t === "orders" || t === "profile" || t === "liked") && !user) { setAuthGate(t === "orders" ? "per vedere i tuoi ordini" : (t === "liked" ? "per vedere i tuoi preferiti" : "per accedere al profilo")); return; }
-    setDetailId(null); setTab(t); window.scrollTo(0, 0);
+    setDetailId(null); setTab(t); requestAnimationFrame(scrollAppToTop);
   };
 
   const allNotifs = orders
@@ -2289,7 +2265,7 @@ export default function App() {
   const markNotifsSeen = () => { const all = notifs.map(notifSig); setNotifSeen((prev) => { const m = [...new Set([...prev, ...all])]; try { localStorage.setItem("strato_notif_seen", JSON.stringify(m)); } catch (e) {} return m; }); };
   const clearNotifs = () => { const sigs = notifs.map(notifSig); setNotifCleared((prev) => { const m = [...new Set([...prev, ...sigs])]; try { localStorage.setItem("strato_notif_cleared", JSON.stringify(m)); } catch (e) {} return m; }); };
   const openNotifs = () => { setNotifOpen(true); markNotifsSeen(); };
-  const onNotifClick = (id) => { setNotifOpen(false); setTab("orders"); setOrderFocus(id); window.scrollTo(0, 0); };
+  const onNotifClick = (id) => { setNotifOpen(false); setTab("orders"); setOrderFocus(id); requestAnimationFrame(scrollAppToTop); };
   const openDetail = (id) => { setDetailId(id); };
   const byId = (id) => prints.find((p) => p.id === id);
 
