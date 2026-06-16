@@ -1467,6 +1467,10 @@ body.dark .productview .dimg{box-shadow:0 22px 56px rgba(0,0,0,.42)}
 .productview .dbuy .dadd2{max-width:none;border-radius:18px;padding:15px 16px;background:linear-gradient(135deg,rgba(199,125,107,.96),rgba(166,84,53,.98));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 14px 32px rgba(166,84,53,.20)}
 .productview .dbuy .dadd2 svg{stroke:#fff;filter:none}
 
+/* ---- product detail: no secondary hero header; topbar owns navigation ---- */
+.productview--clean{padding-top:10px}
+.productview--clean .detailview-card{margin-top:0}
+
 .cartview-card,
 .updatesview-card{
   border-radius:32px;
@@ -2484,8 +2488,8 @@ export default function App() {
 
       <div className="topscrim" aria-hidden="true" />
       <header className="topbar">
-        {(detailId || tab !== "home")
-          ? <button className="tb-btn left tb-back" onClick={() => { if (detailId) setDetailId(null); else if (tab === "updates") open(updatesReturnTab || "home"); else open("home"); }} aria-label={detailId ? "Torna indietro" : "Home"}><ChevronLeft /></button>
+        {detailId
+          ? <button className="tb-btn left tb-back" onClick={() => setDetailId(null)} aria-label="Torna indietro"><ChevronLeft /></button>
           : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
@@ -2823,15 +2827,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const saveAddons = () => { onSaveAddons({ addon_braided: Number(ad.braided) || 0, addon_bulb: Number(ad.bulb) || 0, addon_holder: Number(ad.holder) || 0 }); setEditP(false); };
 
   return (
-    <section className="screen on appview productview" aria-label={"Scheda prodotto: " + p.title}>
-      <div className="viewhead">
-        <button className="viewback" onClick={onClose} aria-label="Torna agli oggetti"><ChevronLeft /></button>
-        <div>
-          <div className="vieweyebrow">Dettaglio articolo</div>
-          <h2 className="viewtitle">{p.title}</h2>
-          <p className="viewsub">Dettagli e configurazione, raccolti con cura.</p>
-        </div>
-      </div>
+    <section className="screen on appview productview productview--clean" aria-label={"Scheda prodotto: " + p.title}>
       <div className="detailview-card detailsheet">
         {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica prodotto"><Pencil /></button>}
         <div className="dgrid">
