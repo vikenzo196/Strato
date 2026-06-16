@@ -105,6 +105,7 @@ const CSS = `
     --b1:#E4C9B0; --b2:#D9C2A3; --b3:#C9A07F; --b4:#C77D6B; --bg:#F4EFE8; --heart:#C2553F;
     --card:rgba(252,248,242,.55);
     --accent:#C77D6B; --accent2:#A65435; --accentDeep:#8B4A32; --sand:#D9C2A3; --clay:#C69B72; --terra:#B7795E;
+    --modal-backplane:#5f5148; --modal-scrim:rgba(43,33,27,.72);
   }
   body.dark{
     --text:#f1ece5; --soft:rgba(241,236,229,.7); --faint:rgba(241,236,229,.42);
@@ -115,6 +116,7 @@ const CSS = `
     --b1:#4A382C; --b2:#5A4030; --b3:#6B463B; --b4:#7A4A38; --bg:#2D2420; --heart:#E0917B;
     --card:rgba(51,39,35,.56);
     --accent:#C77D6B; --accent2:#B7795E; --accentDeep:#A65435; --sand:#7A5A42; --clay:#8A6A4E; --terra:#B7795E;
+    --modal-backplane:#1f191b; --modal-scrim:rgba(17,13,12,.78);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   .bgttl{font-family:'Inter',system-ui,sans-serif;font-weight:600;font-size:17px;color:var(--text);margin:18px 2px 8px}
@@ -1194,12 +1196,28 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
   .cbody .cp,.cbody .ct,.lk,.herotag,.topbar::after{transition:none!important}
 }
 
-/* ===================== SHEET — scroll lock e safe-area ===================== */
-html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
-body.sheet-open{touch-action:none!important}
-/* .ipick: inset:0 copre tutto il viewport (inclusa la dock, z-index:85 > 72).
-   overflow:hidden clipa il contenuto animato durante slide e drag-to-close. */
-.ipick{overflow:hidden}
+/* ===================== SHEET — scroll lock, modal backplane e safe-area ===================== */
+html.sheet-open,body.sheet-open{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+  background:var(--modal-backplane)!important;
+}
+body.sheet-open #root,
+body.sheet-open #appbg{
+  background:var(--modal-backplane)!important;
+  background-image:none!important;
+}
+/* .ipick resta il layer modale pieno sopra la dock.
+   100lvh/100svh coprono meglio i casi iOS in cui inset:0 può lasciare esposto
+   il backstop documento; il backplane sopra rende comunque coerente ogni zona scoperta. */
+.ipick{
+  width:100%;
+  height:100vh;
+  min-height:100vh;
+  overflow:hidden;
+}
+@supports (height:100svh){.ipick{min-height:100svh}}
+@supports (height:100lvh){.ipick{height:100lvh}}
 /* scroll interno dello sheet */
 .ipick .sheet{touch-action:pan-y}
 
@@ -1229,9 +1247,9 @@ body.dark .ipick .sheet{
 }
 
 /* Backdrop caldo (espresso warm invece di nero freddo) */
-@keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
-@keyframes scrimOut{from{background:rgba(43,33,27,.72)}to{background:rgba(43,33,27,0)}}
-.ipick.on{background:rgba(43,33,27,.72)}
+@keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:var(--modal-scrim)}}
+@keyframes scrimOut{from{background:var(--modal-scrim)}to{background:rgba(43,33,27,0)}}
+.ipick.on{background:var(--modal-scrim)}
 .ipick.on.closing{background:rgba(43,33,27,0)}
 
 /* Sheet base: più materica, meno glass */
