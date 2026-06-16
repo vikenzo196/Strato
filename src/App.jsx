@@ -1365,6 +1365,146 @@ body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,
   .gdot,.dmat,.seg button,.dadd2,.sheetclose{transition:none!important}
 }
 
+
+
+/* ===================== STRATO VIEWS V2 — background continuo + transizioni premium ===================== */
+html,
+body{
+  min-height:100%;
+  background-color:var(--app-bg-solid)!important;
+  background-image:var(--app-bg-gradient)!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  background-position:center top!important;
+  overflow-x:hidden;
+}
+body{
+  background-attachment:fixed!important;
+}
+#root{
+  position:relative;
+  z-index:1;
+  min-height:100%;
+  background:transparent!important;
+}
+#appbg{
+  position:fixed!important;
+  inset:0!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:100vh!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background-color:var(--app-bg-solid)!important;
+  background-image:var(--app-bg-gradient)!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center!important;
+  transform:translateZ(0);
+}
+@supports (height:100dvh){#appbg{min-height:100dvh!important}}
+@supports (height:100lvh){#appbg{min-height:100lvh!important}}
+.wrap{
+  position:relative;
+  z-index:1;
+  background:transparent!important;
+  transition:transform .36s cubic-bezier(.22,.8,.26,1);
+}
+
+.screen.on,
+.appview{
+  animation:viewIn .36s cubic-bezier(.22,.8,.26,1) both!important;
+  transform-origin:50% 16%;
+}
+@keyframes viewIn{
+  from{opacity:0;transform:translateY(10px) scale(.997);filter:blur(2px)}
+  70%{filter:blur(0)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+.viewhead{
+  margin:6px 0 22px;
+  animation:viewHeadIn .42s cubic-bezier(.22,.8,.26,1) .04s both;
+}
+@keyframes viewHeadIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.vieweyebrow{letter-spacing:.16em;color:rgba(166,84,53,.78)}
+body.dark .vieweyebrow{color:rgba(230,160,121,.78)}
+.viewtitle{font-size:clamp(27px,7vw,36px);letter-spacing:-.045em;font-weight:760}
+.viewsub{max-width:440px;margin-top:8px;font-size:14px;line-height:1.55;color:var(--soft)}
+.viewback{
+  width:44px;height:44px;
+  background:rgba(246,239,228,.62);
+  -webkit-backdrop-filter:blur(18px) saturate(130%);
+  backdrop-filter:blur(18px) saturate(130%);
+}
+body.dark .viewback{background:rgba(47,37,31,.68)}
+
+.productview{padding-top:2px;padding-bottom:24px}
+.productview .viewhead{margin-bottom:18px}
+.detailview-card{
+  border-radius:34px;
+  padding:18px;
+  background:linear-gradient(180deg,rgba(250,244,236,.68),rgba(238,226,212,.44));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.52),0 16px 42px rgba(74,45,28,.10);
+}
+body.dark .detailview-card{
+  background:linear-gradient(180deg,rgba(52,40,33,.68),rgba(31,24,20,.52));
+  box-shadow:inset 0 1px 0 rgba(255,240,220,.10),0 20px 52px rgba(0,0,0,.34);
+}
+.detailview-card .dgrid{gap:20px}
+.productview .dphoto{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .08s both}
+.productview .dopts{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .14s both}
+.productview .dbuy{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .20s both}
+@keyframes viewObjectIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.productview .dimg{border-radius:28px;box-shadow:0 18px 48px rgba(74,45,28,.14)}
+body.dark .productview .dimg{box-shadow:0 22px 56px rgba(0,0,0,.42)}
+.productview .dttl{font-size:clamp(28px,8vw,38px);letter-spacing:-.045em;line-height:1.02;margin-top:6px}
+.productview .dprice{font-size:clamp(23px,6vw,28px);font-weight:720}
+.productview .ddesc{font-size:14.5px;line-height:1.68;color:var(--soft)}
+.productview .dlabel{margin-top:22px}
+.productview .dbuy{align-items:stretch;border-top:1px solid rgba(199,125,107,.12);padding-top:18px;margin-top:2px}
+.productview .dbuy .dlabel.dctr{text-align:left;margin-left:2px}
+.productview .dbuy .dqty{justify-content:flex-start}
+.productview .dbuy .dadd2{max-width:none;border-radius:18px;padding:15px 16px;background:linear-gradient(135deg,rgba(199,125,107,.96),rgba(166,84,53,.98));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 14px 32px rgba(166,84,53,.20)}
+.productview .dbuy .dadd2 svg{stroke:#fff;filter:none}
+
+.cartview-card,
+.updatesview-card{
+  border-radius:32px;
+  padding:18px;
+  background:linear-gradient(180deg,rgba(250,244,236,.70),rgba(239,229,217,.52));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 16px 42px rgba(74,45,28,.10);
+  animation:viewObjectIn .44s cubic-bezier(.22,.8,.26,1) .10s both;
+}
+body.dark .cartview-card,
+body.dark .updatesview-card{
+  background:linear-gradient(180deg,rgba(52,40,33,.70),rgba(31,24,20,.58));
+  box-shadow:inset 0 1px 0 rgba(255,240,220,.10),0 22px 52px rgba(0,0,0,.34);
+}
+.cartview .crow,
+.updatesview .notifrow{
+  border-radius:20px;
+  background:rgba(252,247,240,.50);
+  transition:transform .24s cubic-bezier(.22,.8,.26,1),background .24s ease,border-color .24s ease;
+}
+body.dark .cartview .crow,
+body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
+.cartview .crow:active,
+.updatesview .notifrow:active{transform:scale(.992)}
+.cartnote{margin:8px 2px 0;color:var(--soft);font-size:13px;line-height:1.45;text-align:center}
+.updatesview .cempty{line-height:1.55;color:var(--soft)}
+.updatesview .notifhead{margin-bottom:14px}
+
+@media(min-width:560px){
+  .productview .dgrid{gap:22px;align-items:start}
+  .productview .dbuy{border-top:0;padding-top:0;margin-top:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .screen.on,.appview,.viewhead,.productview .dphoto,.productview .dopts,.productview .dbuy,.cartview-card,.updatesview-card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+  .wrap,.cartview .crow,.updatesview .notifrow{transition:none!important}
+}
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2678,6 +2818,7 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
         <div>
           <div className="vieweyebrow">Dettaglio articolo</div>
           <h2 className="viewtitle">{p.title}</h2>
+          <p className="viewsub">Dettagli e configurazione, raccolti con cura.</p>
         </div>
       </div>
       <div className="detailview-card detailsheet">
@@ -2811,7 +2952,7 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
         <div>
           <div className="vieweyebrow">Richiesta</div>
           <h2 className="viewtitle">Carrello</h2>
-          <p className="viewsub">Controlla i dettagli della tua scelta prima di inviare la richiesta.</p>
+          <p className="viewsub">Controlla i dettagli della tua scelta.</p>
         </div>
       </div>
       <div className="cartview-card">
@@ -2835,7 +2976,10 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
           ))}
         </div>
         <div className="cttot"><span>Totale</span><span>{eur(total)}</span></div>
-        {cart.length > 0 && <button className="qsend" onClick={onConfirm}><Check /> Invia richiesta</button>}
+        {cart.length > 0 && <>
+          <p className="cartnote">Prepareremo il tuo oggetto con cura.</p>
+          <button className="qsend" onClick={onConfirm}><Check /> Invia richiesta</button>
+        </>}
       </div>
     </section>
   );
@@ -3455,7 +3599,7 @@ function UpdatesView({ notifs, onItemClick, onClear, isAdmin }) {
       </div>
       <div className="updatesview-card">
         <div className="cartitems">
-          {notifs.length === 0 && <div className="cempty">Nessun aggiornamento al momento.</div>}
+          {notifs.length === 0 && <div className="cempty">Nessun aggiornamento al momento.<br />Ti avviseremo quando una richiesta cambia stato.</div>}
           {notifs.map((n) => (
             <button className="notifrow" key={n.id + n.status} onClick={() => onItemClick(n.id)}>
               <span className={"notifdot s-" + n.status} />
