@@ -1110,17 +1110,45 @@ body.dark .ordersExploreCta:hover{background:rgba(199,125,107,.24)}
 .orderDetailPage{padding-bottom:calc(88px + env(safe-area-inset-bottom, 0px))}
 .orderDetailHero{margin:0 0 16px}
 .orderDetailTitle{margin:0;color:var(--text);font-size:28px;font-weight:760;letter-spacing:-.62px;line-height:1.05}
-.orderDetailSubtitle{margin:7px 0 0;color:var(--soft);font-size:14.5px;line-height:1.45;font-weight:420}
-.orderDetailCard{margin:0 14px;border-radius:28px;padding:16px;border:1px solid var(--strokeSoft);box-shadow:0 10px 30px rgba(72,50,32,.10),inset 0 1px 0 var(--hi)}
-body.dark .orderDetailCard{box-shadow:0 12px 34px rgba(0,0,0,.24),inset 0 1px 0 var(--hi)}
-.orderDetailCard .invhead{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--strokeSoft)}
-.orderDetailCard .invitems{margin-top:4px}
-.orderDetailCard .iitem{padding:14px 0}
-.orderDetailCard .ithumb{width:52px;height:52px;border-radius:15px}
-.orderDetailCard .iline{gap:11px}
-.orderDetailCard .ibd{margin-left:64px}
-.orderDetailCard .invtotrow{margin-top:10px}
+.orderDetailSubtitle{display:none}
+.orderDetailCard{margin:0 14px;border-radius:30px;padding:18px;border:1px solid var(--strokeSoft);box-shadow:0 12px 34px rgba(72,50,32,.11),inset 0 1px 0 var(--hi)}
+body.dark .orderDetailCard{box-shadow:0 14px 38px rgba(0,0,0,.25),inset 0 1px 0 var(--hi)}
+.orderDetailHead{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--strokeSoft)}
+.orderDetailIdentity{display:flex;align-items:center;gap:12px;min-width:0}
+.orderDetailIdentityText{min-width:0}
+.orderDetailName{font-family:'Inter',system-ui,sans-serif;font-weight:760;font-size:22px;letter-spacing:-.35px;line-height:1.08;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderDetailDate{margin-top:5px;font-size:13.5px;line-height:1.35;color:var(--soft);font-weight:430}
+.orderDetailStatus{justify-self:end;align-self:center;display:flex;align-items:center;min-height:48px}
+.orderDetailStatus .ostat{padding:7px 11px;font-size:10.5px}
+.orderDetailCard .invav{width:50px;height:50px}
+.orderDetailCard .invitems{margin-top:0}
+.orderDetailItem{padding:4px 0 16px;margin-bottom:2px;border-bottom:1px solid var(--strokeSoft)}
+.orderDetailItem:last-child{margin-bottom:0}
+.orderDetailItemTop{display:grid;grid-template-columns:94px minmax(0,1fr);gap:14px;align-items:center;margin-bottom:16px}
+.orderDetailThumb{width:94px;height:94px;border-radius:22px;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 8px 22px rgba(72,50,32,.14),inset 0 1px 0 rgba(255,255,255,.22);background:var(--glass2)}
+body.dark .orderDetailThumb{box-shadow:0 10px 26px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08)}
+.orderDetailProduct{min-width:0}
+.orderDetailProductLine{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.orderDetailProductName{font-size:22px;font-weight:780;letter-spacing:-.35px;line-height:1.12;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderDetailQty{flex:none;font-size:13.5px;font-weight:650;color:var(--soft)}
+.orderDetailProductMeta{margin-top:8px;display:flex;flex-direction:column;gap:3px;font-size:13.5px;line-height:1.35;color:var(--soft);font-weight:430}
+.orderDetailProductMeta strong{color:var(--text);font-weight:650}
+.orderDetailConfig{margin-top:8px;font-size:12.8px;line-height:1.35;color:var(--soft);opacity:.9}
+.orderDetailCard .ibd{margin-left:0;padding:3px 0}
+.orderDetailCard .ibd span:first-child{color:var(--soft)}
+.orderDetailCard .isub{padding-top:7px;margin-top:4px}
+.orderDetailCard .invtotrow{margin-top:16px;padding-top:16px;border-top:1px solid var(--strokeSoft)}
+.orderDetailCard .invtot{font-size:34px;letter-spacing:-.7px}
 .orderDetailNote{margin:14px 14px 0;padding:14px 16px;border-radius:22px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-size:13.5px;line-height:1.45}
+@media(max-width:390px){
+  .orderDetailCard{margin:0 10px;padding:15px;border-radius:27px}
+  .orderDetailHead{gap:10px}
+  .orderDetailName{font-size:20px}
+  .orderDetailItemTop{grid-template-columns:82px minmax(0,1fr);gap:12px}
+  .orderDetailThumb{width:82px;height:82px;border-radius:19px}
+  .orderDetailProductName{font-size:20px}
+  .orderDetailCard .invtot{font-size:30px}
+}
 @media(prefers-reduced-motion:reduce){.orderDetailPage{animation:none!important}}
 
 /* ===================== HOME — premium editorial ===================== */
@@ -2192,13 +2220,13 @@ export default function App() {
   const loadOrders = async () => {
     const { data } = await supabase
       .from("orders")
-      .select("*, order_items(*)")
+      .select("*, order_items(*, prints(material))")
       .order("created_at", { ascending: false });
     setOrders((data || []).map((o) => ({
       id: o.id, user_id: o.user_id, who: o.customer_name || "Cliente", avatar: o.customer_avatar || "",
       status: o.status, total: Number(o.total) || 0, date: o.created_at,
       items: (o.order_items || []).map((it) => ({
-        t: it.title, col: it.color_name, base: Number(it.base_price) || 0,
+        t: it.title, col: it.color_name, material: it.prints?.material || "", base: Number(it.base_price) || 0,
         adds: it.adds || [], opt: it.opt || "", price: Number(it.unit_price) || 0,
         qty: it.qty || 1, img: it.image_url || "",
       })),
@@ -2833,8 +2861,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const doAdd = (e) => {
     if (e && e.currentTarget) confetti(e.currentTarget);
     onAdd({
-      key: p.id + (optLabel ? "|" + optLabel : ""),
-      pid: p.id, t: p.title, col: "", opt: optLabel, base: p.price, adds, price: unit,
+      key: p.id + "|" + (c.id || c.name || "unico") + (optLabel ? "|" + optLabel : ""),
+      pid: p.id, t: p.title, col: c.name || "", opt: optLabel, base: p.price, adds, price: unit,
       qty, img: c.img || "",
     });
   };
@@ -3121,29 +3149,48 @@ function OrderDetailView({ o, isAdmin }) {
     rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
   };
   const st = STATUS_META[o.status] || STATUS_META.pending;
-  const title = o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
-  const dateLine = o.date ? "Richiesta del " + fmtDate(o.date) : "Dettaglio della richiesta";
+  const customerName = o.who || "Cliente";
+  const dateLine = o.date ? "Richiesta del " + fmtDate(o.date).replace(/ /g, "/") : "Dettaglio della richiesta";
   return (
     <section className="screen on orderDetailPage">
       <div className="orderDetailHero px">
         <h2 className="orderDetailTitle">Dettaglio ordine</h2>
-        <p className="orderDetailSubtitle">{dateLine}{isAdmin && o.who ? " · " + o.who : ""}</p>
       </div>
       <div className="orderDetailCard glass inv">
-        <div className="invhead">
-          {isAdmin && <img className="invav" src={o.avatar || avatarURI(o.who)} alt="" />}
-          <div className="invwho">
-            <div className="invtt">{isAdmin ? o.who : title}</div>
-            <div className="invmeta"><span className={"ostat " + st.cls}>{st.label}</span></div>
+        <div className="orderDetailHead">
+          <div className="orderDetailIdentity">
+            {isAdmin && <img className="invav" src={o.avatar || avatarURI(customerName)} alt="" />}
+            <div className="orderDetailIdentityText">
+              <div className="orderDetailName">{customerName}</div>
+              <div className="orderDetailDate">{dateLine}</div>
+            </div>
           </div>
+          <div className="orderDetailStatus"><span className={"ostat " + st.cls}>{st.label}</span></div>
         </div>
         <div className="invitems">
           {o.items.map((it, i) => {
             const base = it.base != null ? it.base : it.price;
             const adds = it.adds || [];
+            const material = it.material || "";
+            const color = it.col || "";
             return (
-              <div className="iitem" key={i}>
-                <div className="iline"><img className="ithumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" /><b className="iname">{it.t}{it.col ? " · " + it.col : ""}</b><span className="ix">×{it.qty}</span></div>
+              <div className="orderDetailItem" key={i}>
+                <div className="orderDetailItemTop">
+                  <img className="orderDetailThumb" src={it.img || gimg("#cfc4b4", "#9a8d79")} alt="" />
+                  <div className="orderDetailProduct">
+                    <div className="orderDetailProductLine">
+                      <b className="orderDetailProductName">{it.t}</b>
+                      <span className="orderDetailQty">×{it.qty}</span>
+                    </div>
+                    {(material || color) && (
+                      <div className="orderDetailProductMeta">
+                        {material && <span>{material}</span>}
+                        {color && <span>Colore: <strong>{color}</strong></span>}
+                      </div>
+                    )}
+                    {it.opt && <div className="orderDetailConfig">{it.opt}</div>}
+                  </div>
+                </div>
                 <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
                 {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
                 {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
