@@ -1195,13 +1195,18 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 }
 
 /* ===================== SHEET — scroll lock e safe-area ===================== */
-/* Quando uno sheet è aperto: html/body non scrollano, niente rubber-band iOS */
-html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
-body.sheet-open{touch-action:none!important}
-/* Il contenitore scrollabile interno dello sheet deve poter scrollare */
+/* body.sheet-open: position:fixed + top impostato via JS blocca lo scroll
+   senza toccare overflow di <html>. Usare overflow:hidden su html causa su iOS
+   il ricalcolo di env(safe-area-inset-bottom): la dock salta e compare la
+   striscia chiara in fondo allo schermo. */
+html.sheet-open{overscroll-behavior:none!important}
+body.sheet-open{position:fixed;left:0;right:0;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
+/* Il contenitore scrollabile interno deve poter scrollare */
 .ipick .sheet{touch-action:pan-y}
-/* Backdrop: usa --app-height (window.innerHeight) per coprire il gap dinamico iOS */
-.ipick{min-height:var(--app-height,100dvh)}
+/* overflow:hidden clipa il contenuto traslato del sheetwrap durante
+   l'animazione di apertura/chiusura e il drag-to-close: nessun residuo fuori
+   dai bordi del backdrop. Non serve min-height: inset:0 copre già tutto. */
+.ipick{overflow:hidden}
 
 /* Backdrop caldo (espresso warm invece di nero freddo) */
 @keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
@@ -1883,23 +1888,28 @@ export default function App() {
   const anySheetOpen = !!(detailId || cartOpen || notifOpen || invId);
   useEffect(() => {
     if (!anySheetOpen) return;
-    // Approccio class-based: nessun inline style → nessun residuo dopo chiusura.
-    // html.sheet-open/body.sheet-open sono definiti in CSS con overflow:hidden;
-    // overscroll-behavior:none; body anche touch-action:none per iOS rubber-band.
     const html = document.documentElement;
     const body = document.body;
+    // Salva la posizione di scroll corrente e la compensa come offset del body
+    // fisso. body.sheet-open applica position:fixed (CSS): senza questo il body
+    // salterebbe a top:0, facendo sembrare che la dock si alzi e lasciando una
+    // striscia visibile sul fondo dello schermo.
+    const scrollY = window.scrollY;
+    body.style.top = `-${scrollY}px`;
     html.classList.add("sheet-open");
     body.classList.add("sheet-open");
     // Previeni touchmove sul backdrop e su aree fuori dallo scroll interno.
-    // .ipick .sheet è il contenitore scrollabile (ha overflow-y:auto e touch-action:pan-y).
+    // .ipick .sheet è il contenitore scrollabile (touch-action:pan-y in CSS).
     const onTouchMove = (e) => {
-      if (e.target.closest(".ipick .sheet")) return; // lascia scrollare lo sheet
+      if (e.target.closest(".ipick .sheet")) return;
       e.preventDefault();
     };
     document.addEventListener("touchmove", onTouchMove, { passive: false });
     return () => {
       html.classList.remove("sheet-open");
       body.classList.remove("sheet-open");
+      body.style.top = "";
+      window.scrollTo(0, scrollY);
       document.removeEventListener("touchmove", onTouchMove);
     };
   }, [anySheetOpen]);
