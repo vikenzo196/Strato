@@ -738,28 +738,52 @@ body.dark{
   --sheet-scrim:rgba(17,13,12,.74);
 }
 
-/* ======================= SFONDO — brand Earth Tone stabile ==================
-   Lo sfondo Strato non è più configurabile da admin: è parte del brand.
-   #appbg resta un layer fisso puramente decorativo, governato da CSS. */
-html,body,#root{min-height:100%;background:var(--app-bg-solid)}
-body{background:var(--app-bg-solid)!important;background-image:none!important;overflow-x:hidden}
-#root{position:relative;z-index:1}
-/* Background unico Strato: il layer fisso viene esteso sotto il viewport per coprire
-   anche la safe-area iOS, senza colorare una fascia separata e senza toccare root/body scroll. */
+/* ======================= SFONDO — canvas unico Strato ==================
+   Il canvas non deve avere un punto in cui “finisce” e ricomincia.
+   Il colore base vive su html/body; il gradiente atmosferico è un solo layer fixed
+   viewport-sized. #root e le viste restano trasparenti: nessun blocco di pagina può
+   scorrere sopra un background diverso. */
+html,
+body{
+  min-height:100%;
+  background-color:var(--app-bg-solid)!important;
+  background-image:none!important;
+}
+body{
+  overflow-x:hidden;
+}
+#root{
+  position:relative;
+  z-index:1;
+  min-height:100%;
+  background:transparent!important;
+}
 #appbg{
   position:fixed;
-  top:0;left:0;right:0;
-  bottom:calc(-140px - env(safe-area-inset-bottom,0px));
-  height:auto;
-  min-height:0;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  min-height:100vh;
   z-index:0;
   pointer-events:none;
-  background:var(--app-bg-gradient);
-  background-size:100% 100%;
-  background-position:top center;
+  background-color:var(--app-bg-solid);
+  background-image:var(--app-bg-gradient);
+  background-size:100vw 100vh;
+  background-position:center center;
   background-repeat:no-repeat;
   transform:translateZ(0);
   will-change:auto;
+}
+@supports (height:100dvh){
+  #appbg{height:100dvh;min-height:100dvh;background-size:100vw 100dvh}
+}
+@supports (height:100lvh){
+  #appbg{height:100lvh;min-height:100lvh;background-size:100vw 100lvh}
+}
+.wrap,
+.screen,
+.appview{
+  background:transparent!important;
 }
 
 /* ---- vetro: frosted ceramic — Earth Tone ---- */
