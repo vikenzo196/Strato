@@ -1195,18 +1195,18 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 }
 
 /* ===================== SHEET — scroll lock e safe-area ===================== */
-/* body.sheet-open: position:fixed + top impostato via JS blocca lo scroll
-   senza toccare overflow di <html>. Usare overflow:hidden su html causa su iOS
-   il ricalcolo di env(safe-area-inset-bottom): la dock salta e compare la
-   striscia chiara in fondo allo schermo. */
-html.sheet-open{overscroll-behavior:none!important}
-body.sheet-open{position:fixed;left:0;right:0;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
-/* Il contenitore scrollabile interno deve poter scrollare */
-.ipick .sheet{touch-action:pan-y}
-/* overflow:hidden clipa il contenuto traslato del sheetwrap durante
-   l'animazione di apertura/chiusura e il drag-to-close: nessun residuo fuori
-   dai bordi del backdrop. Non serve min-height: inset:0 copre già tutto. */
+html.sheet-open,body.sheet-open{overflow:hidden!important;overscroll-behavior:none!important}
+body.sheet-open{touch-action:none!important}
+/* .ipick torna a inset:0 (definito a riga ~200): copre l'intero viewport.
+   overflow:hidden clipa il contenuto animato del sheetwrap durante
+   slide-in/out e drag-to-close senza lasciare residui fuori dal viewport. */
 .ipick{overflow:hidden}
+/* scroll interno dello sheet */
+.ipick .sheet{touch-action:pan-y}
+/* Dock: si nasconde in modo discreto durante sheet aperto.
+   Non viene spostata né cambia il suo bottom/safe-area.
+   Riappare automaticamente alla chiusura dello sheet. */
+body.sheet-open .dockwrap{opacity:0;pointer-events:none;transform:none!important}
 
 /* Backdrop caldo (espresso warm invece di nero freddo) */
 @keyframes scrimIn{from{background:rgba(43,33,27,0)}to{background:rgba(43,33,27,.72)}}
@@ -1890,16 +1890,9 @@ export default function App() {
     if (!anySheetOpen) return;
     const html = document.documentElement;
     const body = document.body;
-    // Salva la posizione di scroll corrente e la compensa come offset del body
-    // fisso. body.sheet-open applica position:fixed (CSS): senza questo il body
-    // salterebbe a top:0, facendo sembrare che la dock si alzi e lasciando una
-    // striscia visibile sul fondo dello schermo.
-    const scrollY = window.scrollY;
-    body.style.top = `-${scrollY}px`;
     html.classList.add("sheet-open");
     body.classList.add("sheet-open");
-    // Previeni touchmove sul backdrop e su aree fuori dallo scroll interno.
-    // .ipick .sheet è il contenitore scrollabile (touch-action:pan-y in CSS).
+    // Blocca touchmove sul backdrop; lascia scrollare solo .ipick .sheet.
     const onTouchMove = (e) => {
       if (e.target.closest(".ipick .sheet")) return;
       e.preventDefault();
@@ -1908,8 +1901,6 @@ export default function App() {
     return () => {
       html.classList.remove("sheet-open");
       body.classList.remove("sheet-open");
-      body.style.top = "";
-      window.scrollTo(0, scrollY);
       document.removeEventListener("touchmove", onTouchMove);
     };
   }, [anySheetOpen]);
@@ -2011,19 +2002,31 @@ export default function App() {
   useEffect(() => { document.body.removeAttribute("data-bg"); }, []);
   useEffect(() => { loadBackgrounds(); }, []);
   useEffect(() => {
-    // --app-height: viewport reale aggiornato su resize/orientation.
-    // Necessario perché 100dvh su iOS a volte non riflette il viewport corrente.
-    const setAppH = () =>
-      document.documentElement.style.setProperty("--app-height", window.innerHeight + "px");
+    // --app-height: usa visualViewport.height quando disponibile.
+    // Su iOS è più preciso di window.innerHeight e 100dvh: tiene conto della
+    // barra Safari dinamica e della safe-area in modo coerente frame per frame.
+    let frame = null;
+    const setAppH = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const h = window.visualViewport?.height || window.innerHeight;
+        document.documentElement.style.setProperty("--app-height", `${Math.round(h)}px`);
+      });
+    };
     setAppH();
     window.addEventListener("resize", setAppH);
     window.addEventListener("orientationchange", setAppH);
+    window.visualViewport?.addEventListener("resize", setAppH);
+    window.visualViewport?.addEventListener("scroll", setAppH);
     let t;
     const onR = () => { clearTimeout(t); t = setTimeout(() => applyWallpaper(null, document.body.classList.contains("dark")), 200); };
     window.addEventListener("resize", onR);
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       window.removeEventListener("resize", setAppH);
       window.removeEventListener("orientationchange", setAppH);
+      window.visualViewport?.removeEventListener("resize", setAppH);
+      window.visualViewport?.removeEventListener("scroll", setAppH);
       window.removeEventListener("resize", onR);
       clearTimeout(t);
     };
