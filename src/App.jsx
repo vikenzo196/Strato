@@ -871,6 +871,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .notifdot.s-pending{background:var(--warning)}
 .notifdot.s-confirmed{background:var(--success)}
 .notifdot.s-rejected{background:#b06a52}
+.notifdot.s-completed{background:#7f8f6c}
 .notiftxt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .notiftxt b{font-size:14px;font-weight:700;color:var(--text)}
 .notifb{font-size:12.5px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1052,10 +1053,10 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 .ordersHero{margin:0 0 18px}
 .ordersHero .title{margin-bottom:4px!important}
 .ordersSubtitle{margin:0;color:var(--soft);font-size:15px;font-weight:400;line-height:1.45;letter-spacing:-.08px}
-.ordersList{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.ordersList{display:flex;flex-direction:column;gap:16px;margin-top:18px}
 
 /* Card ordine: meno dashboard, più richiesta editoriale */
-.orderCard{display:flex;align-items:center;gap:14px;border-radius:24px;padding:15px 14px;margin:0 14px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s,border-color .3s}
+.orderCard{display:flex;align-items:center;gap:15px;border-radius:25px;padding:17px 16px;margin:0 14px;min-height:100px;cursor:pointer;transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .25s cubic-bezier(.22,1,.36,1),background-color .3s,border-color .3s}
 .orderCard:active{transform:scale(.985)}
 .orderCard:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
 
@@ -1064,12 +1065,12 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 
 .orderBody{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:4px;padding-top:0;align-self:center}
 .orderTitle{font-weight:750;font-size:16px;letter-spacing:-.22px;line-height:1.18;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.orderMeta{font-size:12.8px;font-weight:450;color:var(--soft);line-height:1.35;white-space:normal}
+.orderMeta{font-size:12.8px;font-weight:450;color:var(--soft);line-height:1.38;white-space:normal;display:flex;flex-direction:column;gap:2px}
 .orderMeta strong{font-weight:650;color:var(--text)}
 .orderNote{margin:2px 0 0;font-size:12.5px;line-height:1.45;color:var(--soft);font-weight:400;max-width:96%}
-.orderCta{font-size:12.5px;font-weight:750;color:var(--accent);letter-spacing:.01em;text-align:right;white-space:nowrap}
+.orderCta{display:none}
 
-.orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:9px;align-self:stretch;min-width:76px;padding-top:0}
+.orderSide{flex:none;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:8px;align-self:stretch;min-width:78px;padding-top:0}
 .ostat{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:1px solid transparent}
 .ostat--confirmed{background:rgba(199,125,107,.16);color:#9E553F;border-color:rgba(199,125,107,.34)}
 body.dark .ostat--confirmed{background:rgba(199,125,107,.18);color:#D99A82;border-color:rgba(199,125,107,.36)}
@@ -1077,8 +1078,12 @@ body.dark .ostat--confirmed{background:rgba(199,125,107,.18);color:#D99A82;borde
 body.dark .ostat--pending{background:rgba(184,154,119,.18);color:#CDB79A;border-color:rgba(184,154,119,.34)}
 .ostat--rejected{background:rgba(126,104,92,.14);color:#715A4E;border-color:rgba(126,104,92,.28)}
 body.dark .ostat--rejected{background:rgba(126,104,92,.20);color:#C6AA9C;border-color:rgba(126,104,92,.36)}
+.ostat--completed{background:rgba(127,143,108,.16);color:#647252;border-color:rgba(127,143,108,.32)}
+body.dark .ostat--completed{background:rgba(127,143,108,.20);color:#B7C6A3;border-color:rgba(127,143,108,.38)}
 
 .orderAdminActions{display:flex;flex-direction:column;gap:6px;margin-top:2px;align-items:flex-end}
+.orderCompleteBtn{border:1px solid rgba(127,143,108,.32);border-radius:12px;padding:7px 10px;background:rgba(127,143,108,.13);color:#647252;font-family:inherit;font-weight:750;font-size:12px;cursor:pointer;white-space:nowrap}
+body.dark .orderCompleteBtn{background:rgba(127,143,108,.18);border-color:rgba(127,143,108,.38);color:#B7C6A3}
 .orderCard--pend .orderSide{min-width:88px}
 
 .ordersEmpty{min-height:calc(100vh - 360px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 28px 42px;gap:16px}
@@ -1096,7 +1101,7 @@ body.dark .ordersExploreCta:hover{background:rgba(199,125,107,.24)}
 .orderCard.in{animation:itemIn .45s cubic-bezier(.22,1,.36,1) both}
 
 @media(max-width:390px){
-  .orderCard{gap:12px;padding:13px 12px}
+  .orderCard{gap:12px;padding:15px 13px;min-height:96px}
   .orderThumb{width:58px;height:58px;border-radius:16px}
   .orderSide{min-width:68px;gap:8px}
   .ostat{font-size:10px;padding:4px 8px}
@@ -2424,7 +2429,7 @@ export default function App() {
     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
     if (error) { toast("Errore aggiornamento"); return; }
 
-    if (order?.user_id && (status === "confirmed" || status === "rejected")) {
+    if (order?.user_id && (status === "confirmed" || status === "rejected" || status === "completed")) {
       try {
         const { data: pushData, error: pushError } = await supabase.functions.invoke("push-notify", {
           body: { type: "order_status", order_id: id, status },
@@ -2452,7 +2457,7 @@ export default function App() {
     }
 
     await loadOrders();
-    toast(status === "confirmed" ? "Ordine confermato" : "Richiesta rifiutata");
+    toast(status === "confirmed" ? "Ordine confermato" : (status === "completed" ? "Ordine completato" : "Richiesta rifiutata"));
   };
 
   const deleteOrder = async (id) => {
@@ -2473,12 +2478,12 @@ export default function App() {
   };
 
   const allNotifs = orders
-    .filter((o) => isAdmin ? o.status === "pending" : (o.status === "confirmed" || o.status === "rejected"))
+    .filter((o) => isAdmin ? o.status === "pending" : (o.status === "confirmed" || o.status === "completed" || o.status === "rejected"))
     .slice()
     .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
     .map((o) => ({
       id: o.id, status: o.status, date: o.date,
-      title: isAdmin ? "Nuova richiesta" : (o.status === "confirmed" ? "Ordine confermato" : "Ordine non accettato"),
+      title: isAdmin ? "Nuova richiesta" : (o.status === "completed" ? "Ordine completato" : (o.status === "confirmed" ? "Ordine confermato" : "Ordine non accettato")),
       body: (o.items[0] ? o.items[0].t : "Ordine") + " · " + eur(o.total) + (isAdmin ? " · " + o.who : ""),
     }));
   const notifSig = (n) => n.id + ":" + n.status;
@@ -2605,7 +2610,7 @@ export default function App() {
                 <OrderDetailView o={inv} isAdmin={isAdmin} />
               ) : (
                 <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => { setInvId(id); window.scrollTo(0, 0); }}
-                  onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")}
+                  onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")} onComplete={(id) => setOrderStatus(id, "completed")}
                   onDelete={deleteOrder}
                   orderFocus={orderFocus} clearFocus={() => setOrderFocus(null)}
                   onGoExplore={() => open("search")} />
@@ -3084,7 +3089,7 @@ function OrdersScreen({ orders, isAdmin, onOpen, onConfirm, onReject }) {
             <b>{isAdmin ? "Nuova richiesta" : "La tua richiesta"}</b> · {oTitle(o)} · {eur(o.total)}{isAdmin ? " da " + o.who : ""}<br />
             <span style={{ color: "var(--soft)", fontSize: "12.5px" }}>Tocca per il dettaglio{isAdmin ? " · conferma per avvisare il cliente" : ""}</span>
           </div>
-          <span className="badge bp">In attesa di conferma</span>
+          <span className="badge bp">Inviato</span>
           {isAdmin && <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>}
           {isAdmin && <button className="btnN" onClick={() => onReject(o.id)}>Rifiuta</button>}
         </div>
@@ -3145,13 +3150,14 @@ function AuthGate({ reason, onGoogle, onClose }) {
 
 function OrderDetailView({ o, isAdmin }) {
   const STATUS_META = {
-    confirmed: { label: "Confermato", cls: "ostat--confirmed", note: "La richiesta è stata accolta e sarà preparata con cura." },
-    pending:   { label: "Ricevuto", cls: "ostat--pending", note: "Stiamo valutando la tua richiesta." },
+    confirmed: { label: "Confermato", cls: "ostat--confirmed", note: "Ordine confermato." },
+    pending:   { label: "Inviato", cls: "ostat--pending", note: "in attesa di conferma." },
+    completed: { label: "Completato", cls: "ostat--completed", note: "Il tuo ordine è pronto!" },
     rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
   };
   const st = STATUS_META[o.status] || STATUS_META.pending;
   const customerName = o.who || "Cliente";
-  const dateLine = o.date ? "Richiesta del " + fmtDate(o.date).replace(/ /g, "/") : "Dettaglio della richiesta";
+  const dateLine = o.date ? fmtDate(o.date).replace(/ /g, "/") : "Dettaglio della richiesta";
   return (
     <section className="screen on orderDetailPage">
       <div className="orderDetailHero px">
@@ -3248,7 +3254,7 @@ function Liked({ likedPrints, onOpen, onLike, onEdit }) {
 }
 
 /* ---- PROFILO ---- */
-function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete, orderFocus, clearFocus, onGoExplore }) {
+function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onComplete, onDelete, orderFocus, clearFocus, onGoExplore }) {
   const orderRefs = useRef({});
   useEffect(() => {
     if (orderFocus && orderRefs.current[orderFocus]) {
@@ -3263,21 +3269,22 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
 
   const pend = orders.filter((o) => o.status === "pending");
   const conf = orders.filter((o) => o.status === "confirmed");
+  const comp = orders.filter((o) => o.status === "completed");
   const rej  = orders.filter((o) => o.status === "rejected");
 
   const STATUS_META = {
-    confirmed: { label: "Confermato",  cls: "ostat--confirmed", note: "La richiesta è stata accolta e sarà preparata con cura." },
-    pending:   { label: "Ricevuto",    cls: "ostat--pending",   note: "Stiamo valutando la tua richiesta." },
+    confirmed: { label: "Confermato",  cls: "ostat--confirmed", note: "Ordine confermato." },
+    pending:   { label: "Inviato",    cls: "ostat--pending",   note: "in attesa di conferma." },
+    completed: { label: "Completato", cls: "ostat--completed", note: "Il tuo ordine è pronto!" },
     rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
   };
 
-  const orderMetaText = (o) => {
-    const parts = [];
-    if (isAdmin && o.who) parts.push(o.who);
-    if (o.date) parts.push("Richiesta del " + fmtDate(o.date));
-    parts.push(eur(o.total));
-    return parts.join(" · ");
-  };
+  const orderMetaText = (o) => (
+    <>
+      {o.date && <span>{fmtDate(o.date)}</span>}
+      <span>{eur(o.total)}</span>
+    </>
+  );
 
   const OrderCard = ({ o, idx }) => {
     const st = STATUS_META[o.status] || STATUS_META.pending;
@@ -3301,7 +3308,9 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
         </div>
         <div className="orderSide">
           <span className={"ostat " + st.cls}>{st.label}</span>
-          <div className="orderCta">Dettagli</div>
+          {isAdmin && o.status === "confirmed" && onComplete && (
+            <button className="orderCompleteBtn" onClick={(e) => { e.stopPropagation(); onComplete(o.id); }}>Completa</button>
+          )}
           {isAdmin && o.status === "rejected" && (
             <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>
           )}
@@ -3327,12 +3336,11 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
         {!isAdmin && <img className="orderThumb" src={thumb} alt={oTitle(o)} />}
         <div className="orderBody">
           <div className="orderTitle">{isAdmin ? o.who : oTitle(o)}</div>
-          <div className="orderMeta">{isAdmin ? [oTitle(o), orderMetaText(o)].filter(Boolean).join(" · ") : orderMetaText(o)}</div>
-          <p className="orderNote">{isAdmin ? "Apri il dettaglio per controllare la richiesta." : "Stiamo valutando la tua richiesta."}</p>
+          <div className="orderMeta">{orderMetaText(o)}</div>
+          <p className="orderNote">{isAdmin ? "Apri il dettaglio per controllare la richiesta." : STATUS_META.pending.note}</p>
         </div>
         <div className="orderSide">
-          <span className="ostat ostat--pending">Ricevuto</span>
-          {!isAdmin && <div className="orderCta">Dettagli</div>}
+          <span className="ostat ostat--pending">Inviato</span>
           {isAdmin && (
             <div className="orderAdminActions" onClick={(e) => e.stopPropagation()}>
               <button className="btnY" onClick={() => onConfirm(o.id)}>Conferma</button>
@@ -3344,13 +3352,13 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
     );
   };
 
-  const allOrdered = [...pend, ...conf, ...rej];
+  const allOrdered = [...pend, ...conf, ...comp, ...rej];
 
   return (
     <section className="screen on ordersPage">
       <div className="ordersHero">
         <h2 className="title px" style={{ marginBottom: 4 }}><span className="ticon"><OrdersI /></span>Ordini</h2>
-        <p className="ordersSubtitle px">Segui lo stato delle tue richieste.</p>
+        <p className="ordersSubtitle px">Tocca per scoprire i dettagli.</p>
       </div>
 
       {orders.length === 0 && (
@@ -3367,7 +3375,8 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onDelete
         <div className="ordersList">
           {pend.map((o, i) => <PendCard key={o.id} o={o} idx={i} />)}
           {conf.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length} />)}
-          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length} />)}
+          {comp.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length} />)}
+          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length + comp.length} />)}
         </div>
       )}
 
