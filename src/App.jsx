@@ -1367,50 +1367,9 @@ body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,
 
 
 
-/* ===================== STRATO VIEWS V2 — background continuo + transizioni premium ===================== */
-html,
-body{
-  min-height:100%;
-  background-color:var(--app-bg-solid)!important;
-  background-image:var(--app-bg-gradient)!important;
-  background-repeat:no-repeat!important;
-  background-size:100% 100%!important;
-  background-position:center top!important;
-  overflow-x:hidden;
-}
-body{
-  background-attachment:fixed!important;
-}
-#root{
-  position:relative;
-  z-index:1;
-  min-height:100%;
-  background:transparent!important;
-}
-#appbg{
-  position:fixed!important;
-  inset:0!important;
-  width:100%!important;
-  height:auto!important;
-  min-height:100vh!important;
-  z-index:0!important;
-  pointer-events:none!important;
-  background-color:var(--app-bg-solid)!important;
-  background-image:var(--app-bg-gradient)!important;
-  background-repeat:no-repeat!important;
-  background-size:cover!important;
-  background-position:center!important;
-  transform:translateZ(0);
-}
-@supports (height:100dvh){#appbg{min-height:100dvh!important}}
-@supports (height:100lvh){#appbg{min-height:100lvh!important}}
-.wrap{
-  position:relative;
-  z-index:1;
-  background:transparent!important;
-  transition:transform .36s cubic-bezier(.22,.8,.26,1);
-}
-
+/* ===================== STRATO VIEWS V2B — transizioni premium senza cambiare canvas =====================
+   Nota: niente override di html/body/#root/#appbg.
+   Manteniamo il background della versione stabile fullscreen: il rettangolo basso nasceva dal tentativo V2 di ricalcolare il canvas globale. */
 .screen.on,
 .appview{
   animation:viewIn .36s cubic-bezier(.22,.8,.26,1) both!important;
