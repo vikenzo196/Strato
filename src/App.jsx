@@ -2545,9 +2545,9 @@ body.dark .tb-btn.bell{
 }
 
 
-/* ===================== CARRELLO VUOTO — full-page empty state =====================
+/* ===================== CARRELLO VUOTO — immagine sotto al sottotitolo =====================
    Stato vuoto come vera pagina: niente altezza residua da sheet, niente scroll fantasma.
-   Il visual earth tone resta ambientale, centrato e sempre dentro lo spazio tra topbar e dock. */
+   Ordine editoriale: titolo pagina, messaggio, visual ambientale, CTA. */
 .cartemptypage{
   --cart-empty-top:calc(62px + env(safe-area-inset-top));
   --cart-empty-bottom:max(132px, calc(80px + env(safe-area-inset-bottom, 24px)));
@@ -2568,16 +2568,17 @@ body.dark .tb-btn.bell{
   position:relative;
   z-index:3;
   flex:0 0 auto;
-  margin-bottom:4px;
+  margin-bottom:2px;
 }
 
 .cartEmptyFull{
   position:relative;
   flex:1 1 auto;
   min-height:0;
-  display:grid;
-  place-items:center;
-  padding:0 12px 6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 12px 8px;
   overflow:hidden;
   isolation:isolate;
   border-radius:38px;
@@ -2591,18 +2592,48 @@ body.dark .tb-btn.bell{
   pointer-events:none;
   z-index:0;
   background:
-    radial-gradient(circle at 50% 42%, rgba(255,253,248,.30), transparent 44%),
+    radial-gradient(circle at 50% 46%, rgba(255,253,248,.30), transparent 44%),
     radial-gradient(circle at 50% 74%, rgba(199,125,107,.075), transparent 64%);
 }
 
+.cartEmptyFullContent{
+  position:relative;
+  z-index:2;
+  width:min(100%, 390px);
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  margin:0;
+  padding:6px 18px 14px;
+}
+
+.cartEmptyFullContent h3{
+  margin:0 0 10px;
+  color:var(--text);
+  font-size:30px;
+  line-height:1.06;
+  letter-spacing:-.045em;
+  font-weight:760;
+}
+
+.cartEmptyFullContent p{
+  margin:0;
+  max-width:278px;
+  color:var(--soft);
+  font-size:14px;
+  line-height:1.5;
+}
+
 .cartEmptyFullArt{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:clamp(528px, 146%, 936px);
-  height:clamp(408px, 77svh, 768px);
-  max-height:108%;
-  transform:translate3d(-50%,-50%,0);
+  position:relative;
+  flex:0 0 auto;
+  width:clamp(330px, 104vw, 560px);
+  height:clamp(238px, 39svh, 420px);
+  max-width:none;
+  margin:8px auto 10px;
   pointer-events:none;
   z-index:1;
   opacity:1;
@@ -2624,39 +2655,6 @@ body.dark .tb-btn.bell{
 
 .cartEmptyFullArtDark{display:none!important}
 
-@supports (height:100dvh){
-  .cartEmptyFullArt{height:clamp(408px, 77dvh, 768px)}
-}
-
-.cartEmptyFullContent{
-  position:relative;
-  z-index:2;
-  width:min(100%, 330px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  margin-top:0;
-  padding:24px 18px 28px;
-}
-
-.cartEmptyFullContent h3{
-  margin:0 0 10px;
-  color:var(--text);
-  font-size:30px;
-  line-height:1.06;
-  letter-spacing:-.045em;
-  font-weight:760;
-}
-
-.cartEmptyFullContent p{
-  margin:0 0 24px;
-  max-width:270px;
-  color:var(--soft);
-  font-size:14px;
-  line-height:1.5;
-}
-
 .cartEmptyFullCta{
   width:min(100%, 216px);
   min-width:166px;
@@ -2665,6 +2663,7 @@ body.dark .tb-btn.bell{
   align-items:center;
   justify-content:center;
   padding:0 28px;
+  margin:0;
   border-radius:999px;
   border:1px solid rgba(199,125,107,.22);
   background:
@@ -2681,7 +2680,7 @@ body.dark .tb-btn.bell{
 
 body.dark .cartEmptyFull::before{
   background:
-    radial-gradient(circle at 50% 36%, rgba(199,125,107,.105), transparent 44%),
+    radial-gradient(circle at 50% 38%, rgba(199,125,107,.105), transparent 44%),
     radial-gradient(circle at 50% 78%, rgba(255,238,218,.04), transparent 64%);
 }
 
@@ -2703,23 +2702,23 @@ body.dark .cartEmptyFullCta{
 
 @media(max-height:720px){
   .cartemptypage .cartPageTitle{margin-bottom:0}
-  .cartEmptyFull{padding-bottom:2px}
-  .cartEmptyFullArt{top:50%;width:clamp(492px, 139%, 864px);height:clamp(372px, 72svh, 648px)}
-  .cartEmptyFullContent{margin-top:0;padding-top:18px;padding-bottom:22px}
-  .cartEmptyFullContent h3{font-size:28px}
-  .cartEmptyFullContent p{margin-bottom:20px}
+  .cartEmptyFull{padding-bottom:4px}
+  .cartEmptyFullContent{padding-top:2px;padding-bottom:10px}
+  .cartEmptyFullContent h3{font-size:28px;margin-bottom:8px}
+  .cartEmptyFullArt{width:clamp(310px, 98vw, 500px);height:clamp(198px, 33svh, 330px);margin:4px auto 8px}
+  .cartEmptyFullCta{height:50px}
 }
 
 @media(max-width:380px){
   .cartEmptyFull{padding-left:8px;padding-right:8px;border-radius:34px}
-  .cartEmptyFullArt{width:clamp(492px, 158%, 816px);top:50%}
-  .cartEmptyFullContent{width:min(100%, 310px)}
+  .cartEmptyFullContent{width:min(100%, 328px);padding-left:14px;padding-right:14px}
   .cartEmptyFullContent h3{font-size:27px}
+  .cartEmptyFullArt{width:clamp(316px, 102vw, 480px);height:clamp(216px, 37svh, 360px)}
   .cartEmptyFullCta{width:min(100%, 204px);min-width:158px;height:50px;font-size:15.5px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cartEmptyFullArt{transition:none;transform:translate3d(-50%,-50%,0)}
+  .cartEmptyFullArt,.cartEmptyFullArt img{transition:none;transform:none}
 }
 
 
@@ -4256,13 +4255,13 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
       <section className="screen on appview cartview cartemptypage" aria-label="Carrello vuoto">
         <h2 className="title px cartPageTitle"><span className="ticon"><CartIcon /></span>Carrello</h2>
         <div className="cartEmptyFull">
-          <div className="cartEmptyFullArt" aria-hidden="true">
-            <img className="cartEmptyFullArtImg cartEmptyFullArtLight" src={CART_EMPTY_ART_LIGHT} alt="" decoding="async" draggable="false" />
-            <img className="cartEmptyFullArtImg cartEmptyFullArtDark" src={CART_EMPTY_ART_DARK} alt="" decoding="async" draggable="false" />
-          </div>
           <div className="cartEmptyFullContent">
             <h3>Il carrello è vuoto.</h3>
             <p>Quando sceglierai un oggetto, lo ritroverai qui.</p>
+            <div className="cartEmptyFullArt" aria-hidden="true">
+              <img className="cartEmptyFullArtImg cartEmptyFullArtLight" src={CART_EMPTY_ART_LIGHT} alt="" decoding="async" draggable="false" />
+              <img className="cartEmptyFullArtImg cartEmptyFullArtDark" src={CART_EMPTY_ART_DARK} alt="" decoding="async" draggable="false" />
+            </div>
             <button className="cartempty-action cartEmptyFullCta" onClick={onGoExplore}>Esplora</button>
           </div>
         </div>
