@@ -2583,6 +2583,7 @@ body.dark .tb-btn.bell{
   width:100%;
   max-width:100%;
   padding:0 12px 8px;
+  --cart-empty-body-shift-y:15%;
   overflow-x:hidden;
   overflow-y:visible;
   isolation:isolate;
@@ -2614,7 +2615,7 @@ body.dark .tb-btn.bell{
   text-align:center;
   margin:0;
   padding:6px 18px 14px;
-  transform:none;
+  transform:translateY(var(--cart-empty-body-shift-y));
 }
 
 .cartEmptyFullContent h3{
@@ -2647,7 +2648,7 @@ body.dark .tb-btn.bell{
   pointer-events:none;
   z-index:1;
   opacity:1;
-  --cart-art-shift-x:-14%;
+  --cart-art-shift-x:-21%;
 }
 
 .cartEmptyFullArt img{
@@ -2716,7 +2717,7 @@ body.dark .cartEmptyFullCta{
 @media(max-height:720px){
   .cartemptypage .cartPageTitle{margin-bottom:0}
   .cartEmptyFull{padding-bottom:4px}
-  .cartEmptyFullContent{padding-top:2px;padding-bottom:10px;transform:none}
+  .cartEmptyFullContent{padding-top:2px;padding-bottom:10px;transform:translateY(var(--cart-empty-body-shift-y))}
   .cartEmptyFullContent h3{font-size:28px;margin-bottom:8px}
   .cartEmptyFullArt{width:min(calc(100vw - 36px), 500px);height:clamp(198px, 33svh, 330px);margin:4px auto 8px}
   .cartEmptyFullCta{height:50px}
