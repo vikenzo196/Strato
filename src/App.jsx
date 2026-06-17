@@ -2598,10 +2598,10 @@ body.dark .tb-btn.bell{
 .cartEmptyFullArt{
   position:absolute;
   left:50%;
-  top:55%;
-  width:clamp(440px, 122%, 780px);
-  height:clamp(340px, 64svh, 640px);
-  max-height:94%;
+  top:50%;
+  width:clamp(528px, 146%, 936px);
+  height:clamp(408px, 77svh, 768px);
+  max-height:108%;
   transform:translate3d(-50%,-50%,0);
   pointer-events:none;
   z-index:1;
@@ -2616,7 +2616,7 @@ body.dark .tb-btn.bell{
   object-fit:contain;
   display:block;
   opacity:.94;
-  filter:saturate(1.02) contrast(1.03);
+  filter:saturate(.85) contrast(1.02);
   transform:translateZ(0);
   user-select:none;
   -webkit-user-drag:none;
@@ -2625,7 +2625,7 @@ body.dark .tb-btn.bell{
 .cartEmptyFullArtDark{display:none!important}
 
 @supports (height:100dvh){
-  .cartEmptyFullArt{height:clamp(340px, 64dvh, 640px)}
+  .cartEmptyFullArt{height:clamp(408px, 77dvh, 768px)}
 }
 
 .cartEmptyFullContent{
@@ -2636,18 +2636,8 @@ body.dark .tb-btn.bell{
   flex-direction:column;
   align-items:center;
   text-align:center;
-  margin-top:-6px;
-  padding:28px 18px 30px;
-}
-
-.cartEmptyMini{
-  margin-bottom:14px;
-  color:var(--accent);
-  text-transform:uppercase;
-  font-size:10px;
-  letter-spacing:.18em;
-  font-weight:700;
-  opacity:.72;
+  margin-top:0;
+  padding:24px 18px 28px;
 }
 
 .cartEmptyFullContent h3{
@@ -2686,6 +2676,7 @@ body.dark .tb-btn.bell{
   letter-spacing:-.015em;
   line-height:1;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 14px 30px rgba(112,72,48,.18);
+  opacity:.90;
 }
 
 body.dark .cartEmptyFull::before{
@@ -2698,7 +2689,7 @@ body.dark .cartEmptyFullArtLight{display:none!important}
 body.dark .cartEmptyFullArtDark{display:block!important}
 body.dark .cartEmptyFullArt img{
   opacity:.90;
-  filter:saturate(1.02) contrast(1.04);
+  filter:saturate(.85) contrast(1.03);
 }
 
 body.dark .cartEmptyFullCta{
@@ -2713,15 +2704,15 @@ body.dark .cartEmptyFullCta{
 @media(max-height:720px){
   .cartemptypage .cartPageTitle{margin-bottom:0}
   .cartEmptyFull{padding-bottom:2px}
-  .cartEmptyFullArt{top:56%;width:clamp(410px, 116%, 720px);height:clamp(310px, 60svh, 540px)}
-  .cartEmptyFullContent{margin-top:-14px;padding-top:18px;padding-bottom:22px}
+  .cartEmptyFullArt{top:50%;width:clamp(492px, 139%, 864px);height:clamp(372px, 72svh, 648px)}
+  .cartEmptyFullContent{margin-top:0;padding-top:18px;padding-bottom:22px}
   .cartEmptyFullContent h3{font-size:28px}
   .cartEmptyFullContent p{margin-bottom:20px}
 }
 
 @media(max-width:380px){
   .cartEmptyFull{padding-left:8px;padding-right:8px;border-radius:34px}
-  .cartEmptyFullArt{width:clamp(410px, 132%, 680px);top:56%}
+  .cartEmptyFullArt{width:clamp(492px, 158%, 816px);top:50%}
   .cartEmptyFullContent{width:min(100%, 310px)}
   .cartEmptyFullContent h3{font-size:27px}
   .cartEmptyFullCta{width:min(100%, 204px);min-width:158px;height:50px;font-size:15.5px}
@@ -4270,7 +4261,6 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
             <img className="cartEmptyFullArtImg cartEmptyFullArtDark" src={CART_EMPTY_ART_DARK} alt="" decoding="async" draggable="false" />
           </div>
           <div className="cartEmptyFullContent">
-            <div className="cartEmptyMini">Ancora nessun oggetto</div>
             <h3>Il carrello è vuoto.</h3>
             <p>Quando sceglierai un oggetto, lo ritroverai qui.</p>
             <button className="cartempty-action cartEmptyFullCta" onClick={onGoExplore}>Esplora</button>
