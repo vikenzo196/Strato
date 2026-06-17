@@ -873,10 +873,36 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 /* ---- campanella notifiche (topbar) ---- */
 .tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1);color:var(--text)}
 .tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
-.matdot{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 32% 30%, rgba(255,248,242,.55) 0%, rgba(255,248,242,.18) 24%, rgba(215,153,127,.96) 26%, rgba(181,120,96,.96) 72%, rgba(145,92,71,.98) 100%);border:1.4px solid rgba(255,250,245,.44);box-shadow:0 1px 4px rgba(101,61,46,.22), inset 0 1px 0 rgba(255,255,255,.28)}
-.cartdot{top:11px;right:12px}
-body.dark .cartdot{border-color:rgba(255,240,228,.28);box-shadow:0 1px 5px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08)}
-.belldot{top:9px;right:10px}
+
+/* Badge v2 — punto morbido con glow, definito in CSS vettoriale */
+.softdot{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 35% 32%, rgba(255,246,236,.88) 0 12%, rgba(255,246,236,0) 13%),
+    radial-gradient(circle at 50% 52%, rgba(207,125,97,.98) 0%, rgba(183,101,75,.96) 58%, rgba(132,75,58,.98) 100%);
+  border:1px solid rgba(255,244,235,.62);
+  box-shadow:
+    0 0 0 1px rgba(96,58,42,.08),
+    0 0 9px rgba(199,110,79,.42),
+    0 2px 6px rgba(87,52,39,.20);
+  transform:translateZ(0);
+}
+.cartdot{top:10px;right:12px}
+.belldot{top:8px;right:9px}
+body.dark .softdot{
+  border-color:rgba(255,235,220,.28);
+  background:
+    radial-gradient(circle at 35% 32%, rgba(255,236,220,.72) 0 11%, rgba(255,236,220,0) 12%),
+    radial-gradient(circle at 50% 52%, rgba(213,137,103,.96) 0%, rgba(185,103,76,.94) 60%, rgba(126,72,55,.98) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,235,220,.06),
+    0 0 10px rgba(205,126,91,.34),
+    0 2px 7px rgba(0,0,0,.32);
+}
 
 /* ---- foglio notifiche ---- */
 
@@ -2685,7 +2711,7 @@ export default function App() {
         <div className="tb-right">
           {user && (
             <button className="tb-btn bell" onClick={openNotifs} aria-label="Notifiche">
-              <Bell />{unread > 0 && <span className="matdot belldot" />}
+              <Bell />{unread > 0 && <span className="softdot belldot" />}
             </button>
           )}
           {user ? (
@@ -2787,7 +2813,7 @@ export default function App() {
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
-          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon />{cartCount > 0 && <span className="matdot cartdot" />}</button>
+          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon />{cartCount > 0 && <span className="softdot cartdot" />}</button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
