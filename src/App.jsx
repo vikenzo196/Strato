@@ -1423,6 +1423,65 @@ body.dark .sheetclose{
 .dkick{font-weight:700;letter-spacing:.12em;color:rgba(166,84,53,.85)}
 
 
+
+/* ===================== HOME ONLY — ingresso più lento e più ampio ===================== */
+@keyframes homeViewIn {
+  from {
+    opacity: 0;
+    transform: translateY(13px) scale(.998);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.homeview,
+.screen.homeview,
+.homeScreen,
+.screen.homeScreen{
+  animation: homeViewIn .58s cubic-bezier(.19,.85,.25,1) both!important;
+}
+
+.homeview .hero,
+.homeview .heroCard,
+.homeview .heroCopy,
+.homeview .sectionTitle,
+.homeview .grid,
+.homeview .card,
+.homeScreen .hero,
+.homeScreen .heroCard,
+.homeScreen .heroCopy,
+.homeScreen .sectionTitle,
+.homeScreen .grid,
+.homeScreen .card{
+  animation-duration:.62s!important;
+  animation-timing-function:cubic-bezier(.19,.85,.25,1)!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview,
+  .screen.homeview,
+  .homeScreen,
+  .screen.homeScreen,
+  .homeview .hero,
+  .homeview .heroCard,
+  .homeview .heroCopy,
+  .homeview .sectionTitle,
+  .homeview .grid,
+  .homeview .card,
+  .homeScreen .hero,
+  .homeScreen .heroCard,
+  .homeScreen .heroCopy,
+  .homeScreen .sectionTitle,
+  .homeScreen .grid,
+  .homeScreen .card{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+
+
 /* ===================== STRATO MOTION TUNING — soft premium ingressi ===================== */
 :root{
   --strato-ease-soft:cubic-bezier(.19,.85,.25,1);
@@ -2974,7 +3033,7 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   const { tap } = useHaptic();
   const heroLkRef = useRef(null);
   return (
-    <section className="screen on">
+    <section className="screen on homeview">
       <div className="px">
         <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
         <div className="kick homekick">A COLPO D'OCCHIO</div>
