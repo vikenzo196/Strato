@@ -1612,36 +1612,44 @@ body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
 .cartview .crow:active,
 .updatesview .notifrow:active{transform:scale(.992)}
 /* Carrello: header sullo stesso asse di Esplora, Piaciuti e Ordini.
-   La dock resta senza badge: il carrello è una sezione, non un contatore. */
+   Tile più editoriale: miniatura centrata, quantità e prezzo sulla stessa linea. */
 .cartview .title.cartPageTitle{margin:10px -14px 4px}
 .cartPageSub{margin:0 -14px 16px;color:var(--soft);font-size:13.5px;line-height:1.45}
 .cartview .cartitems{display:grid;gap:14px}
 .cartview .crow.cartrow{
-  align-items:flex-start;
-  gap:15px;
-  padding:16px;
+  display:grid;
+  grid-template-columns:76px minmax(0,1fr);
+  grid-template-rows:auto auto auto;
+  align-items:center;
+  column-gap:15px;
+  row-gap:9px;
+  padding:17px;
   margin-bottom:0;
   border-radius:25px;
-  min-height:124px;
+  min-height:132px;
 }
 .cartview .crow.cartrow img.cartThumb{
-  width:70px;
-  height:70px;
-  border-radius:18px;
+  grid-column:1;
+  grid-row:1 / 3;
+  justify-self:center;
+  align-self:center;
+  width:76px;
+  height:76px;
+  border-radius:19px;
   box-shadow:0 8px 20px rgba(74,45,28,.10);
 }
-.cartMain{flex:1;min-width:0;display:grid;gap:9px;align-self:stretch}
-.cartTopLine{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cartMain{display:contents;min-width:0}
+.cartTopLine{grid-column:2;grid-row:1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-width:0}
 .cartTextBlock{min-width:0;flex:1;padding-top:1px}
 .cartview .cartName{font-size:15.5px;line-height:1.18;letter-spacing:-.01em;padding-right:2px}
 .cartColor{margin-top:4px;font-size:12.5px;line-height:1.35;color:var(--soft);font-weight:400}
 .cartColor span{font-weight:400;color:var(--soft)}
-.cartBottomLine{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:2px}
-.cartQty{flex:none;margin-top:0;align-self:flex-end}
+.cartOptions{grid-column:2;grid-row:2;display:grid;gap:5px;margin-top:1px;min-width:0}
+.cartBottomLine{grid-column:1 / -1;grid-row:3;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;padding-top:2px}
+.cartQty{flex:none;margin-top:0;align-self:center;justify-self:start}
 .cartview .cartQty button{width:28px;height:28px;border-radius:10px;font-size:16px;background:rgba(246,239,228,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 body.dark .cartview .cartQty button{background:rgba(55,42,34,.58)}
 .cartview .cartQty span{min-width:16px;font-size:13px;font-weight:700}
-.cartOptions{display:grid;gap:5px;margin-top:1px}
 .cartOptionRow{display:flex;align-items:center;gap:7px;color:var(--soft);font-size:12.5px;line-height:1.35}
 .cartOptionIcon{width:18px;height:18px;border-radius:9px;display:grid;place-items:center;flex:none;color:rgba(166,84,53,.88);background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.12)}
 .cartOptionIcon svg{width:13px;height:13px;stroke:currentColor}
