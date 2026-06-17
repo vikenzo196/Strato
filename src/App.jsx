@@ -1422,6 +1422,98 @@ body.dark .sheetclose{
 /* dkick: categoria leggermente alleggerita */
 .dkick{font-weight:700;letter-spacing:.12em;color:rgba(166,84,53,.85)}
 
+
+/* ===================== STRATO MOTION TUNING — soft premium ingressi ===================== */
+:root{
+  --strato-ease-soft:cubic-bezier(.19,.85,.25,1);
+  --strato-view-dur:.46s;
+  --strato-item-dur:.54s;
+}
+
+.appview{
+  animation-duration:var(--strato-view-dur)!important;
+  animation-timing-function:var(--strato-ease-soft)!important;
+}
+
+.viewStage,
+.productview,
+.cartview,
+.ordersview,
+.updatesview,
+.adminProductView{
+  animation-duration:var(--strato-view-dur)!important;
+  animation-timing-function:var(--strato-ease-soft)!important;
+}
+
+.productview .dphoto,
+.productview .dinfo,
+.productview .dopts,
+.productview .buybox,
+.cartview .cartPageTitle,
+.cartview .crow,
+.cartview .ctotal,
+.ordersview .title,
+.ordersview .filters,
+.ordersview .orderTile,
+.ordersview .ordercard,
+.updatesview .notifhead,
+.updatesview .notifrow,
+.adminProductView .adminProductCard,
+.adminProductView .field,
+.adminProductView .qsend{
+  animation-duration:var(--strato-item-dur)!important;
+  animation-timing-function:var(--strato-ease-soft)!important;
+}
+
+.productview .dinfo,
+.cartview .crow,
+.ordersview .orderTile,
+.ordersview .ordercard,
+.updatesview .notifrow,
+.adminProductView .field{
+  animation-delay:.04s;
+}
+
+.productview .dopts,
+.cartview .ctotal,
+.adminProductView .qsend{
+  animation-delay:.08s;
+}
+
+.productview .buybox{
+  animation-delay:.11s;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .appview,
+  .viewStage,
+  .productview,
+  .cartview,
+  .ordersview,
+  .updatesview,
+  .adminProductView,
+  .productview .dphoto,
+  .productview .dinfo,
+  .productview .dopts,
+  .productview .buybox,
+  .cartview .cartPageTitle,
+  .cartview .crow,
+  .cartview .ctotal,
+  .ordersview .title,
+  .ordersview .filters,
+  .ordersview .orderTile,
+  .ordersview .ordercard,
+  .updatesview .notifhead,
+  .updatesview .notifrow,
+  .adminProductView .adminProductCard,
+  .adminProductView .field,
+  .adminProductView .qsend{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+
+
 /* ===================== VISTE INTERNE — no sheet per prodotto, carrello, aggiornamenti ===================== */
 .appview{padding:0 18px 12px;animation:scrIn .3s cubic-bezier(.22,1,.36,1) both}
 .viewhead{display:flex;align-items:flex-start;gap:13px;margin:4px 0 16px}
