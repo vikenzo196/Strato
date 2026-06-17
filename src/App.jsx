@@ -568,7 +568,7 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 .tb-back svg{width:22px;height:22px;stroke:var(--text)}
 .tb-btn.cart{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1)}
 .tb-btn.cart svg{width:23px;height:23px;stroke:var(--text);fill:none}
-.tb-btn.cart .cbadge{display:grid}
+.tb-btn.cart .cbadge{display:none!important}
 .tb-right{gap:10px}
 
 /* ---- parallasse leggera su scroll (solo immagine hero) ---- */
@@ -860,9 +860,15 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 @media(max-width:360px){.dock.dock5 .dnav{width:46px}}
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
-.cartbadge{display:none}
+.cartbadge{display:none!important}
 .cartdot{position:absolute;top:8px;right:calc(50% - 15px);width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,236,212,.95) 0 12%,rgba(199,125,107,.92) 38%,rgba(166,84,53,.88) 100%);border:1px solid rgba(255,238,218,.64);box-shadow:0 2px 6px rgba(92,54,34,.22),inset 0 1px 0 rgba(255,255,255,.46);z-index:3}
 body.dark .cartdot{background:radial-gradient(circle at 35% 30%,rgba(255,218,188,.78) 0 12%,rgba(209,124,86,.88) 42%,rgba(132,78,55,.92) 100%);border-color:rgba(255,226,198,.28);box-shadow:0 2px 7px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,240,220,.20)}
+/* Hard kill legacy numeric cart badges: Strato usa solo il punto materico. */
+.dnav.cart .cbadge,
+.dnav.cart .cartbadge,
+.tb-btn.cart .cbadge,
+.tb-btn.cart .cartbadge{display:none!important}
+
 .dnav.profile svg{stroke:var(--icon)}
 .dnav.profile.act svg{stroke:var(--accent)}
 
