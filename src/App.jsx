@@ -1604,6 +1604,40 @@ body.dark .cartview .crow,
 body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
 .cartview .crow:active,
 .updatesview .notifrow:active{transform:scale(.992)}
+.cartview .title.cartPageTitle{margin:10px 4px 4px}
+.cartPageSub{margin:0 4px 16px;color:var(--soft);font-size:13.5px;line-height:1.45}
+.cartview .cartitems{display:grid;gap:14px}
+.cartview .crow.cartrow{
+  align-items:flex-start;
+  gap:14px;
+  padding:14px;
+  margin-bottom:0;
+  border-radius:24px;
+  min-height:116px;
+}
+.cartview .crow.cartrow img.cartThumb{
+  width:68px;
+  height:68px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(74,45,28,.10);
+}
+.cartMain{flex:1;min-width:0;display:grid;gap:9px;align-self:stretch}
+.cartTopLine{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.cartTextBlock{min-width:0;flex:1;padding-top:1px}
+.cartview .cartName{font-size:15.5px;line-height:1.18;letter-spacing:-.01em}
+.cartColor{margin-top:4px;font-size:12.5px;line-height:1.35;color:var(--soft)}
+.cartColor strong{font-weight:650;color:var(--text)}
+.cartQty{flex:none;margin-top:0}
+.cartview .cartQty button{width:28px;height:28px;border-radius:10px;font-size:16px;background:rgba(246,239,228,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+body.dark .cartview .cartQty button{background:rgba(55,42,34,.58)}
+.cartview .cartQty span{min-width:16px;font-size:13px;font-weight:700}
+.cartOptions{display:grid;gap:5px;margin-top:1px}
+.cartOptionRow{display:flex;align-items:center;gap:7px;color:var(--soft);font-size:12.5px;line-height:1.35}
+.cartOptionIcon{width:18px;height:18px;border-radius:9px;display:grid;place-items:center;flex:none;color:rgba(166,84,53,.88);background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.12)}
+.cartOptionIcon svg{width:13px;height:13px;stroke:currentColor}
+.cartOptionDot{width:5px;height:5px;border-radius:50%;background:currentColor;display:block;opacity:.72}
+.cartItemPrice{justify-self:end;align-self:end;margin-top:2px;color:var(--text);font-size:15px;font-weight:720;letter-spacing:-.015em;font-variant-numeric:tabular-nums}
+body.dark .cartOptionIcon{color:rgba(224,157,126,.92);background:rgba(199,125,107,.12);border-color:rgba(199,125,107,.16)}
 .cartnote{margin:8px 2px 0;color:var(--soft);font-size:13px;line-height:1.45;text-align:center}
 .updatesview .cempty{line-height:1.55;color:var(--soft)}
 .updatesview .notifhead{margin-bottom:14px}
@@ -3124,15 +3158,44 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
 /* ---- CARRELLO ---- */
 
 function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
+  const cartOptionKind = (label) => {
+    const l = String(label || "").toLowerCase();
+    if (l.includes("cavo")) return "cable";
+    if (l.includes("lampadina")) return "bulb";
+    if (l.includes("portalampada")) return "holder";
+    return "addon";
+  };
+  const cartOptionLabel = (label) => {
+    const raw = String(label || "").trim();
+    const l = raw.toLowerCase();
+    if (!raw) return "";
+    if (l.includes("cavo in tessuto") || l.includes("cavo intrecciato")) return "Cavo in tessuto - incluso";
+    if (l.includes("cavo normale") || l.includes("cavo standard")) return "Cavo standard - incluso";
+    if (l.includes("portalampada premium") || l.includes("con portalampada") || l === "portalampada") return "Portalampada premium - incluso";
+    if (l.includes("portalampada standard") || l.includes("senza portalampada")) return "Portalampada standard - incluso";
+    if (l.includes("con lampadina") || l === "lampadina") return "Con lampadina";
+    if (l.includes("senza lampadina")) return "Senza lampadina";
+    if (l.startsWith("cavo ")) return "Cavo " + raw.slice(5) + " - incluso";
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  };
+  const cartOptionIcon = (kind) => {
+    if (kind === "cable") return <IcoCable />;
+    if (kind === "bulb") return <IcoBulb />;
+    if (kind === "holder") return <IcoHolder />;
+    return <span className="cartOptionDot" aria-hidden="true" />;
+  };
+  const cartOptionRows = (c) => {
+    const fromOpt = String(c.opt || "")
+      .split("·")
+      .map((x) => x.trim())
+      .filter(Boolean);
+    if (fromOpt.length) return fromOpt.map((label) => ({ label: cartOptionLabel(label), kind: cartOptionKind(label) })).filter((x) => x.label);
+    return (c.adds || []).map((a) => ({ label: cartOptionLabel(a.label), kind: cartOptionKind(a.label) })).filter((x) => x.label);
+  };
   return (
     <section className="screen on appview cartview" aria-label="Carrello">
-      <div className="viewhead">
-        <div>
-          <div className="vieweyebrow">Richiesta</div>
-          <h2 className="viewtitle">Carrello</h2>
-          <p className="viewsub">Controlla i dettagli della tua scelta.</p>
-        </div>
-      </div>
+      <h2 className="title px cartPageTitle"><span className="ticon"><CartIcon /></span>Carrello</h2>
+      <p className="cartPageSub px">Controlla i dettagli della tua scelta.</p>
       <div className="cartview-card">
         <div className="cartitems">
           {cart.length === 0 && (
@@ -3141,17 +3204,34 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
               <button className="cartempty-action" onClick={onGoExplore}>Esplora gli oggetti</button>
             </>
           )}
-          {cart.map((c, i) => (
-            <div className="crow" key={c.key}>
-              <img src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
-              <div className="cinfo">
-                <div className="cn">{c.t}</div>
-                <div className="cp">{c.col}{c.opt ? " · " + c.opt : ""}</div>
-                <div className="cprice">{eur(c.price)} · tot {eur(c.price * c.qty)}</div>
+          {cart.map((c, i) => {
+            const opts = cartOptionRows(c);
+            return (
+              <div className="crow cartrow" key={c.key}>
+                <img className="cartThumb" src={c.img || gimg(c.a || "#cfc4b4", c.b || "#9a8d79")} alt="" />
+                <div className="cartMain">
+                  <div className="cartTopLine">
+                    <div className="cartTextBlock">
+                      <div className="cn cartName">{c.t}</div>
+                      {c.col && <div className="cartColor">Colore: <strong>{c.col}</strong></div>}
+                    </div>
+                    <div className="qstep csmall cartQty"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
+                  </div>
+                  {opts.length > 0 && (
+                    <div className="cartOptions" aria-label="Aggiunte e configurazione">
+                      {opts.map((opt, k) => (
+                        <div className="cartOptionRow" key={k}>
+                          <span className="cartOptionIcon">{cartOptionIcon(opt.kind)}</span>
+                          <span>{opt.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="cartItemPrice">{eur(c.price * c.qty)}</div>
+                </div>
               </div>
-              <div className="qstep csmall"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="cttot"><span>Totale</span><span>{eur(total)}</span></div>
         {cart.length > 0 && <>
