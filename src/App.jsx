@@ -494,6 +494,13 @@ body.dark .pcard{background:rgba(90,64,48,.28);border-color:rgba(199,125,107,.22
 .upbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--strokeSoft);background:var(--glassDock);display:grid;place-items:center;cursor:pointer;color:var(--text)}
 .coldel{width:36px;height:36px;border-radius:10px;border:1px solid var(--strokeSoft);background:var(--glass2);color:#c0392b;display:grid;place-items:center;cursor:pointer;margin-left:auto}
 .addcolor{display:flex;align-items:center;gap:7px;background:none;border:1px dashed var(--strokeSoft);border-radius:12px;padding:10px 14px;color:var(--soft);font-family:inherit;font-weight:600;cursor:pointer;margin:2px 0 12px}
+.adminProductView{padding-bottom:calc(90px + env(safe-area-inset-bottom, 0px))}
+.adminProductCard{margin:0 14px;padding:18px;border-radius:30px;overflow:visible}
+.adminProductHead{margin-bottom:12px}
+.adminProductTitle{display:flex;align-items:center;gap:10px;margin:4px 0 12px;color:var(--text);font-size:28px;line-height:1.05;letter-spacing:-.62px}
+.adminProductTitle svg{width:22px;height:22px;color:var(--accent)}
+.adminProductCard .qsend,.adminProductCard .delbtn{width:100%;margin:12px 0 0}
+.adminProductCard .addcolor{width:100%;justify-content:center;margin:4px 0 12px}
 .saveaddons{margin-top:8px;background:var(--glassDock);border:1px solid var(--strokeSoft);border-radius:11px;padding:9px 14px;color:var(--text);font-family:inherit;font-weight:600;cursor:pointer}
 .elecedit{margin-top:14px;background:none;border:none;color:var(--soft);font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer;padding:2px 0}
 .card{opacity:1}
@@ -1158,9 +1165,9 @@ body.dark .orderDetailThumb{box-shadow:0 10px 26px rgba(0,0,0,.28),inset 0 1px 0
 .orderOptionIcon{width:22px;height:22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.16)}
 .orderOptionIcon svg{width:14px;height:14px;stroke:currentColor}
 .orderOptionDot{width:5px;height:5px;border-radius:999px;background:currentColor;display:block;opacity:.8}
-.orderDetailItemPrice{display:inline-flex;align-items:center;justify-content:center;margin-top:13px;padding:8px 12px;border-radius:999px;background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.16);color:var(--text);font-size:16.5px;font-weight:760;letter-spacing:-.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.20)}
+.orderDetailItemPrice{display:block;margin-top:14px;padding:0;border:0;background:transparent;color:var(--text);font-size:17px;font-weight:760;letter-spacing:-.2px;box-shadow:none}
 body.dark .orderOptionIcon{background:rgba(199,125,107,.13);border-color:rgba(199,125,107,.24);color:#D99A82}
-body.dark .orderDetailItemPrice{background:rgba(199,125,107,.12);border-color:rgba(199,125,107,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+body.dark .orderDetailItemPrice{background:transparent;border-color:transparent;box-shadow:none}
 .orderDetailConfig{display:none}
 .orderDetailCard .ibd{display:none}
 .orderDetailCard .ibd span:first-child{color:var(--soft)}
@@ -2127,7 +2134,7 @@ export default function App() {
   };
 
   /* ---- scroll lock: quando uno sheet è aperto blocca lo scroll del body ---- */
-  const anySheetOpen = !!(editing || editingCat);
+  const anySheetOpen = !!editingCat;
   useEffect(() => {
     if (!anySheetOpen) return;
     const html = document.documentElement;
@@ -2512,7 +2519,7 @@ export default function App() {
   /* ---- navigazione ---- */
   const open = (t) => {
     if ((t === "orders" || t === "profile" || t === "liked") && !user) { setAuthGate(t === "orders" ? "per vedere i tuoi ordini" : (t === "liked" ? "per vedere i tuoi preferiti" : "per accedere al profilo")); return; }
-    setDetailId(null); setInvId(null); setTab(t); window.scrollTo(0, 0);
+    setDetailId(null); setInvId(null); setEditing(null); setTab(t); window.scrollTo(0, 0);
   };
 
   const allNotifs = orders
@@ -2538,7 +2545,7 @@ export default function App() {
     return (<><style>{CSS}</style><Bg /><Raw html={GRADS_SVG} /><div className="boot">Strato…</div></>);
   }
 
-  const adminEdit = isAdmin ? (prod) => { setDetailId(null); setEditing(prod); } : undefined;
+  const adminEdit = isAdmin ? (prod) => { setDetailId(null); setInvId(null); setEditing(prod); } : undefined;
   const deletePrint = async (id) => {
     try {
       await supabase.from("print_colors").delete().eq("print_id", id);
@@ -2574,8 +2581,8 @@ export default function App() {
 
       <div className="topscrim" aria-hidden="true" />
       <header className="topbar">
-        {(detailId || inv)
-          ? <button className="tb-btn left tb-back" onClick={() => detailId ? setDetailId(null) : setInvId(null)} aria-label="Torna indietro"><ChevronLeft /></button>
+        {(detailId || inv || editing)
+          ? <button className="tb-btn left tb-back" onClick={() => detailId ? setDetailId(null) : (inv ? setInvId(null) : setEditing(null))} aria-label="Torna indietro"><ChevronLeft /></button>
           : <div className="tb-spacer" />}
         <div className="brand2"><span className="mk"><Box /></span>Strato</div>
         <div className="tb-right">
@@ -2595,7 +2602,15 @@ export default function App() {
       </header>
 
       <main className="wrap">
-        {detail ? (
+        {editing ? (
+          <AdminProduct
+            editing={editing.id ? editing : null} cats={cats}
+            onClose={() => setEditing(null)}
+            onSaved={async () => { await Promise.all([loadPrints(), loadCats()]); setEditing(null); toast("Salvato"); }}
+            onDelete={deletePrint}
+            user={user} toast={toast}
+          />
+        ) : detail ? (
           <Detail
             key={detail.id} p={detail} cats={cats} prints={prints}
             onClose={() => setDetailId(null)} onOpen={openDetail}
@@ -2702,15 +2717,6 @@ export default function App() {
         />
       )}
 
-      {editing && (
-        <AdminProduct
-          editing={editing.id ? editing : null} cats={cats}
-          onClose={() => setEditing(null)}
-          onSaved={async () => { await Promise.all([loadPrints(), loadCats()]); setEditing(null); toast("Salvato"); }}
-          onDelete={deletePrint}
-          user={user} toast={toast}
-        />
-      )}
 
       {editingCat && (
         <CategoryEditor cat={editingCat.id ? editingCat : null} onClose={() => setEditingCat(null)} onSave={saveCategory} onDelete={deleteCategory} />
@@ -2893,13 +2899,14 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const c = p.cols[ci] || p.cols[0];
   const adds = [];
   if (p.isElectrical) {
-    if (cable === "Intrecciato") adds.push({ label: "Cavo intrecciato", amt: Number(ad.braided) || 0 });
+    if (cable === "Intrecciato") adds.push({ label: "Cavo in tessuto", amt: Number(ad.braided) || 0 });
     if (bulb) adds.push({ label: "Lampadina", amt: Number(ad.bulb) || 0 });
-    if (holder) adds.push({ label: "Portalampada", amt: Number(ad.holder) || 0 });
+    if (holder) adds.push({ label: "Portalampada premium", amt: Number(ad.holder) || 0 });
   }
   const unit = p.price + adds.reduce((s, x) => s + x.amt, 0);
+  const cableText = cable === "Intrecciato" ? "in tessuto" : "standard";
   const optLabel = p.isElectrical
-    ? "Cavo " + cable.toLowerCase() + " · " + (bulb ? "con" : "senza") + " lampadina · " + (holder ? "con" : "senza") + " portalampada"
+    ? "Cavo " + cableText + " · " + (bulb ? "Con lampadina" : "Senza lampadina") + " · " + (holder ? "Portalampada premium" : "Portalampada standard")
     : "";
 
   const doAdd = (e) => {
@@ -2975,8 +2982,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                         className={cable === "Intrecciato" ? "on" : ""}
                         onClick={() => setCable("Intrecciato")}
                         aria-pressed={cable === "Intrecciato"}
-                        aria-label={"Cavo tessuto intrecciato, più " + eur(ad.braided)}
-                      ><span className="segopt">Tessuto intrecciato</span><i>+{eur(ad.braided)}</i></button>
+                        aria-label={"Cavo in tessuto, più " + eur(ad.braided)}
+                      ><span className="segopt">In tessuto</span><i>+{eur(ad.braided)}</i></button>
                     )}
                   </div>
                 </div>
@@ -3002,9 +3009,9 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
                     <button className="elecedit" onClick={() => setEditP(!editP)}>✎ Prezzi aggiunte</button>
                     {editP && (
                       <div className="elecprices">
-                        <div className="epp"><span>Cavo intrecciato</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.braided} onChange={(e) => setAd({ ...ad, braided: e.target.value })} /> €</span></div>
+                        <div className="epp"><span>Cavo in tessuto</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.braided} onChange={(e) => setAd({ ...ad, braided: e.target.value })} /> €</span></div>
                         <div className="epp"><span>Lampadina</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.bulb} onChange={(e) => setAd({ ...ad, bulb: e.target.value })} /> €</span></div>
-                        <div className="epp"><span>Portalampada</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.holder} onChange={(e) => setAd({ ...ad, holder: e.target.value })} /> €</span></div>
+                        <div className="epp"><span>Portalampada premium</span><span className="eur"><input type="number" min="0" step="0.5" value={ad.holder} onChange={(e) => setAd({ ...ad, holder: e.target.value })} /> €</span></div>
                         <button className="saveaddons" onClick={saveAddons}>Salva prezzi</button>
                       </div>
                     )}
@@ -3208,11 +3215,15 @@ function OrderDetailView({ o, isAdmin, onDelete }) {
     const raw = String(label || "").trim();
     const l = raw.toLowerCase();
     if (!raw) return "";
-    if (l.includes("senza lampadina")) return "Lampadina non inclusa";
-    if (l.includes("con lampadina")) return "Lampadina inclusa";
-    if (l.includes("senza portalampada")) return "Portalampada non incluso";
-    if (l.includes("con portalampada")) return "Portalampada incluso";
-    if (l.startsWith("cavo ")) return "Cavo " + raw.slice(5);
+    if (l.includes("senza lampadina")) return "Senza lampadina";
+    if (l.includes("con lampadina") || l === "lampadina") return "Con lampadina";
+    if (l.includes("senza portalampada")) return "Portalampada standard - incluso";
+    if (l.includes("con portalampada")) return "Portalampada premium - incluso";
+    if (l.includes("portalampada premium") || l === "portalampada") return "Portalampada premium - incluso";
+    if (l.includes("portalampada standard")) return "Portalampada standard - incluso";
+    if (l.includes("cavo normale") || l.includes("cavo standard")) return "Cavo standard - incluso";
+    if (l.includes("cavo in tessuto") || l.includes("cavo intrecciato")) return "Cavo in tessuto - incluso";
+    if (l.startsWith("cavo ")) return "Cavo " + raw.slice(5) + " - incluso";
     return raw.charAt(0).toUpperCase() + raw.slice(1);
   };
   const optionIcon = (kind) => {
@@ -3732,10 +3743,12 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
   };
 
   return (
-    <div className="ipick on">
-      <div className="sheet admin">
-        <button className="sheetclose" onClick={onClose}><ChevronDown /></button>
-        <h4><Pencil /> {editing ? "Modifica prodotto" : "Nuovo prodotto"}</h4>
+    <section className="screen on appview productview productview--clean adminProductView" aria-label={editing ? "Modifica prodotto" : "Nuovo prodotto"}>
+      <div className="detailview-card adminProductCard">
+        <div className="adminProductHead">
+          <div className="dkick">{editing ? "Modifica articolo" : "Nuovo articolo"}</div>
+          <h2 className="adminProductTitle"><Pencil /> {editing ? "Modifica prodotto" : "Nuovo prodotto"}</h2>
+        </div>
         <div className="afield"><label>Titolo</label><input value={f.title} onChange={(e) => upd("title", e.target.value)} /></div>
         <div className="afrow">
           <div className="afield"><label>Prezzo (€)</label><input type="number" step="0.5" value={f.price} onChange={(e) => upd("price", e.target.value)} /></div>
@@ -3752,11 +3765,11 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
         <label className="achk"><input type="checkbox" checked={f.is_electrical} onChange={(e) => upd("is_electrical", e.target.checked)} /> Articolo a corrente (aggiunte elettriche)</label>
         {f.is_electrical && (
           <>
-            <label className="achk"><input type="checkbox" checked={f.allow_braided} onChange={(e) => upd("allow_braided", e.target.checked)} /> Permetti cavo intrecciato (altrimenti solo Normale)</label>
+            <label className="achk"><input type="checkbox" checked={f.allow_braided} onChange={(e) => upd("allow_braided", e.target.checked)} /> Permetti cavo in tessuto (altrimenti solo Normale)</label>
             <div className="afrow3">
-              {f.allow_braided && <div className="afield"><label>Cavo intrecciato +€</label><input type="number" step="0.5" value={f.addon_braided} onChange={(e) => upd("addon_braided", e.target.value)} /></div>}
+              {f.allow_braided && <div className="afield"><label>Cavo in tessuto +€</label><input type="number" step="0.5" value={f.addon_braided} onChange={(e) => upd("addon_braided", e.target.value)} /></div>}
               <div className="afield"><label>Lampadina +€</label><input type="number" step="0.5" value={f.addon_bulb} onChange={(e) => upd("addon_bulb", e.target.value)} /></div>
-              <div className="afield"><label>Portalampada +€</label><input type="number" step="0.5" value={f.addon_holder} onChange={(e) => upd("addon_holder", e.target.value)} /></div>
+              <div className="afield"><label>Portalampada premium +€</label><input type="number" step="0.5" value={f.addon_holder} onChange={(e) => upd("addon_holder", e.target.value)} /></div>
             </div>
           </>
         )}
@@ -3790,7 +3803,7 @@ function AdminProduct({ editing, cats, onClose, onSaved, onDelete, user, toast }
           <button className="delbtn" onClick={() => { if (window.confirm("Eliminare definitivamente questo prodotto? L'azione è irreversibile.")) onDelete(editing.id); }}><Trash2 /> Elimina prodotto</button>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 
