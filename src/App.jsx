@@ -2061,7 +2061,7 @@ body.dark .tb-btn.bell{
 
 /* Gli elementi sotto la hero non devono animarsi mentre l'utente può iniziare a scrollare. */
 .homeview .grid,
-.homeview .grid .card:not(.home-motion-card){
+.homeview .grid .card{
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2187,7 +2187,7 @@ body.dark .tb-btn.bell{
 
 /* La griglia e le card restano ferme: niente cascata pesante durante lo scroll iniziale. */
 .homeview .grid,
-.homeview .grid .card:not(.home-motion-card){
+.homeview .grid .card{
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2289,7 +2289,7 @@ body.dark .tb-btn.bell{
 
 /* Mantieni esplicitamente ferme griglia e card prodotto. */
 .homeview .grid,
-.homeview .grid .card:not(.home-motion-card){
+.homeview .grid .card{
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2441,140 +2441,107 @@ body.dark .tb-btn.bell{
 
 
 
-/* ===================== HOME MOTION — instant start + liked-style first cards =====================
-   Tutte le animazioni Home partono subito all'ingresso.
-   Le prime 2 card usano un ingresso morbido tipo Piaciuti, senza animare tutta la griglia. */
 
-@keyframes homeLikedCardIn{
-  from{
-    opacity:.94;
-    transform:translate3d(0,8px,0);
-  }
-  to{
-    opacity:1;
-    transform:translate3d(0,0,0);
+
+/* ===================== HOME GRID WRAP — liked motion model =====================
+   Segue il modello reale di Piaciuti:
+   wrapper dedicato + .card.in + likedCardIn + stagger.
+   Solo le prime 2 card Home si animano; dalla terza in poi restano statiche. */
+
+.home-grid-wrap{
+  padding:0 18px;
+}
+
+.home-grid-wrap .grid{
+  gap:16px;
+}
+
+/* Override mirato del blocco statico Home, solo dentro questo wrapper. */
+.homeview .home-grid-wrap .grid .card.in{
+  animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) both!important;
+  opacity:1;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+/* Stagger identico nella logica di Piaciuti, ma limitato alle prime due. */
+.homeview .home-grid-wrap .grid .card.in:nth-child(1){
+  animation-delay:0ms!important;
+}
+
+.homeview .home-grid-wrap .grid .card.in:nth-child(2){
+  animation-delay:40ms!important;
+}
+
+/* Dalla terza in poi: statiche per preservare scroll fluido. */
+.homeview .home-grid-wrap .grid .card.in:nth-child(n+3){
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+  will-change:auto!important;
+}
+
+.homeview.motionDone .home-grid-wrap .grid .card.in:nth-child(1),
+.homeview.motionDone .home-grid-wrap .grid .card.in:nth-child(2){
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .home-grid-wrap .grid .card.in{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
   }
 }
 
-/* Testi/pulsanti hero: nessun delay percettibile. */
+
+/* ===================== HOME MOTION — slower instant timing =====================
+   Partenza immediata, durata più distesa.
+   Non cambia struttura, scroll, hero image, layout o logiche. */
+
+/* Testi Home: stessa animazione approvata, solo più lenta. */
 .homeview > .px .hero{
+  animation-duration:1.24s!important;
   animation-delay:0s!important;
 }
 
 .homeview > .px .homekick{
-  animation-delay:0s!important;
-}
-
-.homeview .herocard{
+  animation-duration:1.16s!important;
   animation-delay:0s!important;
 }
 
 .homeview .herocard .herotag{
+  animation-duration:1.16s!important;
   animation-delay:0s!important;
 }
 
 .homeview .herocard .lk,
 .homeview .herocard .cedit{
+  animation-duration:1.10s!important;
   animation-delay:0s!important;
 }
 
 .homeview .home-sec-title{
+  animation-duration:1.12s!important;
   animation-delay:0s!important;
 }
 
-/* Prime due card prodotto: target robusto anche se il wrapper non si chiama .grid. */
-.homeview .card:nth-of-type(1),
-.homeview .card:nth-of-type(2){
-  animation:homeLikedCardIn .68s cubic-bezier(.12,.72,.22,1) 0s both!important;
-  will-change:transform, opacity;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
+/* Prime 2 card Home: modello Piaciuti, ma più disteso. */
+.homeview .home-grid-wrap .grid .card.in:nth-child(1){
+  animation:likedCardIn .68s cubic-bezier(.22,1,.36,1) 0ms both!important;
 }
 
-/* Se esiste un wrapper .grid, mantieni comunque tutte le altre statiche. */
-.homeview .grid .card:nth-child(n+3),
-.homeview .card:nth-of-type(n+3){
+.homeview .home-grid-wrap .grid .card.in:nth-child(2){
+  animation:likedCardIn .72s cubic-bezier(.22,1,.36,1) 40ms both!important;
+}
+
+/* Dalla terza in poi resta tutto statico. */
+.homeview .home-grid-wrap .grid .card.in:nth-child(n+3){
   animation:none!important;
   transform:none!important;
   opacity:1!important;
   will-change:auto!important;
-}
-
-.homeview.motionDone .card:nth-of-type(1),
-.homeview.motionDone .card:nth-of-type(2){
-  will-change:auto!important;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .homeview > .px .hero,
-  .homeview > .px .homekick,
-  .homeview .herocard,
-  .homeview .herocard .herotag,
-  .homeview .herocard .lk,
-  .homeview .herocard .cedit,
-  .homeview .home-sec-title,
-  .homeview .card:nth-of-type(1),
-  .homeview .card:nth-of-type(2){
-    animation:none!important;
-    transform:none!important;
-    opacity:1!important;
-    will-change:auto!important;
-  }
-}
-
-
-
-
-/* ===================== HOME FIRST TILES — unblocked liked motion =====================
-   Correzione: le prime 2 tile Home non vengono più bloccate dalle regole statiche.
-   Usano la stessa animazione base delle card in Piaciuti, con partenza immediata. */
-
-@keyframes homeTileLikedMotionFallback{
-  from{
-    opacity:0;
-    transform:translate3d(0,8px,0);
-  }
-  to{
-    opacity:1;
-    transform:translate3d(0,0,0);
-  }
-}
-
-/* Escludi solo le tile animate dal blocco statico della Home. */
-.homeview .grid .card.home-motion-card{
-  animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) 0s both!important;
-  opacity:1;
-  will-change:transform, opacity!important;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-/* Se likedCardIn non fosse disponibile in qualche build, questa regola resta compatibile come backup visivo. */
-@supports not (animation-timeline: auto){
-  .homeview .grid .card.home-motion-card{
-    animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) 0s both!important;
-  }
-}
-
-.homeview.motionDone .grid .card.home-motion-card{
-  will-change:auto!important;
-}
-
-/* Tutte le altre card Home restano ferme. */
-.homeview .grid .card:not(.home-motion-card){
-  animation:none!important;
-  transform:none!important;
-  opacity:1!important;
-  will-change:auto!important;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .homeview .grid .card.home-motion-card{
-    animation:none!important;
-    transform:none!important;
-    opacity:1!important;
-    will-change:auto!important;
-  }
 }
 
 `;
@@ -3001,7 +2968,7 @@ const HeartI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" str
 const OrdersI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h4" /></svg>);
 
 /* ============================ CARD ==================================== */
-function Card({ p, liked, onLike, onOpen, onEdit, context, motionSlot = 0 }) {
+function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   const c0 = p.cols[0];
   const { tap } = useHaptic();
   const lkRef = useRef(null);
@@ -3015,7 +2982,7 @@ function Card({ p, liked, onLike, onOpen, onEdit, context, motionSlot = 0 }) {
   };
   return (
     <div
-      className={"card in" + (isLiked ? " liked-card" : "") + (motionSlot ? " home-motion-card home-motion-card-" + motionSlot : "")}
+      className={"card in" + (isLiked ? " liked-card" : "")}
       onClick={onOpen}
       role="button"
       tabIndex={0}
@@ -3760,9 +3727,11 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
       )}
       <h2 className="title px home-sec-title">Lasciati ispirare</h2>
       {prints.length === 0 && <p className="empty">Nessun prodotto ancora.</p>}
-      <Grid>
-        {prints.map((p, i) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" motionSlot={i < 2 ? i + 1 : 0} />)}
-      </Grid>
+      <div className="home-grid-wrap">
+        <Grid>
+          {prints.map((p) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" />)}
+        </Grid>
+      </div>
     </section>
   );
 }
