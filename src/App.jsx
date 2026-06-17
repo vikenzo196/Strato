@@ -1086,6 +1086,20 @@ body.dark .ostat--completed{background:rgba(127,143,108,.20);color:#B7C6A3;borde
 body.dark .orderCompleteBtn{background:rgba(127,143,108,.18);border-color:rgba(127,143,108,.38);color:#B7C6A3}
 .orderCard--pend .orderSide{min-width:88px}
 
+
+.orderFilters{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;margin:18px 14px 0;padding:4px 2px 6px}
+.orderFilters::-webkit-scrollbar{display:none}
+.orderFilter{flex:none;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:999px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.01em;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi);transition:background .22s ease,color .22s ease,border-color .22s ease,transform .14s ease}
+.orderFilter:active{transform:scale(.97)}
+.orderFilter.on{background:rgba(199,125,107,.15);border-color:rgba(199,125,107,.30);color:var(--accent)}
+body.dark .orderFilter.on{background:rgba(199,125,107,.18);border-color:rgba(199,125,107,.34);color:#D99A82}
+.orderFilter em{font-style:normal;min-width:19px;height:19px;padding:0 6px;border-radius:999px;background:rgba(126,104,92,.10);color:var(--soft);display:inline-grid;place-items:center;font-size:11px;font-weight:760}
+.orderFilter.on em{background:rgba(199,125,107,.18);color:var(--accent)}
+body.dark .orderFilter em{background:rgba(255,255,255,.06)}
+body.dark .orderFilter.on em{background:rgba(199,125,107,.20);color:#D99A82}
+.ordersFilterEmpty{margin:28px 22px 0;color:var(--soft);font-size:14px;line-height:1.45;text-align:center}
+.orderArchivedHint{font-size:11px;font-weight:720;color:var(--soft);opacity:.72}
+
 .ordersEmpty{min-height:calc(100vh - 360px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 28px 42px;gap:16px}
 .ordersEmptyIcon{width:60px;height:60px;border-radius:50%;background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.20);display:grid;place-items:center;color:var(--accent);opacity:.76}
 .ordersEmptyIcon svg{width:27px;height:27px;stroke:var(--accent)}
@@ -1145,6 +1159,22 @@ body.dark .orderDetailThumb{box-shadow:0 10px 26px rgba(0,0,0,.28),inset 0 1px 0
 .orderDetailCard .isub{padding-top:7px;margin-top:4px}
 .orderDetailCard .invtotrow{margin-top:16px;padding-top:16px;border-top:1px solid var(--strokeSoft)}
 .orderDetailCard .invtot{font-size:31px;letter-spacing:-.62px}
+
+.orderDanger{margin:14px 14px 0}
+.orderDangerBtn{width:100%;border:1px solid rgba(126,104,92,.22);background:rgba(126,104,92,.08);color:var(--soft);border-radius:18px;padding:13px 16px;font-family:inherit;font-size:13px;font-weight:720;cursor:pointer;transition:background .22s ease,transform .14s ease,color .22s ease,border-color .22s ease}
+.orderDangerBtn:active{transform:scale(.985)}
+.orderDangerBtn:hover{background:rgba(126,104,92,.12);border-color:rgba(126,104,92,.30);color:var(--text)}
+.orderDangerConfirm{border:1px solid rgba(126,104,92,.26);background:var(--glass2);border-radius:22px;padding:15px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:inset 0 1px 0 var(--hi)}
+.orderDangerConfirm b{display:block;font-size:13.5px;color:var(--text);letter-spacing:-.1px;margin-bottom:3px}
+.orderDangerConfirm span{display:block;font-size:12.5px;color:var(--soft);line-height:1.35}
+.orderDangerActions{display:flex;gap:8px;align-items:center;flex:none}
+.orderDangerCancel,.orderDangerDelete{border-radius:14px;padding:10px 12px;font-family:inherit;font-weight:760;font-size:12.5px;cursor:pointer;transition:transform .14s ease,background .22s ease}
+.orderDangerCancel{border:1px solid var(--strokeSoft);background:var(--glass);color:var(--soft)}
+.orderDangerDelete{border:1px solid rgba(99,68,51,.32);background:rgba(99,68,51,.13);color:#634433}
+.orderDangerCancel:active,.orderDangerDelete:active{transform:scale(.96)}
+body.dark .orderDangerDelete{background:rgba(192,153,127,.14);border-color:rgba(192,153,127,.30);color:#D8B89F}
+@media(max-width:390px){.orderDangerConfirm{align-items:stretch;flex-direction:column}.orderDangerActions{justify-content:flex-end}}
+
 .orderDetailNote{margin:14px 14px 0;padding:14px 16px;border-radius:22px;border:1px solid var(--strokeSoft);background:var(--glass2);color:var(--soft);font-size:13.5px;line-height:1.45}
 @media(max-width:390px){
   .orderDetailCard{margin:0 10px;padding:15px;border-radius:27px}
@@ -2461,14 +2491,14 @@ export default function App() {
   };
 
   const deleteOrder = async (id) => {
-    if (!window.confirm("Eliminare definitivamente questo ordine rifiutato? L'azione è irreversibile.")) return;
     const r1 = await supabase.from("order_items").delete().eq("order_id", id);
-    if (r1.error) { toast("Errore: " + r1.error.message); return; }
+    if (r1.error) { toast("Errore: " + r1.error.message); return false; }
     const { data, error } = await supabase.from("orders").delete().eq("id", id).select("id");
-    if (error) { toast("Errore: " + error.message); return; }
-    if (!data || data.length === 0) { toast("Eliminazione bloccata: manca una policy DELETE per gli admin (RLS)."); return; }
+    if (error) { toast("Errore: " + error.message); return false; }
+    if (!data || data.length === 0) { toast("Eliminazione bloccata: manca una policy DELETE per gli admin (RLS)."); return false; }
     await loadOrders();
     toast("Ordine eliminato");
+    return true;
   };
 
   /* ---- navigazione ---- */
@@ -2607,7 +2637,7 @@ export default function App() {
             )}
             {tab === "orders" && (
               inv ? (
-                <OrderDetailView o={inv} isAdmin={isAdmin} />
+                <OrderDetailView o={inv} isAdmin={isAdmin} onDelete={async (id) => { const ok = await deleteOrder(id); if (ok) setInvId(null); }} />
               ) : (
                 <OrdersTab orders={orders} isAdmin={isAdmin} onOpenOrder={(id) => { setInvId(id); window.scrollTo(0, 0); }}
                   onConfirm={(id) => setOrderStatus(id, "confirmed")} onReject={(id) => setOrderStatus(id, "rejected")} onComplete={(id) => setOrderStatus(id, "completed")}
@@ -3148,7 +3178,7 @@ function AuthGate({ reason, onGoogle, onClose }) {
   );
 }
 
-function OrderDetailView({ o, isAdmin }) {
+function OrderDetailView({ o, isAdmin, onDelete }) {
   const STATUS_META = {
     confirmed: { label: "Confermato", cls: "ostat--confirmed", note: "Ordine confermato." },
     pending:   { label: "Inviato", cls: "ostat--pending", note: "in attesa di conferma." },
@@ -3156,6 +3186,7 @@ function OrderDetailView({ o, isAdmin }) {
     rejected:  { label: "Non accettato", cls: "ostat--rejected", note: "Questa richiesta non può essere confermata in questo momento." },
   };
   const st = STATUS_META[o.status] || STATUS_META.pending;
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
   const customerName = o.who || "Cliente";
   const dateLine = o.date ? fmtDate(o.date).replace(/ /g, "/") : "Dettaglio della richiesta";
   return (
@@ -3208,6 +3239,24 @@ function OrderDetailView({ o, isAdmin }) {
         </div>
         <div className="cttot invtotrow"><span>Totale</span><span className="invtot">{eur(o.total)}</span></div>
       </div>
+      {isAdmin && onDelete && (
+        <div className={"orderDanger" + (deleteConfirm ? " confirming" : "")}>
+          {!deleteConfirm ? (
+            <button type="button" className="orderDangerBtn" onClick={() => setDeleteConfirm(true)}>Elimina ordine</button>
+          ) : (
+            <div className="orderDangerConfirm">
+              <div>
+                <b>Eliminare definitivamente?</b>
+                <span>Questa azione non può essere annullata.</span>
+              </div>
+              <div className="orderDangerActions">
+                <button type="button" className="orderDangerCancel" onClick={() => setDeleteConfirm(false)}>Annulla</button>
+                <button type="button" className="orderDangerDelete" onClick={() => onDelete(o.id)}>Elimina</button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       {!isAdmin && <p className="orderDetailNote">{st.note}</p>}
     </section>
   );
@@ -3266,11 +3315,31 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onComple
 
   const oTitle = (o) => o.items.length > 1 ? o.items.length + " articoli" : (o.items[0] ? o.items[0].t : "Ordine");
   const setRef = (id) => (el) => { orderRefs.current[id] = el; };
+  const [filter, setFilter] = useState("all");
 
   const pend = orders.filter((o) => o.status === "pending");
   const conf = orders.filter((o) => o.status === "confirmed");
   const comp = orders.filter((o) => o.status === "completed");
   const rej  = orders.filter((o) => o.status === "rejected");
+
+  const filters = isAdmin
+    ? [
+        ["all", "Tutti", orders.length],
+        ["pending", "Da accettare", pend.length],
+        ["confirmed", "Accettati", conf.length],
+        ["completed", "Completati", comp.length],
+        ["rejected", "Rifiutati", rej.length],
+      ]
+    : [
+        ["all", "Tutti", orders.length],
+        ["pending", "Inviati", pend.length],
+        ["confirmed", "Accettati", conf.length],
+        ["completed", "Completati", comp.length],
+      ];
+
+  useEffect(() => {
+    if (!filters.some(([id]) => id === filter)) setFilter("all");
+  }, [isAdmin, orders.length]);
 
   const STATUS_META = {
     confirmed: { label: "Confermato",  cls: "ostat--confirmed", note: "Ordine confermato." },
@@ -3311,9 +3380,7 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onComple
           {isAdmin && o.status === "confirmed" && onComplete && (
             <button className="orderCompleteBtn" onClick={(e) => { e.stopPropagation(); onComplete(o.id); }}>Completa</button>
           )}
-          {isAdmin && o.status === "rejected" && (
-            <button className="orddel" onClick={(e) => { e.stopPropagation(); onDelete(o.id); }} aria-label="Elimina ordine"><Trash /></button>
-          )}
+
         </div>
       </article>
     );
@@ -3352,7 +3419,11 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onComple
     );
   };
 
-  const allOrdered = [...pend, ...conf, ...comp, ...rej];
+  const ordered = [...pend, ...conf, ...comp, ...rej];
+  const visibleOrders = filter === "all" ? ordered : ordered.filter((o) => o.status === filter);
+  const emptyFilterText = isAdmin
+    ? { pending: "Nessuna richiesta da accettare.", confirmed: "Nessun ordine accettato.", completed: "Nessun ordine completato.", rejected: "Nessun ordine rifiutato." }
+    : { pending: "Nessun ordine inviato.", confirmed: "Nessun ordine accettato.", completed: "Nessun ordine completato." };
 
   return (
     <section className="screen on ordersPage">
@@ -3372,12 +3443,32 @@ function OrdersTab({ orders, isAdmin, onOpenOrder, onConfirm, onReject, onComple
       )}
 
       {orders.length > 0 && (
-        <div className="ordersList">
-          {pend.map((o, i) => <PendCard key={o.id} o={o} idx={i} />)}
-          {conf.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length} />)}
-          {comp.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length} />)}
-          {rej.map((o, i) => <OrderCard key={o.id} o={o} idx={i + pend.length + conf.length + comp.length} />)}
-        </div>
+        <>
+          <div className="orderFilters" role="tablist" aria-label="Filtra ordini">
+            {filters.map(([id, label, count]) => (
+              <button
+                key={id}
+                type="button"
+                className={"orderFilter" + (filter === id ? " on" : "")}
+                onClick={() => setFilter(id)}
+                aria-pressed={filter === id}
+              >
+                <span>{label}</span>
+                <em>{count}</em>
+              </button>
+            ))}
+          </div>
+          {visibleOrders.length === 0 ? (
+            <p className="ordersFilterEmpty">{emptyFilterText[filter] || "Nessun ordine in questa sezione."}</p>
+          ) : (
+            <div className="ordersList">
+              {visibleOrders.map((o, i) => o.status === "pending"
+                ? <PendCard key={o.id} o={o} idx={i} />
+                : <OrderCard key={o.id} o={o} idx={i} />
+              )}
+            </div>
+          )}
+        </>
       )}
 
       <div className="ordersBottomSpacer" />
