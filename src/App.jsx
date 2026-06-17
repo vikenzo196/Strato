@@ -2310,6 +2310,82 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME TEXT TIMING — smoother curve =====================
+   Solo tempi/easing/movimento/opacità iniziale dei testi Home.
+   Nessuna modifica a scroll, struttura, hero image, griglia o card. */
+@keyframes homeTextTimingSmoothIn{
+  from{
+    opacity:.18;
+    transform:translate3d(0,6px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+@keyframes homeSmallTextTimingSmoothIn{
+  from{
+    opacity:.22;
+    transform:translate3d(0,5px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+.homeview > .px .hero{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .04s both!important;
+  will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview > .px .homekick{
+  animation:homeSmallTextTimingSmoothIn .92s cubic-bezier(.12,.72,.22,1) .13s both!important;
+  will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .herocard .herotag{
+  animation:homeSmallTextTimingSmoothIn .90s cubic-bezier(.12,.72,.22,1) .19s both!important;
+  will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .herocard .lk,
+.homeview .herocard .cedit{
+  animation:homeSmallTextTimingSmoothIn .82s cubic-bezier(.12,.72,.22,1) .22s both!important;
+  will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .home-sec-title{
+  animation:homeTextTimingSmoothIn .82s cubic-bezier(.12,.72,.22,1) .26s both!important;
+  will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview > .px .hero,
+  .homeview > .px .homekick,
+  .homeview .herocard .herotag,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit,
+  .homeview .home-sec-title{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
