@@ -1440,7 +1440,7 @@ body.dark .sheetclose{
 .screen.homeview,
 .homeScreen,
 .screen.homeScreen{
-  animation: homeViewIn .58s cubic-bezier(.19,.85,.25,1) both!important;
+  animation: homeViewIn .68s cubic-bezier(.19,.85,.25,1) both!important;
 }
 
 .homeview .hero,
@@ -1455,8 +1455,24 @@ body.dark .sheetclose{
 .homeScreen .sectionTitle,
 .homeScreen .grid,
 .homeScreen .card{
-  animation-duration:.62s!important;
+  animation-duration:.74s!important;
   animation-timing-function:cubic-bezier(.19,.85,.25,1)!important;
+}
+
+
+.homeview .hero,
+.homeview .heroCard,
+.homeview .heroCopy,
+.homeview .sectionTitle,
+.homeview .grid,
+.homeview .card,
+.homeScreen .hero,
+.homeScreen .heroCard,
+.homeScreen .heroCopy,
+.homeScreen .sectionTitle,
+.homeScreen .grid,
+.homeScreen .card{
+  animation-delay:.07s!important;
 }
 
 @media (prefers-reduced-motion: reduce){
