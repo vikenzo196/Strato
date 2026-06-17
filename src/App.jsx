@@ -1142,21 +1142,29 @@ body.dark .orderDetailCard{box-shadow:0 14px 38px rgba(0,0,0,.25),inset 0 1px 0 
 .orderDetailStatus .ostat{padding:7px 11px;font-size:10.5px}
 .orderDetailCard .invav{width:50px;height:50px}
 .orderDetailCard .invitems{margin-top:0}
-.orderDetailItem{padding:4px 0 16px;margin-bottom:2px;border-bottom:1px solid var(--strokeSoft)}
+.orderDetailItem{padding:6px 0 18px;margin-bottom:4px;border-bottom:1px solid var(--strokeSoft)}
 .orderDetailItem:last-child{margin-bottom:0}
-.orderDetailItemTop{display:grid;grid-template-columns:94px minmax(0,1fr);gap:14px;align-items:center;margin-bottom:16px}
+.orderDetailItemTop{display:grid;grid-template-columns:94px minmax(0,1fr);gap:14px;align-items:start;margin-bottom:0}
 .orderDetailThumb{width:94px;height:94px;border-radius:22px;object-fit:cover;border:1px solid var(--strokeSoft);box-shadow:0 8px 22px rgba(72,50,32,.14),inset 0 1px 0 rgba(255,255,255,.22);background:var(--glass2)}
 body.dark .orderDetailThumb{box-shadow:0 10px 26px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08)}
 .orderDetailProduct{min-width:0}
-.orderDetailProductLine{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
-.orderDetailProductName{font-size:22px;font-weight:780;letter-spacing:-.35px;line-height:1.12;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orderDetailProductLine{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.orderDetailProductName{font-size:22px;font-weight:780;letter-spacing:-.35px;line-height:1.12;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:normal;max-width:100%}
 .orderDetailQty{flex:none;font-size:13.5px;font-weight:650;color:var(--soft)}
 .orderDetailProductMeta{margin-top:8px;display:flex;flex-direction:column;gap:3px;font-size:13.5px;line-height:1.35;color:var(--soft);font-weight:430}
 .orderDetailProductMeta strong{color:var(--text);font-weight:650}
-.orderDetailConfig{margin-top:8px;font-size:12.8px;line-height:1.35;color:var(--soft);opacity:.9}
-.orderDetailCard .ibd{margin-left:0;padding:3px 0}
+.orderDetailOptions{margin-top:12px;display:flex;flex-direction:column;gap:7px;color:var(--soft);font-size:13.2px;line-height:1.35}
+.orderOptionRow{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:8px;min-height:22px}
+.orderOptionIcon{width:22px;height:22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent);background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.16)}
+.orderOptionIcon svg{width:14px;height:14px;stroke:currentColor}
+.orderOptionDot{width:5px;height:5px;border-radius:999px;background:currentColor;display:block;opacity:.8}
+.orderDetailItemPrice{display:inline-flex;align-items:center;justify-content:center;margin-top:13px;padding:8px 12px;border-radius:999px;background:rgba(199,125,107,.10);border:1px solid rgba(199,125,107,.16);color:var(--text);font-size:16.5px;font-weight:760;letter-spacing:-.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.20)}
+body.dark .orderOptionIcon{background:rgba(199,125,107,.13);border-color:rgba(199,125,107,.24);color:#D99A82}
+body.dark .orderDetailItemPrice{background:rgba(199,125,107,.12);border-color:rgba(199,125,107,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.orderDetailConfig{display:none}
+.orderDetailCard .ibd{display:none}
 .orderDetailCard .ibd span:first-child{color:var(--soft)}
-.orderDetailCard .isub{padding-top:7px;margin-top:4px}
+.orderDetailCard .isub{display:none}
 .orderDetailCard .invtotrow{margin-top:16px;padding-top:16px;border-top:1px solid var(--strokeSoft)}
 .orderDetailCard .invtot{font-size:31px;letter-spacing:-.62px}
 
@@ -3189,6 +3197,38 @@ function OrderDetailView({ o, isAdmin, onDelete }) {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const customerName = o.who || "Cliente";
   const dateLine = o.date ? fmtDate(o.date).replace(/ /g, "/") : "Dettaglio della richiesta";
+  const optionKind = (label) => {
+    const l = String(label || "").toLowerCase();
+    if (l.includes("cavo")) return "cable";
+    if (l.includes("lampadina")) return "bulb";
+    if (l.includes("portalampada")) return "holder";
+    return "addon";
+  };
+  const optionLabel = (label) => {
+    const raw = String(label || "").trim();
+    const l = raw.toLowerCase();
+    if (!raw) return "";
+    if (l.includes("senza lampadina")) return "Lampadina non inclusa";
+    if (l.includes("con lampadina")) return "Lampadina inclusa";
+    if (l.includes("senza portalampada")) return "Portalampada non incluso";
+    if (l.includes("con portalampada")) return "Portalampada incluso";
+    if (l.startsWith("cavo ")) return "Cavo " + raw.slice(5);
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  };
+  const optionIcon = (kind) => {
+    if (kind === "cable") return <IcoCable />;
+    if (kind === "bulb") return <IcoBulb />;
+    if (kind === "holder") return <IcoHolder />;
+    return <span className="orderOptionDot" aria-hidden="true" />;
+  };
+  const optionRows = (it) => {
+    const fromOpt = String(it.opt || "")
+      .split("·")
+      .map((x) => x.trim())
+      .filter(Boolean);
+    if (fromOpt.length) return fromOpt.map((label) => ({ label: optionLabel(label), kind: optionKind(label) }));
+    return (it.adds || []).map((a) => ({ label: optionLabel(a.label), kind: optionKind(a.label) })).filter((x) => x.label);
+  };
   return (
     <section className="screen on orderDetailPage">
       <div className="orderDetailHero px">
@@ -3207,10 +3247,9 @@ function OrderDetailView({ o, isAdmin, onDelete }) {
         </div>
         <div className="invitems">
           {o.items.map((it, i) => {
-            const base = it.base != null ? it.base : it.price;
-            const adds = it.adds || [];
             const material = it.material || "";
             const color = it.col || "";
+            const opts = optionRows(it);
             return (
               <div className="orderDetailItem" key={i}>
                 <div className="orderDetailItemTop">
@@ -3226,13 +3265,19 @@ function OrderDetailView({ o, isAdmin, onDelete }) {
                         {color && <span>Colore: <strong>{color}</strong></span>}
                       </div>
                     )}
-                    {it.opt && <div className="orderDetailConfig">{it.opt}</div>}
+                    {opts.length > 0 && (
+                      <div className="orderDetailOptions" aria-label="Aggiunte e configurazione">
+                        {opts.map((opt, k) => (
+                          <div className="orderOptionRow" key={k}>
+                            <span className="orderOptionIcon">{optionIcon(opt.kind)}</span>
+                            <span>{opt.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="orderDetailItemPrice">{eur(it.price * it.qty)}</div>
                   </div>
                 </div>
-                <div className="ibd"><span>Base</span><span>{eur(base)}</span></div>
-                {adds.map((a, k) => <div className="ibd" key={k}><span>+ {a.label}</span><span>+{eur(a.amt)}</span></div>)}
-                {adds.length > 0 && <div className="ibd ifin"><span>Prezzo unitario</span><span>{eur(it.price)}</span></div>}
-                <div className="ibd isub"><span>Subtotale{it.qty > 1 ? " (×" + it.qty + ")" : ""}</span><span>{eur(it.price * it.qty)}</span></div>
               </div>
             );
           })}
