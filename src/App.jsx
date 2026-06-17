@@ -194,16 +194,16 @@ const CSS = `
   .cathint{margin:16px 4px 14px;color:var(--soft,#9a8d7d);font-size:13px}
   .ipick{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .28s ease, background .28s ease, visibility .28s}
   .ipick.on{visibility:visible;opacity:1;pointer-events:auto;background:rgba(0,0,0,.4)}
-  .ipick .sheet{width:100%;max-width:520px;max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-radius:28px;border:1px solid var(--strokeSoft);box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);padding:16px 18px 20px;transform:translate3d(0,100%,0);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
+  .ipick .sheet{width:100%;max-width:520px;max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--glassDock);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-radius:28px;border:1px solid var(--strokeSoft);box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);padding:16px 18px 20px;transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
   .iplabel{display:block;font-size:12px;font-weight:700;color:var(--soft);letter-spacing:.05em;text-transform:uppercase;margin:6px 2px 8px}
   .catinput{width:100%;border:1px solid var(--strokeSoft);background:var(--glass2);border-radius:14px;padding:12px 14px;font-family:inherit;font-size:15px;color:var(--text);outline:none;margin-bottom:6px;box-shadow:inset 0 1px 0 var(--hi)}
   .catinput:focus{box-shadow:inset 0 1px 0 var(--hi),0 0 0 2px var(--text)}
   .iggroup{font-size:12px;font-weight:700;color:var(--soft);letter-spacing:.04em;text-transform:uppercase;margin:16px 2px 9px}
-  .ipick.on .sheet{transform:translate3d(0,0,0)}
+  .ipick.on .sheet{transform:translateY(0)}
   /* POPUP BENVENUTO / TEMA */
   .welcome{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,0);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .3s ease, background .3s ease, visibility .3s}
   .welcome.on{visibility:visible;opacity:1;pointer-events:auto;background:rgba(0,0,0,.46)}
-  .wcard{width:100%;max-width:420px;max-height:88vh;overflow-y:auto;border-radius:28px;padding:26px 22px 22px;background:var(--glassDock);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--strokeSoft);box-shadow:0 24px 60px rgba(0,0,0,.4);transform:translate3d(0,16px,0) scale(.98);transition:transform .34s cubic-bezier(.2,.8,.2,1)}
+  .wcard{width:100%;max-width:420px;max-height:88vh;overflow-y:auto;border-radius:28px;padding:26px 22px 22px;background:var(--glassDock);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid var(--strokeSoft);box-shadow:0 24px 60px rgba(0,0,0,.4);transform:translateY(16px) scale(.98);transition:transform .34s cubic-bezier(.2,.8,.2,1)}
   .welcome.on .wcard{transform:none}
   .wmk{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#C77D6B,#A65435);display:grid;place-items:center;color:#fff;margin:0 auto 14px;box-shadow:0 10px 24px var(--txtShadow),inset 0 1px 0 rgba(255,255,255,.6)}
   .wttl{font-family:'Inter',system-ui,sans-serif;font-weight:700;font-size:23px;text-align:center;color:var(--text);margin:0 0 5px}
@@ -370,8 +370,8 @@ const CSS = `
   .note{text-align:center;color:var(--faint);font-size:12.5px;margin:26px 0 0}
   .screen{display:none} .screen.on{display:block;animation:scrIn .3s cubic-bezier(.22,1,.36,1) both}
   @keyframes scrIn{from{opacity:0}to{opacity:1}}
-  @keyframes fu{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
-  @keyframes itemIn{from{opacity:0;transform:translate3d(0,18px,0) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  @keyframes itemIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
   .grid .card{opacity:0}
   .card.in,.cat.in,.ord.in,.banner.in{animation:itemIn .5s cubic-bezier(.2,.8,.25,1) both}
   svg{display:block}
@@ -400,7 +400,7 @@ body.dark .searchbox{background:rgba(199,125,107,.09);border-color:rgba(199,125,
 .empty{color:var(--faint);font-size:14px;padding:6px 18px}
 /* ---- PIACIUTI: empty state editoriale ---- */
 .liked-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:54vh;padding:0 36px;text-align:center;animation:likedEmptyIn .3s cubic-bezier(.22,1,.36,1) both}
-@keyframes likedEmptyIn{from{opacity:0;filter:blur(4px);transform:translate3d(0,8px,0)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes likedEmptyIn{from{opacity:0;filter:blur(4px);transform:translateY(8px)}to{opacity:1;filter:blur(0);transform:none}}
 .liked-empty-mark{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(199,125,107,.12);border:1.5px solid rgba(199,125,107,.22);margin:0 auto 32px;box-shadow:0 4px 18px rgba(199,125,107,.14)}
 .liked-empty-mark svg{width:24px;height:24px;stroke:#C77D6B;fill:rgba(199,125,107,.18)}
 .liked-empty-title{font-family:'Inter',system-ui,sans-serif;font-size:28px;font-weight:800;letter-spacing:-.6px;line-height:1.1;color:var(--text);margin:0 0 18px}
@@ -409,7 +409,7 @@ body.dark .searchbox{background:rgba(199,125,107,.09);border-color:rgba(199,125,
 .pwa-overlay{position:fixed;inset:0;z-index:300;background:rgba(45,36,32,.48);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;animation:pwaFade .3s cubic-bezier(.22,1,.36,1) both}
 @keyframes pwaFade{from{opacity:0}to{opacity:1}}
 .pwa-sheet{width:100%;max-width:500px;background:var(--sheetbg);border-radius:32px 32px 0 0;padding:24px 24px calc(28px + env(safe-area-inset-bottom));animation:pwaUp .32s cubic-bezier(.22,1,.36,1) both;box-shadow:0 -6px 48px rgba(45,36,32,.24);border-top:1px solid rgba(199,125,107,.14)}
-@keyframes pwaUp{from{transform:translate3d(0,100%,0);opacity:0}to{transform:none;opacity:1}}
+@keyframes pwaUp{from{transform:translateY(100%);opacity:0}to{transform:none;opacity:1}}
 .pwa-pill{width:36px;height:4px;border-radius:2px;background:rgba(199,125,107,.22);margin:0 auto 22px}
 .pwa-icon{width:68px;height:68px;border-radius:18px;display:block;margin:0 auto 18px;box-shadow:0 8px 24px rgba(45,36,32,.20)}
 .pwa-title{font-family:'Inter',system-ui,sans-serif;font-size:21px;font-weight:800;text-align:center;color:var(--text);letter-spacing:-.45px;line-height:1.2;margin:0 0 8px}
@@ -580,7 +580,7 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 
 /* ---- animazione apertura carrello dal basso ---- */
 .ipick.on .sheet{animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
-@keyframes sheetUp{from{transform:translate3d(0,100%,0)}to{transform:translate3d(0,0,0)}}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .ipick.on{animation:scrimIn .32s ease both}
 @keyframes scrimIn{from{background:rgba(0,0,0,0)}to{background:rgba(0,0,0,.4)}}
 
@@ -626,30 +626,30 @@ button:active{transform:scale(.93)}
 /* ---- chiusura carrello (slide-down + fade scrim) ---- */
 .ipick.on.closing .sheet{animation:sheetDown .34s cubic-bezier(.4,0,.7,.4) both}
 .ipick.on.closing{animation:scrimOut .34s ease both}
-@keyframes sheetDown{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,100%,0)}}
+@keyframes sheetDown{from{transform:translateY(0)}to{transform:translateY(100%)}}
 @keyframes scrimOut{from{background:rgba(0,0,0,.4)}to{background:rgba(0,0,0,0)}}
 
 /* ---- foglio dall'ALTO (notifiche): identico al carrello ma scende dall'alto ---- */
 .ipick.top{align-items:flex-start}
-.ipick.top .sheet{border-radius:28px;box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);transform:translate3d(0,-100%,0);padding:16px 18px 20px}
-.ipick.top.on .sheet{transform:translate3d(0,0,0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
+.ipick.top .sheet{border-radius:28px;box-shadow:0 8px 36px rgba(43,33,27,.30),0 2px 6px rgba(43,33,27,.14);transform:translateY(-100%);padding:16px 18px 20px}
+.ipick.top.on .sheet{transform:translateY(0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
 .ipick.top.on.closing .sheet{animation:sheetTopOut .34s cubic-bezier(.4,0,.7,.4) both}
-@keyframes sheetTopIn{from{transform:translate3d(0,-100%,0)}to{transform:translate3d(0,0,0)}}
-@keyframes sheetTopOut{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-100%,0)}}
+@keyframes sheetTopIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+@keyframes sheetTopOut{from{transform:translateY(0)}to{transform:translateY(-100%)}}
 .ipick.top .sheetclose{margin:14px auto 0}
 
 /* ---- wrapper foglio: porta l'animazione di slide; il pulsante di chiusura
    sta FUORI dal foglio (sopra per carrello/dettaglio, sotto per notifiche) ---- */
-.ipick .sheetwrap{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;transform:translate3d(0,100%,0);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
-.ipick.on .sheetwrap{transform:translate3d(0,0,0);animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
+.ipick .sheetwrap{width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;transform:translateY(100%);transition:transform .36s cubic-bezier(.2,.8,.2,1)}
+.ipick.on .sheetwrap{transform:translateY(0);animation:sheetUp .4s cubic-bezier(.2,.85,.25,1) both}
 .ipick.on.closing .sheetwrap{animation:sheetDown .34s cubic-bezier(.4,0,.7,.4) both}
 /* il foglio dentro al wrapper non slitta da solo (slitta il wrapper) */
 .sheetwrap .sheet{transform:none!important;animation:none!important;max-width:100%}
 /* pulsante chiusura sopra al foglio (carrello/dettaglio) */
 .sheetwrap>.sheetclose{margin:0 0 12px}
 /* variante dall'alto: wrapper scende dall'alto e il pulsante sta SOTTO il foglio */
-.ipick.top .sheetwrap{transform:translate3d(0,-100%,0)}
-.ipick.top.on .sheetwrap{transform:translate3d(0,0,0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
+.ipick.top .sheetwrap{transform:translateY(-100%)}
+.ipick.top.on .sheetwrap{transform:translateY(0);animation:sheetTopIn .4s cubic-bezier(.2,.85,.25,1) both}
 .ipick.top.on.closing .sheetwrap{animation:sheetTopOut .34s cubic-bezier(.4,0,.7,.4) both}
 .ipick.top .sheetwrap>.sheetclose{margin:12px 0 0}
 
@@ -953,7 +953,7 @@ body.dark .softdot{
 .dswbox.ro{cursor:default}
 
 /* ===================== PROFILO — premium ===================== */
-@keyframes profIn{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+@keyframes profIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .profilePage .title{margin-bottom:20px}
 .profileHero,.profilePage .profileSection,.profileLogoutWrap{animation:profIn .5s cubic-bezier(.22,1,.36,1) both}
 .profilePage .profileSection:nth-of-type(1){animation-delay:.04s}
@@ -1071,7 +1071,7 @@ body.dark .liked-configbtn:hover{background:rgba(199,125,107,.10)}
 .liked-card .lk:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--accent)}
 
 /* Stagger ingresso card piaciuti */
-@keyframes likedCardIn{from{opacity:0;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+@keyframes likedCardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .liked-grid-wrap .card.in{animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) both}
 .liked-grid-wrap .card:nth-child(1){animation-delay:0ms}
 .liked-grid-wrap .card:nth-child(2){animation-delay:40ms}
@@ -1333,7 +1333,7 @@ body.dark .card{box-shadow:0 1px 3px rgba(0,0,0,.32),0 14px 34px rgba(0,0,0,.44)
 .card{box-shadow:0 1px 3px rgba(70,45,30,.04),0 8px 22px var(--shcol),0 20px 44px rgba(90,55,35,.04)}
 
 /* ===================== SCREEN TRANSITION — translateY leggero ===================== */
-@keyframes scrIn{from{opacity:0;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+@keyframes scrIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ===================== GLOBAL WRAP PADDING ===================== */
 /* .wrap ha già 132px → sufficiente per la dock. Qui solo sicurezza mobile. */
@@ -1428,11 +1428,11 @@ body.dark .sheetclose{
 @keyframes homeViewIn {
   from {
     opacity: 0;
-    transform: translate3d(0,13px,0) scale(.998);
+    transform: translateY(13px) scale(.998);
   }
   to {
     opacity: 1;
-    transform: translate3d(0,0,0) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -1737,17 +1737,17 @@ body.dark .eleccard{background:rgba(90,64,48,.12);border-color:rgba(199,125,107,
   transform-origin:50% 16%;
 }
 @keyframes viewIn{
-  from{opacity:0;transform:translate3d(0,10px,0) scale(.997);filter:blur(2px)}
+  from{opacity:0;transform:translateY(10px) scale(.997);filter:blur(2px)}
   70%{filter:blur(0)}
-  to{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+  to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
 }
 .viewhead{
   margin:6px 0 22px;
   animation:viewHeadIn .42s cubic-bezier(.22,.8,.26,1) .04s both;
 }
 @keyframes viewHeadIn{
-  from{opacity:0;transform:translate3d(0,8px,0)}
-  to{opacity:1;transform:translate3d(0,0,0)}
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
 }
 .vieweyebrow{letter-spacing:.16em;color:rgba(166,84,53,.78)}
 body.dark .vieweyebrow{color:rgba(230,160,121,.78)}
@@ -1777,7 +1777,7 @@ body.dark .detailview-card{
 .productview .dphoto{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .08s both}
 .productview .dopts{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .14s both}
 .productview .dbuy{animation:viewObjectIn .46s cubic-bezier(.22,.8,.26,1) .20s both}
-@keyframes viewObjectIn{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes viewObjectIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .productview .dimg{border-radius:28px;box-shadow:0 18px 48px rgba(74,45,28,.14)}
 body.dark .productview .dimg{box-shadow:0 22px 56px rgba(0,0,0,.42)}
 .productview .dttl{font-size:clamp(28px,8vw,38px);letter-spacing:-.045em;line-height:1.02;margin-top:6px}
@@ -1924,11 +1924,11 @@ body.dark .tb-btn.bell{
 @keyframes homeHeadlineEditorial {
   from {
     opacity: 0;
-    transform: translate3d(0,10px,0);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0,0,0);
+    transform: translateY(0);
   }
 }
 
@@ -1949,11 +1949,11 @@ body.dark .tb-btn.bell{
 @keyframes homeHeroTagEditorial {
   from {
     opacity: 0;
-    transform: translate3d(0,8px,0);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translate3d(0,0,0);
+    transform: translateY(0);
   }
 }
 
@@ -2029,217 +2029,120 @@ body.dark .tb-btn.bell{
 }
 
 
-/* ===================== GLOBAL MOTION COMPOSITOR — 120Hz safe =====================
-   Ottimizzazione controllata: non cambia tempi, movimento, layout o glass.
-   Prepara solo gli elementi animati durante il primo secondo della vista. */
-html.motion-boost .homeview .hero,
-html.motion-boost .homeview .herocard,
-html.motion-boost .homeview .herotag,
-html.motion-boost .homeview .lk,
-html.motion-boost .homeview .cedit,
-html.motion-boost .productview .dphoto,
-html.motion-boost .productview .dinfo,
-html.motion-boost .productview .dopts,
-html.motion-boost .productview .buybox,
-html.motion-boost .cartview .cartPageTitle,
-html.motion-boost .cartview .crow,
-html.motion-boost .cartview .ctotal,
-html.motion-boost .ordersview .title,
-html.motion-boost .ordersview .filters,
-html.motion-boost .ordersview .orderTile,
-html.motion-boost .ordersview .ordercard,
-html.motion-boost .updatesview .notifhead,
-html.motion-boost .updatesview .notifrow,
-html.motion-boost .adminProductView .adminProductCard,
-html.motion-boost .adminProductView .field,
-html.motion-boost .adminProductView .qsend{
-  will-change:transform, opacity;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  transform-style:preserve-3d;
-}
+/* ===================== HOME ANIMATION — scroll-safe v2 =====================
+   Base unica, niente motion layer duplicato.
+   La Home non anima più come grande contenitore scrollabile:
+   lo scroll resta libero mentre restano micro-ingressi su elementi leggeri. */
 
-/* Isolamento leggero degli elementi ripetuti: aiuta lo scroll senza creare layer permanenti. */
-.card,
-.cat,
-.herocard,
-.crow,
-.orderTile,
-.ordercard,
-.notifrow,
-.adminProductCard{
-  contain:layout paint;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-/* Immagini scrollabili più stabili durante gesture veloci. */
-.card img,
-.cat img,
-.herocard img,
-.crow img,
-.orderTile img,
-.ordercard img{
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  transform:translate3d(0,0,0);
-}
-
-/* Evita hit-test e selezioni inutili durante flick scroll su mobile. */
-.card,
-.cat,
-.herocard,
-.crow,
-.orderTile,
-.ordercard{
-  -webkit-tap-highlight-color:transparent;
-  user-select:none;
-  -webkit-user-select:none;
-}
-
-@media (prefers-reduced-motion: reduce){
-  html.motion-boost .homeview .hero,
-  html.motion-boost .homeview .herocard,
-  html.motion-boost .homeview .herotag,
-  html.motion-boost .homeview .lk,
-  html.motion-boost .homeview .cedit,
-  html.motion-boost .productview .dphoto,
-  html.motion-boost .productview .dinfo,
-  html.motion-boost .productview .dopts,
-  html.motion-boost .productview .buybox,
-  html.motion-boost .cartview .cartPageTitle,
-  html.motion-boost .cartview .crow,
-  html.motion-boost .cartview .ctotal,
-  html.motion-boost .ordersview .title,
-  html.motion-boost .ordersview .filters,
-  html.motion-boost .ordersview .orderTile,
-  html.motion-boost .ordersview .ordercard,
-  html.motion-boost .updatesview .notifhead,
-  html.motion-boost .updatesview .notifrow,
-  html.motion-boost .adminProductView .adminProductCard,
-  html.motion-boost .adminProductView .field,
-  html.motion-boost .adminProductView .qsend{
-    will-change:auto;
-  }
-}
-
-
-/* ===================== HOME MOTION LAYER — scroll layer separato =====================
-   La Home reale è subito stabile e scrollabile.
-   Il movimento iniziale vive su un layer visuale pointer-events:none,
-   così lo scroll non deve trascinarsi dietro il contenitore animato. */
-.homeMotionSplit{
-  position:relative;
+.homeview,
+.screen.homeview{
   animation:none!important;
   transform:none!important;
-  contain:layout paint style;
+  opacity:1!important;
+  will-change:auto!important;
+  contain:none!important;
 }
 
-/* La struttura reale mantiene spazio e layout, ma la parte hero compare quando il layer visuale finisce. */
-@keyframes homeRealCommit{
-  from{opacity:0}
-  to{opacity:1}
-}
-
-.homeMotionSplit > .homeRealHeroText,
-.homeMotionSplit > .homeRealHeroCard{
-  opacity:0;
-  animation:homeRealCommit .001s linear 1.06s both!important;
+/* Struttura e immagine hero sempre stabili: niente zoom, niente fade, niente blur. */
+.homeview .herocard{
+  animation:none!important;
+  opacity:1!important;
   transform:none!important;
-}
-
-.homeMotionSplit > .homeRealHeroText .hero,
-.homeMotionSplit > .homeRealHeroCard,
-.homeMotionSplit > .homeRealHeroCard .herotag,
-.homeMotionSplit > .homeRealHeroCard .lk,
-.homeMotionSplit > .homeRealHeroCard .cedit{
-  animation-name:none!important;
-  transform:none!important;
-}
-
-/* Layer visuale: non partecipa all'interazione, resta leggero e isolato. */
-@keyframes homeIntroLayerOut{
-  to{opacity:0;visibility:hidden}
-}
-
-.homeIntroLayer{
-  position:absolute;
-  z-index:4;
-  top:0;
-  left:0;
-  right:0;
-  pointer-events:none;
-  contain:layout paint style;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  transform:translate3d(0,0,0);
-  will-change:transform, opacity;
-  animation:homeIntroLayerOut .001s linear 1.10s forwards!important;
-}
-
-/* Reimpiego del ritmo approvato, ma sul layer visivo e non sul contenuto scrollabile reale. */
-.homeIntroLayer .homeIntroHeroText{
-  animation:homeViewIn .68s cubic-bezier(.19,.85,.25,1) both!important;
-  will-change:transform, opacity;
+  will-change:auto!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
 }
 
-.homeIntroLayer .homeIntroHeroText .hero{
-  animation:homeHeadlineEditorial .82s cubic-bezier(.19,.85,.25,1) .10s both!important;
-  will-change:transform, opacity;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-.homeIntroLayer .homeIntroHeroCard{
-  animation:homeViewIn .68s cubic-bezier(.19,.85,.25,1) .02s both!important;
-  will-change:transform, opacity;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  transform-origin:center center;
-}
-
-.homeIntroLayer .homeIntroHeroCard img{
+.homeview .herocard img{
   opacity:1!important;
   transform:scale(1.08)!important;
   transition:none!important;
   will-change:auto!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
 
-.homeIntroLayer .homeIntroHeroCard .herotag{
-  animation:homeHeroTagEditorial .78s cubic-bezier(.19,.85,.25,1) .28s both!important;
-  will-change:transform, opacity;
-}
-
-.homeIntroLayer .homeIntroHeroCard .lk,
-.homeIntroLayer .homeIntroHeroCard .cedit{
-  animation:homeHeroTagEditorial .70s cubic-bezier(.19,.85,.25,1) .34s both!important;
-  will-change:transform, opacity;
-}
-
-/* Sotto la hero, niente animazioni pesanti sullo scroll layer Home. */
-.homeMotionSplit > .home-sec-title,
-.homeMotionSplit > .grid,
-.homeMotionSplit > .grid .card{
+/* Gli elementi sotto la hero non devono animarsi mentre l'utente può iniziare a scrollare. */
+.homeview .home-sec-title,
+.homeview .grid,
+.homeview .grid .card{
   animation:none!important;
+  transform:none!important;
+  opacity:1!important;
   will-change:auto!important;
 }
 
-/* Dopo il primo frame, mantieni la card reale stabile e pronta. */
-.homeMotionSplit > .homeRealHeroCard img{
-  transform:scale(1.08)!important;
-  transition:none!important;
+/* Animazione percepita: solo elementi leggeri e sopra la hero. */
+@keyframes homeTextScrollSafeIn{
+  from{
+    opacity:0;
+    transform:translate3d(0,10px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+@keyframes homeSmallScrollSafeIn{
+  from{
+    opacity:0;
+    transform:translate3d(0,8px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+.homeview > .px .hero{
+  animation:homeTextScrollSafeIn .86s cubic-bezier(.19,.85,.25,1) .08s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview > .px .homekick{
+  animation:homeSmallScrollSafeIn .74s cubic-bezier(.19,.85,.25,1) .16s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .herocard .herotag{
+  animation:homeSmallScrollSafeIn .78s cubic-bezier(.19,.85,.25,1) .20s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .herocard .lk,
+.homeview .herocard .cedit{
+  animation:homeSmallScrollSafeIn .70s cubic-bezier(.19,.85,.25,1) .24s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+/* Dopo l'ingresso, non tenere layer inutili vivi. */
+.homeview.motionDone .hero,
+.homeview.motionDone .homekick,
+.homeview.motionDone .herotag,
+.homeview.motionDone .lk,
+.homeview.motionDone .cedit{
+  will-change:auto!important;
 }
 
 @media (prefers-reduced-motion: reduce){
-  .homeMotionSplit > .homeRealHeroText,
-  .homeMotionSplit > .homeRealHeroCard{
-    opacity:1!important;
+  .homeview > .px .hero,
+  .homeview > .px .homekick,
+  .homeview .herocard .herotag,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit{
     animation:none!important;
-  }
-  .homeIntroLayer{
-    display:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
   }
 }
 
@@ -2748,7 +2651,8 @@ export default function App() {
   const [theme, setTheme] = useState("auto"); // "light" | "dark" | "auto" (dispositivo)
   const [toasts, setToasts] = useState([]);
   const [q, setQ] = useState("");
-const isAdmin = user?.is_admin;
+
+  const isAdmin = user?.is_admin;
   const toast = (m) => {
     const id = Date.now() + Math.random();
     setToasts((t) => [...t, { id, m }]);
@@ -3395,34 +3299,26 @@ function Screen({ title, icon, children, heart, action }) {
 function Grid({ children }) { return <div className="grid">{children}</div>; }
 
 function Home({ prints, liked, onLike, onOpen, onEdit }) {
+  const homeRef = useRef(null);
   // Una sola tile in evidenza: articolo casuale, nuovo ad ogni refresh del sito.
   const hero = useMemo(() => (prints.length ? prints[Math.floor(Math.random() * prints.length)] : null), [prints.length]);
   const { tap } = useHaptic();
   const heroLkRef = useRef(null);
+  useEffect(() => {
+    const el = homeRef.current;
+    if (!el) return;
+    el.classList.remove("motionDone");
+    const t = window.setTimeout(() => el.classList.add("motionDone"), 1150);
+    return () => window.clearTimeout(t);
+  }, [hero?.id]);
   return (
-    <section className="screen on homeview homeMotionSplit">
-      <div className="homeIntroLayer" aria-hidden="true">
-        <div className="px homeIntroHeroText">
-          <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
-          <div className="kick homekick">A COLPO D'OCCHIO</div>
-        </div>
-        {hero && (
-          <div className="herocard homeIntroHeroCard">
-            <img src={colImg(hero.cols[0])} alt="" loading="eager" fetchPriority="high" decoding="async" />
-            <div className="lk homeIntroLike">
-              <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
-            </div>
-            <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
-            {onEdit && <div className="cedit hero"><Pencil /></div>}
-          </div>
-        )}
-      </div>
-      <div className="px homeRealHeroText">
+    <section ref={homeRef} className="screen on homeview">
+      <div className="px">
         <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
         <div className="kick homekick">A COLPO D'OCCHIO</div>
       </div>
       {hero && (
-        <div className="herocard homeRealHeroCard" key={hero.id} onClick={() => onOpen(hero.id)}>
+        <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
           <img src={colImg(hero.cols[0])} alt={hero.title} loading="eager" fetchPriority="high" decoding="async" />
           <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label={liked(hero.id) ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}>
             <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
