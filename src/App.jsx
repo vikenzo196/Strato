@@ -1997,6 +1997,24 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME HERO ONLY — immagine stabile =====================
+   Niente zoom e niente fade/opacità sulla card immagine hero.
+   Restano solo headline/tag/pulsanti con ingresso morbido. */
+.homeview .herocard,
+.homeScreen .herocard{
+  animation:none!important;
+  opacity:1!important;
+  transform:none!important;
+  will-change:auto!important;
+}
+
+.homeview .herocard img,
+.homeScreen .herocard img{
+  opacity:1!important;
+  will-change:auto!important;
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
