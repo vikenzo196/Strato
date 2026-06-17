@@ -2522,6 +2522,53 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME FIRST TILES — fixed deterministic classes =====================
+   Le prime 2 tile Home hanno classi dedicate, quindi l'animazione non dipende da nth-child/nth-of-type.
+   Motion uguale al linguaggio morbido delle card in Piaciuti, con partenza immediata. */
+@keyframes homeFirstTileInFixed{
+  from{
+    opacity:.94;
+    transform:translate3d(0,8px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+.homeview .home-motion-card{
+  animation:homeFirstTileInFixed .68s cubic-bezier(.12,.72,.22,1) 0s both!important;
+  will-change:transform, opacity!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .home-motion-card-2{
+  animation-duration:.70s!important;
+}
+
+/* Override delle regole precedenti che tenevano ferme le card Home. */
+.homeview .grid .home-motion-card,
+.homeview .grid .card.home-motion-card{
+  animation-name:homeFirstTileInFixed!important;
+  animation-delay:0s!important;
+  transform:translate3d(0,0,0);
+}
+
+.homeview.motionDone .home-motion-card{
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .home-motion-card{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2946,7 +2993,7 @@ const HeartI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" str
 const OrdersI = () => (<svg viewBox="0 0 24 24" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" /><path d="M14 2v5h5" /><path d="M9 13h6M9 17h4" /></svg>);
 
 /* ============================ CARD ==================================== */
-function Card({ p, liked, onLike, onOpen, onEdit, context }) {
+function Card({ p, liked, onLike, onOpen, onEdit, context, motionSlot = 0 }) {
   const c0 = p.cols[0];
   const { tap } = useHaptic();
   const lkRef = useRef(null);
@@ -2960,7 +3007,7 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   };
   return (
     <div
-      className={"card in" + (isLiked ? " liked-card" : "")}
+      className={"card in" + (isLiked ? " liked-card" : "") + (motionSlot ? " home-motion-card home-motion-card-" + motionSlot : "")}
       onClick={onOpen}
       role="button"
       tabIndex={0}
@@ -3706,7 +3753,7 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
       <h2 className="title px home-sec-title">Lasciati ispirare</h2>
       {prints.length === 0 && <p className="empty">Nessun prodotto ancora.</p>}
       <Grid>
-        {prints.map((p) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" />)}
+        {prints.map((p, i) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" motionSlot={i < 2 ? i + 1 : 0} />)}
       </Grid>
     </section>
   );
