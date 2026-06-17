@@ -1925,12 +1925,10 @@ body.dark .tb-btn.bell{
   from {
     opacity: 0;
     transform: translateY(10px);
-    filter: blur(1.2px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
@@ -1938,16 +1936,13 @@ body.dark .tb-btn.bell{
   from {
     opacity: .52;
     transform: scale(1.012);
-    filter: blur(2.2px) saturate(.96);
   }
   58% {
     opacity: .92;
-    filter: blur(.7px) saturate(1);
   }
   to {
     opacity: 1;
     transform: scale(1);
-    filter: blur(0) saturate(1);
   }
 }
 
@@ -1955,12 +1950,10 @@ body.dark .tb-btn.bell{
   from {
     opacity: 0;
     transform: translateY(8px);
-    filter: blur(1px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 
@@ -1973,7 +1966,7 @@ body.dark .tb-btn.bell{
 .homeScreen .herocard{
   animation: homeHeroCardEditorial .92s cubic-bezier(.19,.85,.25,1) .12s both!important;
   transform-origin:center center;
-  will-change:opacity, transform, filter;
+  will-change:opacity, transform;
 }
 
 .homeview .herocard .herotag,
@@ -2001,7 +1994,6 @@ body.dark .tb-btn.bell{
   .homeScreen .herocard .cedit{
     animation:none!important;
     transition:none!important;
-    filter:none!important;
   }
 }
 
