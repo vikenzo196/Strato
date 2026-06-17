@@ -874,7 +874,7 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1);color:var(--text)}
 .tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
 
-/* Badge v2 — punto morbido con glow, definito in CSS vettoriale */
+/* Badge v2 — punto frosted matte, definito in CSS vettoriale */
 .softdot{
   position:absolute;
   width:8px;
@@ -882,26 +882,28 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
   border-radius:50%;
   pointer-events:none;
   background:
-    radial-gradient(circle at 35% 32%, rgba(255,246,236,.88) 0 12%, rgba(255,246,236,0) 13%),
-    radial-gradient(circle at 50% 52%, rgba(207,125,97,.98) 0%, rgba(183,101,75,.96) 58%, rgba(132,75,58,.98) 100%);
-  border:1px solid rgba(255,244,235,.62);
+    linear-gradient(145deg, rgba(206,132,105,.74), rgba(155,96,73,.62)),
+    rgba(196,122,94,.42);
+  border:1px solid rgba(255,244,235,.38);
+  -webkit-backdrop-filter:blur(10px) saturate(135%);
+  backdrop-filter:blur(10px) saturate(135%);
   box-shadow:
-    0 0 0 1px rgba(96,58,42,.08),
-    0 0 9px rgba(199,110,79,.42),
-    0 2px 6px rgba(87,52,39,.20);
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 1px rgba(92,58,44,.10),
+    0 1px 4px rgba(90,55,42,.18);
   transform:translateZ(0);
 }
 .cartdot{top:10px;right:12px}
 .belldot{top:8px;right:9px}
 body.dark .softdot{
-  border-color:rgba(255,235,220,.28);
   background:
-    radial-gradient(circle at 35% 32%, rgba(255,236,220,.72) 0 11%, rgba(255,236,220,0) 12%),
-    radial-gradient(circle at 50% 52%, rgba(213,137,103,.96) 0%, rgba(185,103,76,.94) 60%, rgba(126,72,55,.98) 100%);
+    linear-gradient(145deg, rgba(207,132,101,.66), rgba(137,82,62,.56)),
+    rgba(184,105,78,.34);
+  border-color:rgba(255,235,220,.22);
   box-shadow:
-    0 0 0 1px rgba(255,235,220,.06),
-    0 0 10px rgba(205,126,91,.34),
-    0 2px 7px rgba(0,0,0,.32);
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 1px rgba(0,0,0,.16),
+    0 1px 5px rgba(0,0,0,.26);
 }
 
 /* ---- foglio notifiche ---- */
