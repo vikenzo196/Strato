@@ -2556,7 +2556,7 @@ body.dark .tb-btn.bell{
   display:flex;
   flex-direction:column;
   padding-bottom:0!important;
-  overflow:hidden;
+  overflow:visible;
   overscroll-behavior:none;
 }
 
@@ -2575,11 +2575,10 @@ body.dark .tb-btn.bell{
   position:relative;
   flex:1 1 auto;
   min-height:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:grid;
+  place-items:center;
   padding:0 12px 8px;
-  overflow:hidden;
+  overflow:visible;
   isolation:isolate;
   border-radius:38px;
 }
@@ -2600,7 +2599,7 @@ body.dark .tb-btn.bell{
   position:relative;
   z-index:2;
   width:min(100%, 390px);
-  min-height:100%;
+  min-height:0;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -2608,7 +2607,7 @@ body.dark .tb-btn.bell{
   text-align:center;
   margin:0;
   padding:6px 18px 14px;
-  transform:translateY(clamp(42px, 6svh, 92px));
+  transform:none;
 }
 
 .cartEmptyFullContent h3{
@@ -2641,12 +2640,13 @@ body.dark .tb-btn.bell{
   pointer-events:none;
   z-index:1;
   opacity:1;
+  --cart-art-shift-x:-14%;
 }
 
 .cartEmptyFullArt img{
   position:absolute;
   top:50%;
-  left:43%;
+  left:50%;
   width:100%;
   height:100%;
   object-fit:contain;
@@ -2654,7 +2654,7 @@ body.dark .tb-btn.bell{
   display:block;
   opacity:.94;
   filter:saturate(.85) contrast(1.02);
-  transform:translate(-50%, -50%);
+  transform:translate(calc(-50% + var(--cart-art-shift-x)), -50%);
   user-select:none;
   -webkit-user-drag:none;
 }
@@ -2709,7 +2709,7 @@ body.dark .cartEmptyFullCta{
 @media(max-height:720px){
   .cartemptypage .cartPageTitle{margin-bottom:0}
   .cartEmptyFull{padding-bottom:4px}
-  .cartEmptyFullContent{padding-top:2px;padding-bottom:10px;transform:translateY(clamp(22px, 4svh, 52px))}
+  .cartEmptyFullContent{padding-top:2px;padding-bottom:10px;transform:none}
   .cartEmptyFullContent h3{font-size:28px;margin-bottom:8px}
   .cartEmptyFullArt{width:clamp(310px, 98vw, 500px);height:clamp(198px, 33svh, 330px);margin:4px auto 8px}
   .cartEmptyFullCta{height:50px}
@@ -2724,7 +2724,7 @@ body.dark .cartEmptyFullCta{
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cartEmptyFullArt{transition:none}.cartEmptyFullArt img{transition:none;transform:translate(-50%, -50%)}.cartEmptyFullContent{transition:none}
+  .cartEmptyFullArt{transition:none}.cartEmptyFullArt img{transition:none;transform:translate(calc(-50% + var(--cart-art-shift-x)), -50%)}.cartEmptyFullContent{transition:none}
 }
 
 
