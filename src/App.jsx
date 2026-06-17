@@ -2123,6 +2123,126 @@ html.motion-boost .adminProductView .qsend{
   }
 }
 
+
+/* ===================== HOME MOTION LAYER — scroll layer separato =====================
+   La Home reale è subito stabile e scrollabile.
+   Il movimento iniziale vive su un layer visuale pointer-events:none,
+   così lo scroll non deve trascinarsi dietro il contenitore animato. */
+.homeMotionSplit{
+  position:relative;
+  animation:none!important;
+  transform:none!important;
+  contain:layout paint style;
+}
+
+/* La struttura reale mantiene spazio e layout, ma la parte hero compare quando il layer visuale finisce. */
+@keyframes homeRealCommit{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.homeMotionSplit > .homeRealHeroText,
+.homeMotionSplit > .homeRealHeroCard{
+  opacity:0;
+  animation:homeRealCommit .001s linear 1.06s both!important;
+  transform:none!important;
+}
+
+.homeMotionSplit > .homeRealHeroText .hero,
+.homeMotionSplit > .homeRealHeroCard,
+.homeMotionSplit > .homeRealHeroCard .herotag,
+.homeMotionSplit > .homeRealHeroCard .lk,
+.homeMotionSplit > .homeRealHeroCard .cedit{
+  animation-name:none!important;
+  transform:none!important;
+}
+
+/* Layer visuale: non partecipa all'interazione, resta leggero e isolato. */
+@keyframes homeIntroLayerOut{
+  to{opacity:0;visibility:hidden}
+}
+
+.homeIntroLayer{
+  position:absolute;
+  z-index:4;
+  top:0;
+  left:0;
+  right:0;
+  pointer-events:none;
+  contain:layout paint style;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform:translate3d(0,0,0);
+  will-change:transform, opacity;
+  animation:homeIntroLayerOut .001s linear 1.10s forwards!important;
+}
+
+/* Reimpiego del ritmo approvato, ma sul layer visivo e non sul contenuto scrollabile reale. */
+.homeIntroLayer .homeIntroHeroText{
+  animation:homeViewIn .68s cubic-bezier(.19,.85,.25,1) both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeIntroLayer .homeIntroHeroText .hero{
+  animation:homeHeadlineEditorial .82s cubic-bezier(.19,.85,.25,1) .10s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeIntroLayer .homeIntroHeroCard{
+  animation:homeViewIn .68s cubic-bezier(.19,.85,.25,1) .02s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform-origin:center center;
+}
+
+.homeIntroLayer .homeIntroHeroCard img{
+  opacity:1!important;
+  transform:scale(1.08)!important;
+  transition:none!important;
+  will-change:auto!important;
+}
+
+.homeIntroLayer .homeIntroHeroCard .herotag{
+  animation:homeHeroTagEditorial .78s cubic-bezier(.19,.85,.25,1) .28s both!important;
+  will-change:transform, opacity;
+}
+
+.homeIntroLayer .homeIntroHeroCard .lk,
+.homeIntroLayer .homeIntroHeroCard .cedit{
+  animation:homeHeroTagEditorial .70s cubic-bezier(.19,.85,.25,1) .34s both!important;
+  will-change:transform, opacity;
+}
+
+/* Sotto la hero, niente animazioni pesanti sullo scroll layer Home. */
+.homeMotionSplit > .home-sec-title,
+.homeMotionSplit > .grid,
+.homeMotionSplit > .grid .card{
+  animation:none!important;
+  will-change:auto!important;
+}
+
+/* Dopo il primo frame, mantieni la card reale stabile e pronta. */
+.homeMotionSplit > .homeRealHeroCard img{
+  transform:scale(1.08)!important;
+  transition:none!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeMotionSplit > .homeRealHeroText,
+  .homeMotionSplit > .homeRealHeroCard{
+    opacity:1!important;
+    animation:none!important;
+  }
+  .homeIntroLayer{
+    display:none!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2628,19 +2748,7 @@ export default function App() {
   const [theme, setTheme] = useState("auto"); // "light" | "dark" | "auto" (dispositivo)
   const [toasts, setToasts] = useState([]);
   const [q, setQ] = useState("");
-
-  /* ---- 120Hz motion boost: solo durante ingresso schermata ---- */
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.add("motion-boost");
-    const t = window.setTimeout(() => root.classList.remove("motion-boost"), 1200);
-    return () => {
-      window.clearTimeout(t);
-      root.classList.remove("motion-boost");
-    };
-  }, [tab, detailId, invId, orderFocus, editing?.id]);
-
-  const isAdmin = user?.is_admin;
+const isAdmin = user?.is_admin;
   const toast = (m) => {
     const id = Date.now() + Math.random();
     setToasts((t) => [...t, { id, m }]);
@@ -3292,13 +3400,29 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   const { tap } = useHaptic();
   const heroLkRef = useRef(null);
   return (
-    <section className="screen on homeview">
-      <div className="px">
+    <section className="screen on homeview homeMotionSplit">
+      <div className="homeIntroLayer" aria-hidden="true">
+        <div className="px homeIntroHeroText">
+          <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
+          <div className="kick homekick">A COLPO D'OCCHIO</div>
+        </div>
+        {hero && (
+          <div className="herocard homeIntroHeroCard">
+            <img src={colImg(hero.cols[0])} alt="" loading="eager" fetchPriority="high" decoding="async" />
+            <div className="lk homeIntroLike">
+              <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
+            </div>
+            <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
+            {onEdit && <div className="cedit hero"><Pencil /></div>}
+          </div>
+        )}
+      </div>
+      <div className="px homeRealHeroText">
         <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
         <div className="kick homekick">A COLPO D'OCCHIO</div>
       </div>
       {hero && (
-        <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
+        <div className="herocard homeRealHeroCard" key={hero.id} onClick={() => onOpen(hero.id)}>
           <img src={colImg(hero.cols[0])} alt={hero.title} loading="eager" fetchPriority="high" decoding="async" />
           <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label={liked(hero.id) ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}>
             <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
