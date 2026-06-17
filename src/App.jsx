@@ -861,8 +861,6 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
 .cartbadge{display:none!important}
-.cartdot{display:none!important}
-body.dark .cartdot{display:none!important}
 /* Hard kill legacy numeric cart badges: Strato usa solo il punto materico. */
 .dnav.cart .cbadge,
 .dnav.cart .cartbadge,
@@ -875,7 +873,10 @@ body.dark .cartdot{display:none!important}
 /* ---- campanella notifiche (topbar) ---- */
 .tb-btn.bell{position:relative;width:42px;height:42px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi), var(--elev1);color:var(--text)}
 .tb-btn.bell svg{width:22px;height:22px;stroke:var(--text);fill:none}
-.belldot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock);box-shadow:0 0 8px rgba(199,125,107,.5)}
+.matdot{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 32% 30%, rgba(255,248,242,.55) 0%, rgba(255,248,242,.18) 24%, rgba(215,153,127,.96) 26%, rgba(181,120,96,.96) 72%, rgba(145,92,71,.98) 100%);border:1.4px solid rgba(255,250,245,.44);box-shadow:0 1px 4px rgba(101,61,46,.22), inset 0 1px 0 rgba(255,255,255,.28)}
+.cartdot{top:11px;right:12px}
+body.dark .cartdot{border-color:rgba(255,240,228,.28);box-shadow:0 1px 5px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.08)}
+.belldot{top:9px;right:10px}
 
 /* ---- foglio notifiche ---- */
 
@@ -2684,7 +2685,7 @@ export default function App() {
         <div className="tb-right">
           {user && (
             <button className="tb-btn bell" onClick={openNotifs} aria-label="Notifiche">
-              <Bell />{unread > 0 && <span className="belldot" />}
+              <Bell />{unread > 0 && <span className="matdot belldot" />}
             </button>
           )}
           {user ? (
@@ -2786,7 +2787,7 @@ export default function App() {
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
-          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon /></button>
+          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon />{cartCount > 0 && <span className="matdot cartdot" />}</button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
