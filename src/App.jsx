@@ -2439,12 +2439,16 @@ body.dark .tb-btn.bell{
 }
 
 
-/* ===================== HOME FIRST CARDS — micro ingresso controllato =====================
-   Solo prime 2 card in Home. Le altre restano statiche per preservare scroll 120Hz. */
-@keyframes homeFirstCardIn{
+
+
+/* ===================== HOME MOTION — instant start + liked-style first cards =====================
+   Tutte le animazioni Home partono subito all'ingresso.
+   Le prime 2 card usano un ingresso morbido tipo Piaciuti, senza animare tutta la griglia. */
+
+@keyframes homeLikedCardIn{
   from{
-    opacity:.96;
-    transform:translate3d(0,6px,0);
+    opacity:.94;
+    transform:translate3d(0,8px,0);
   }
   to{
     opacity:1;
@@ -2452,35 +2456,65 @@ body.dark .tb-btn.bell{
   }
 }
 
-.homeview .grid .card:nth-child(1){
-  animation:homeFirstCardIn .66s cubic-bezier(.12,.72,.22,1) .30s both!important;
+/* Testi/pulsanti hero: nessun delay percettibile. */
+.homeview > .px .hero{
+  animation-delay:0s!important;
+}
+
+.homeview > .px .homekick{
+  animation-delay:0s!important;
+}
+
+.homeview .herocard{
+  animation-delay:0s!important;
+}
+
+.homeview .herocard .herotag{
+  animation-delay:0s!important;
+}
+
+.homeview .herocard .lk,
+.homeview .herocard .cedit{
+  animation-delay:0s!important;
+}
+
+.homeview .home-sec-title{
+  animation-delay:0s!important;
+}
+
+/* Prime due card prodotto: target robusto anche se il wrapper non si chiama .grid. */
+.homeview .card:nth-of-type(1),
+.homeview .card:nth-of-type(2){
+  animation:homeLikedCardIn .68s cubic-bezier(.12,.72,.22,1) 0s both!important;
   will-change:transform, opacity;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
 }
 
-.homeview .grid .card:nth-child(2){
-  animation:homeFirstCardIn .66s cubic-bezier(.12,.72,.22,1) .36s both!important;
-  will-change:transform, opacity;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-.homeview .grid .card:nth-child(n+3){
+/* Se esiste un wrapper .grid, mantieni comunque tutte le altre statiche. */
+.homeview .grid .card:nth-child(n+3),
+.homeview .card:nth-of-type(n+3){
   animation:none!important;
   transform:none!important;
   opacity:1!important;
   will-change:auto!important;
 }
 
-.homeview.motionDone .grid .card:nth-child(1),
-.homeview.motionDone .grid .card:nth-child(2){
+.homeview.motionDone .card:nth-of-type(1),
+.homeview.motionDone .card:nth-of-type(2){
   will-change:auto!important;
 }
 
 @media (prefers-reduced-motion: reduce){
-  .homeview .grid .card:nth-child(1),
-  .homeview .grid .card:nth-child(2){
+  .homeview > .px .hero,
+  .homeview > .px .homekick,
+  .homeview .herocard,
+  .homeview .herocard .herotag,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit,
+  .homeview .home-sec-title,
+  .homeview .card:nth-of-type(1),
+  .homeview .card:nth-of-type(2){
     animation:none!important;
     transform:none!important;
     opacity:1!important;
