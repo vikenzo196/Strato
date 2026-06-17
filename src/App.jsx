@@ -1599,6 +1599,33 @@ body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
   .screen.on,.appview,.viewhead,.productview .dphoto,.productview .dopts,.productview .dbuy,.cartview-card,.updatesview-card{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
   .wrap,.cartview .crow,.updatesview .notifrow{transition:none!important}
 }
+
+/* ---- tuning trasparenze principali: +5/6% soft ----
+   Alleggerisce solo dock, back topbar e campanella notifiche.
+   Non modifica card, sheet, sfondo, fullscreen o altri elementi glass. */
+.dock{
+  background:rgba(247,243,238,.76);
+  -webkit-backdrop-filter:blur(22px) saturate(185%);
+  backdrop-filter:blur(22px) saturate(185%);
+}
+.tb-back,
+.tb-btn.bell{
+  background:rgba(247,243,238,.77);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  backdrop-filter:blur(16px) saturate(160%);
+}
+body.dark .dock{
+  background:rgba(45,36,32,.72);
+  -webkit-backdrop-filter:blur(22px) saturate(178%);
+  backdrop-filter:blur(22px) saturate(178%);
+}
+body.dark .tb-back,
+body.dark .tb-btn.bell{
+  background:rgba(45,36,32,.73);
+  -webkit-backdrop-filter:blur(16px) saturate(152%);
+  backdrop-filter:blur(16px) saturate(152%);
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
