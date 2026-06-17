@@ -2061,7 +2061,7 @@ body.dark .tb-btn.bell{
 
 /* Gli elementi sotto la hero non devono animarsi mentre l'utente può iniziare a scrollare. */
 .homeview .grid,
-.homeview .grid .card{
+.homeview .grid .card:not(.home-motion-card){
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2187,7 +2187,7 @@ body.dark .tb-btn.bell{
 
 /* La griglia e le card restano ferme: niente cascata pesante durante lo scroll iniziale. */
 .homeview .grid,
-.homeview .grid .card{
+.homeview .grid .card:not(.home-motion-card){
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2289,7 +2289,7 @@ body.dark .tb-btn.bell{
 
 /* Mantieni esplicitamente ferme griglia e card prodotto. */
 .homeview .grid,
-.homeview .grid .card{
+.homeview .grid .card:not(.home-motion-card){
   animation:none!important;
   transform:none!important;
   opacity:1!important;
@@ -2523,12 +2523,15 @@ body.dark .tb-btn.bell{
 }
 
 
-/* ===================== HOME FIRST TILES — fixed deterministic classes =====================
-   Le prime 2 tile Home hanno classi dedicate, quindi l'animazione non dipende da nth-child/nth-of-type.
-   Motion uguale al linguaggio morbido delle card in Piaciuti, con partenza immediata. */
-@keyframes homeFirstTileInFixed{
+
+
+/* ===================== HOME FIRST TILES — unblocked liked motion =====================
+   Correzione: le prime 2 tile Home non vengono più bloccate dalle regole statiche.
+   Usano la stessa animazione base delle card in Piaciuti, con partenza immediata. */
+
+@keyframes homeTileLikedMotionFallback{
   from{
-    opacity:.94;
+    opacity:0;
     transform:translate3d(0,8px,0);
   }
   to{
@@ -2537,31 +2540,36 @@ body.dark .tb-btn.bell{
   }
 }
 
-.homeview .home-motion-card{
-  animation:homeFirstTileInFixed .68s cubic-bezier(.12,.72,.22,1) 0s both!important;
+/* Escludi solo le tile animate dal blocco statico della Home. */
+.homeview .grid .card.home-motion-card{
+  animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) 0s both!important;
+  opacity:1;
   will-change:transform, opacity!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
 }
 
-.homeview .home-motion-card-2{
-  animation-duration:.70s!important;
+/* Se likedCardIn non fosse disponibile in qualche build, questa regola resta compatibile come backup visivo. */
+@supports not (animation-timeline: auto){
+  .homeview .grid .card.home-motion-card{
+    animation:likedCardIn .42s cubic-bezier(.22,1,.36,1) 0s both!important;
+  }
 }
 
-/* Override delle regole precedenti che tenevano ferme le card Home. */
-.homeview .grid .home-motion-card,
-.homeview .grid .card.home-motion-card{
-  animation-name:homeFirstTileInFixed!important;
-  animation-delay:0s!important;
-  transform:translate3d(0,0,0);
+.homeview.motionDone .grid .card.home-motion-card{
+  will-change:auto!important;
 }
 
-.homeview.motionDone .home-motion-card{
+/* Tutte le altre card Home restano ferme. */
+.homeview .grid .card:not(.home-motion-card){
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
   will-change:auto!important;
 }
 
 @media (prefers-reduced-motion: reduce){
-  .homeview .home-motion-card{
+  .homeview .grid .card.home-motion-card{
     animation:none!important;
     transform:none!important;
     opacity:1!important;
