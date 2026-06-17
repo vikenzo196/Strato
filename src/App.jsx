@@ -572,7 +572,7 @@ body.dark .dswbox.on .dsw{border-color:#fff;box-shadow:0 0 0 2px #1a1714,0 0 0 4
 .tb-right{gap:10px}
 
 /* ---- parallasse leggera su scroll (solo immagine hero) ---- */
-.herocard img{transform:scale(1.08) translateY(calc(var(--par,0) * -0.015px));transition:transform .05s linear}
+.herocard img{transform:scale(1.08);transition:none}
 
 /* ---- topbar: frosted glass trasparente e corto allo scroll ----
    Non colora la status bar: sfoca soltanto ciò che passa sotto. */
@@ -2015,6 +2015,19 @@ body.dark .tb-btn.bell{
   will-change:auto!important;
 }
 
+
+/* ===================== SCROLL PERFORMANCE — no parallax / no --par =====================
+   Mantiene topbar, dock e glass. Rimuove solo movimento legato allo scroll. */
+.herocard img{
+  transform:scale(1.08)!important;
+  transition:none!important;
+}
+
+.topscrim{
+  opacity:.72!important;
+  transition:none!important;
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
@@ -2797,7 +2810,7 @@ export default function App() {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         const sy = window.scrollY || 0;
-        document.documentElement.style.setProperty("--par", String(sy));
+      // Scroll performance: rimosso update continuo di --par per mantenere 120Hz fluido.
         raf = 0;
       });
     };
