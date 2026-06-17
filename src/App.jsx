@@ -2583,7 +2583,7 @@ body.dark .tb-btn.bell{
   width:100%;
   max-width:100%;
   padding:0 12px 8px;
-  --cart-empty-body-shift-y:15%;
+  --cart-empty-body-shift-y:10%;
   overflow-x:hidden;
   overflow-y:visible;
   isolation:isolate;
