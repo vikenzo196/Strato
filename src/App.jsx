@@ -2386,6 +2386,58 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME TEXT MOTION — unified on headline =====================
+   La headline “Design contemporaneo…” è la base.
+   Stesso movimento/tempo/easing per il resto dei testi Home, con soli delay gerarchici. */
+.homeview > .px .hero{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .04s both!important;
+  will-change:auto!important;
+}
+
+.homeview > .px .homekick{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .12s both!important;
+  will-change:auto!important;
+}
+
+.homeview .herocard .herotag{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .20s both!important;
+  will-change:auto!important;
+}
+
+.homeview .herocard .herotag .ht,
+.homeview .herocard .herotag .hp{
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+}
+
+.homeview .home-sec-title{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .28s both!important;
+  will-change:auto!important;
+}
+
+/* I pulsanti restano leggeri ma seguono la stessa curva, senza diventare protagonisti. */
+.homeview .herocard .lk,
+.homeview .herocard .cedit{
+  animation:homeTextTimingSmoothIn 1.05s cubic-bezier(.12,.72,.22,1) .24s both!important;
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview > .px .hero,
+  .homeview > .px .homekick,
+  .homeview .herocard .herotag,
+  .homeview .home-sec-title,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
