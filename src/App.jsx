@@ -861,8 +861,8 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
 .cartbadge{display:none!important}
-.cartdot{position:absolute;top:8px;right:calc(50% - 15px);width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,236,212,.95) 0 12%,rgba(199,125,107,.92) 38%,rgba(166,84,53,.88) 100%);border:1px solid rgba(255,238,218,.64);box-shadow:0 2px 6px rgba(92,54,34,.22),inset 0 1px 0 rgba(255,255,255,.46);z-index:3}
-body.dark .cartdot{background:radial-gradient(circle at 35% 30%,rgba(255,218,188,.78) 0 12%,rgba(209,124,86,.88) 42%,rgba(132,78,55,.92) 100%);border-color:rgba(255,226,198,.28);box-shadow:0 2px 7px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,240,220,.20)}
+.cartdot{display:none!important}
+body.dark .cartdot{display:none!important}
 /* Hard kill legacy numeric cart badges: Strato usa solo il punto materico. */
 .dnav.cart .cbadge,
 .dnav.cart .cartbadge,
@@ -1611,32 +1611,33 @@ body.dark .cartview .crow,
 body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
 .cartview .crow:active,
 .updatesview .notifrow:active{transform:scale(.992)}
-/* Carrello: header allineato allo stesso asse di Esplora, Piaciuti e Ordini.
-   La vista carrello mantiene padding interno per le card, ma titolo e sottotitolo compensano quel padding. */
+/* Carrello: header sullo stesso asse di Esplora, Piaciuti e Ordini.
+   La dock resta senza badge: il carrello è una sezione, non un contatore. */
 .cartview .title.cartPageTitle{margin:10px -14px 4px}
 .cartPageSub{margin:0 -14px 16px;color:var(--soft);font-size:13.5px;line-height:1.45}
 .cartview .cartitems{display:grid;gap:14px}
 .cartview .crow.cartrow{
   align-items:flex-start;
-  gap:14px;
-  padding:14px;
+  gap:15px;
+  padding:16px;
   margin-bottom:0;
-  border-radius:24px;
-  min-height:116px;
+  border-radius:25px;
+  min-height:124px;
 }
 .cartview .crow.cartrow img.cartThumb{
-  width:68px;
-  height:68px;
+  width:70px;
+  height:70px;
   border-radius:18px;
   box-shadow:0 8px 20px rgba(74,45,28,.10);
 }
 .cartMain{flex:1;min-width:0;display:grid;gap:9px;align-self:stretch}
 .cartTopLine{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .cartTextBlock{min-width:0;flex:1;padding-top:1px}
-.cartview .cartName{font-size:15.5px;line-height:1.18;letter-spacing:-.01em}
-.cartColor{margin-top:4px;font-size:12.5px;line-height:1.35;color:var(--soft)}
-.cartColor strong{font-weight:650;color:var(--text)}
-.cartQty{flex:none;margin-top:0}
+.cartview .cartName{font-size:15.5px;line-height:1.18;letter-spacing:-.01em;padding-right:2px}
+.cartColor{margin-top:4px;font-size:12.5px;line-height:1.35;color:var(--soft);font-weight:400}
+.cartColor span{font-weight:400;color:var(--soft)}
+.cartBottomLine{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:2px}
+.cartQty{flex:none;margin-top:0;align-self:flex-end}
 .cartview .cartQty button{width:28px;height:28px;border-radius:10px;font-size:16px;background:rgba(246,239,228,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 body.dark .cartview .cartQty button{background:rgba(55,42,34,.58)}
 .cartview .cartQty span{min-width:16px;font-size:13px;font-weight:700}
@@ -1645,7 +1646,7 @@ body.dark .cartview .cartQty button{background:rgba(55,42,34,.58)}
 .cartOptionIcon{width:18px;height:18px;border-radius:9px;display:grid;place-items:center;flex:none;color:rgba(166,84,53,.88);background:rgba(199,125,107,.08);border:1px solid rgba(199,125,107,.12)}
 .cartOptionIcon svg{width:13px;height:13px;stroke:currentColor}
 .cartOptionDot{width:5px;height:5px;border-radius:50%;background:currentColor;display:block;opacity:.72}
-.cartItemPrice{justify-self:end;align-self:end;margin-top:2px;color:var(--text);font-size:15px;font-weight:720;letter-spacing:-.015em;font-variant-numeric:tabular-nums}
+.cartItemPrice{margin-left:auto;color:var(--text);font-size:15.4px;font-weight:540;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 body.dark .cartOptionIcon{color:rgba(224,157,126,.92);background:rgba(199,125,107,.12);border-color:rgba(199,125,107,.16)}
 .cartnote{margin:8px 2px 0;color:var(--soft);font-size:13px;line-height:1.45;text-align:center}
 .updatesview .cempty{line-height:1.55;color:var(--soft)}
@@ -2777,7 +2778,7 @@ export default function App() {
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
-          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon />{cartCount > 0 && <span className="cartdot" aria-hidden="true" />}</button>
+          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon /></button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
@@ -3222,9 +3223,8 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
                   <div className="cartTopLine">
                     <div className="cartTextBlock">
                       <div className="cn cartName">{c.t}</div>
-                      {c.col && <div className="cartColor">Colore: <strong>{c.col}</strong></div>}
+                      {c.col && <div className="cartColor">Colore: <span>{c.col}</span></div>}
                     </div>
-                    <div className="qstep csmall cartQty"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
                   </div>
                   {opts.length > 0 && (
                     <div className="cartOptions" aria-label="Aggiunte e configurazione">
@@ -3236,7 +3236,10 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
                       ))}
                     </div>
                   )}
-                  <div className="cartItemPrice">{eur(c.price * c.qty)}</div>
+                  <div className="cartBottomLine">
+                    <div className="qstep csmall cartQty"><button onClick={() => onStep(i, -1)} aria-label="Diminuisci">−</button><span>{c.qty}</span><button onClick={() => onStep(i, 1)} aria-label="Aumenta">+</button></div>
+                    <div className="cartItemPrice">{eur(c.price * c.qty)}</div>
+                  </div>
                 </div>
               </div>
             );
