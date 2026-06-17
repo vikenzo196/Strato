@@ -2546,59 +2546,77 @@ body.dark .tb-btn.bell{
 
 
 /* ===================== CARRELLO VUOTO — full-page empty state =====================
-   Mantiene il layout full-page: cambia solo il visual ambientale e la CTA.
-   Il JPG è reinterpretato in earth tone, senza bianco esterno e senza colori stock. */
+   Stato vuoto come vera pagina: niente altezza residua da sheet, niente scroll fantasma.
+   Il visual earth tone resta ambientale, centrato e sempre dentro lo spazio tra topbar e dock. */
 .cartemptypage{
-  min-height:calc(100svh - 130px);
+  --cart-empty-top:calc(62px + env(safe-area-inset-top));
+  --cart-empty-bottom:max(132px, calc(80px + env(safe-area-inset-bottom, 24px)));
+  height:calc(100svh - var(--cart-empty-top) - var(--cart-empty-bottom));
+  min-height:0;
   display:flex;
   flex-direction:column;
+  padding-bottom:0!important;
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+
+@supports (height:100dvh){
+  .cartemptypage{height:calc(100dvh - var(--cart-empty-top) - var(--cart-empty-bottom))}
 }
 
 .cartemptypage .cartPageTitle{
   position:relative;
   z-index:3;
+  flex:0 0 auto;
+  margin-bottom:4px;
 }
 
 .cartEmptyFull{
   position:relative;
-  flex:1;
-  min-height:560px;
+  flex:1 1 auto;
+  min-height:0;
   display:grid;
   place-items:center;
-  padding:12px 18px calc(122px + env(safe-area-inset-bottom));
+  padding:0 12px 6px;
   overflow:hidden;
   isolation:isolate;
+  border-radius:38px;
 }
 
 .cartEmptyFull::before{
   content:"";
   position:absolute;
-  inset:4px 8px calc(84px + env(safe-area-inset-bottom));
-  border-radius:38px;
+  inset:0 0 6px;
+  border-radius:inherit;
   pointer-events:none;
   z-index:0;
   background:
-    radial-gradient(circle at 50% 34%, rgba(255,253,248,.25), transparent 42%),
-    radial-gradient(circle at 50% 80%, rgba(199,125,107,.07), transparent 62%);
+    radial-gradient(circle at 50% 42%, rgba(255,253,248,.30), transparent 44%),
+    radial-gradient(circle at 50% 74%, rgba(199,125,107,.075), transparent 64%);
 }
 
 .cartEmptyFullArt{
   position:absolute;
   left:50%;
-  bottom:calc(50px + env(safe-area-inset-bottom));
-  width:min(132%, 660px);
-  aspect-ratio:1.12/1;
-  transform:translate3d(-50%,0,0);
+  top:56%;
+  width:clamp(430px, 118%, 760px);
+  height:clamp(330px, 62svh, 620px);
+  max-height:92%;
+  transform:translate3d(-50%,-50%,0);
   background-image:url("/assets/cart-empty-strato-light.webp");
   background-repeat:no-repeat;
-  background-position:center bottom;
+  background-position:center center;
   background-size:contain;
-  opacity:.74;
-  mix-blend-mode:multiply;
-  filter:saturate(.92) contrast(.94);
+  opacity:.96;
+  mix-blend-mode:normal;
+  filter:saturate(.98) contrast(.99);
   pointer-events:none;
   z-index:1;
   transition:opacity .42s ease, filter .42s ease;
+}
+
+@supports (height:100dvh){
+  .cartEmptyFullArt{height:clamp(330px, 62dvh, 620px)}
 }
 
 .cartEmptyFullContent{
@@ -2609,8 +2627,8 @@ body.dark .tb-btn.bell{
   flex-direction:column;
   align-items:center;
   text-align:center;
-  margin-top:-28px;
-  padding:30px 18px 28px;
+  margin-top:-6px;
+  padding:28px 18px 30px;
 }
 
 .cartEmptyMini{
@@ -2641,6 +2659,7 @@ body.dark .tb-btn.bell{
 }
 
 .cartEmptyFullCta{
+  width:min(100%, 216px);
   min-width:166px;
   height:52px;
   display:inline-flex;
@@ -2662,15 +2681,15 @@ body.dark .tb-btn.bell{
 
 body.dark .cartEmptyFull::before{
   background:
-    radial-gradient(circle at 50% 30%, rgba(199,125,107,.105), transparent 42%),
-    radial-gradient(circle at 50% 82%, rgba(255,238,218,.04), transparent 64%);
+    radial-gradient(circle at 50% 36%, rgba(199,125,107,.105), transparent 44%),
+    radial-gradient(circle at 50% 78%, rgba(255,238,218,.04), transparent 64%);
 }
 
 body.dark .cartEmptyFullArt{
   background-image:url("/assets/cart-empty-strato-dark.webp");
-  opacity:.60;
+  opacity:.88;
   mix-blend-mode:normal;
-  filter:saturate(.92) contrast(.96);
+  filter:saturate(.98) contrast(.99);
 }
 
 body.dark .cartEmptyFullCta{
@@ -2682,15 +2701,25 @@ body.dark .cartEmptyFullCta{
   box-shadow:inset 0 1px 0 rgba(255,238,218,.11),0 15px 34px rgba(0,0,0,.24);
 }
 
+@media(max-height:720px){
+  .cartemptypage .cartPageTitle{margin-bottom:0}
+  .cartEmptyFull{padding-bottom:2px}
+  .cartEmptyFullArt{top:58%;width:clamp(390px, 112%, 700px);height:clamp(292px, 58svh, 520px)}
+  .cartEmptyFullContent{margin-top:-14px;padding-top:18px;padding-bottom:22px}
+  .cartEmptyFullContent h3{font-size:28px}
+  .cartEmptyFullContent p{margin-bottom:20px}
+}
+
 @media(max-width:380px){
-  .cartEmptyFull{min-height:520px;padding-left:14px;padding-right:14px}
-  .cartEmptyFullArt{width:140%;bottom:calc(46px + env(safe-area-inset-bottom))}
+  .cartEmptyFull{padding-left:8px;padding-right:8px;border-radius:34px}
+  .cartEmptyFullArt{width:clamp(390px, 128%, 660px);top:58%}
+  .cartEmptyFullContent{width:min(100%, 310px)}
   .cartEmptyFullContent h3{font-size:27px}
-  .cartEmptyFullCta{min-width:158px;height:50px;font-size:15.5px}
+  .cartEmptyFullCta{width:min(100%, 204px);min-width:158px;height:50px;font-size:15.5px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .cartEmptyFullArt{transition:none;transform:translate3d(-50%,0,0)}
+  .cartEmptyFullArt{transition:none;transform:translate3d(-50%,-50%,0)}
 }
 
 
