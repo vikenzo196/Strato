@@ -1498,6 +1498,32 @@ body.dark .sheetclose{
 }
 
 
+
+/* ===================== HOME HERO ONLY — comparsa più lenta ===================== */
+.homeview .hero,
+.homeview .heroCard,
+.homeview .heroCopy,
+.homeScreen .hero,
+.homeScreen .heroCard,
+.homeScreen .heroCopy{
+  animation-duration:.92s!important;
+  animation-delay:.12s!important;
+  animation-timing-function:cubic-bezier(.19,.85,.25,1)!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .hero,
+  .homeview .heroCard,
+  .homeview .heroCopy,
+  .homeScreen .hero,
+  .homeScreen .heroCard,
+  .homeScreen .heroCopy{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+
+
 /* ===================== STRATO MOTION TUNING — soft premium ingressi ===================== */
 :root{
   --strato-ease-soft:cubic-bezier(.19,.85,.25,1);
