@@ -2438,6 +2438,56 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME FIRST CARDS — micro ingresso controllato =====================
+   Solo prime 2 card in Home. Le altre restano statiche per preservare scroll 120Hz. */
+@keyframes homeFirstCardIn{
+  from{
+    opacity:.96;
+    transform:translate3d(0,6px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+.homeview .grid .card:nth-child(1){
+  animation:homeFirstCardIn .66s cubic-bezier(.12,.72,.22,1) .30s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .grid .card:nth-child(2){
+  animation:homeFirstCardIn .66s cubic-bezier(.12,.72,.22,1) .36s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.homeview .grid .card:nth-child(n+3){
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+  will-change:auto!important;
+}
+
+.homeview.motionDone .grid .card:nth-child(1),
+.homeview.motionDone .grid .card:nth-child(2){
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .grid .card:nth-child(1),
+  .homeview .grid .card:nth-child(2){
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
