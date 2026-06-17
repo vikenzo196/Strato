@@ -1917,6 +1917,94 @@ body.dark .tb-btn.bell{
   backdrop-filter:blur(16px) saturate(152%);
 }
 
+
+/* ===================== HOME HERO ONLY — editorial reveal =====================
+   Cambia il gesto della hero: non scivola, si rivela.
+   Solo Home, nessuna altra schermata. */
+@keyframes homeHeadlineEditorial {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(1.2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes homeHeroCardEditorial {
+  from {
+    opacity: .52;
+    transform: scale(1.012);
+    filter: blur(2.2px) saturate(.96);
+  }
+  58% {
+    opacity: .92;
+    filter: blur(.7px) saturate(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0) saturate(1);
+  }
+}
+
+@keyframes homeHeroTagEditorial {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(1px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.homeview .hero,
+.homeScreen .hero{
+  animation: homeHeadlineEditorial .82s cubic-bezier(.19,.85,.25,1) .10s both!important;
+}
+
+.homeview .herocard,
+.homeScreen .herocard{
+  animation: homeHeroCardEditorial .92s cubic-bezier(.19,.85,.25,1) .12s both!important;
+  transform-origin:center center;
+  will-change:opacity, transform, filter;
+}
+
+.homeview .herocard .herotag,
+.homeScreen .herocard .herotag{
+  animation: homeHeroTagEditorial .78s cubic-bezier(.19,.85,.25,1) .28s both!important;
+}
+
+.homeview .herocard .lk,
+.homeview .herocard .cedit,
+.homeScreen .herocard .lk,
+.homeScreen .herocard .cedit{
+  animation: homeHeroTagEditorial .70s cubic-bezier(.19,.85,.25,1) .34s both!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .hero,
+  .homeScreen .hero,
+  .homeview .herocard,
+  .homeScreen .herocard,
+  .homeview .herocard .herotag,
+  .homeScreen .herocard .herotag,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit,
+  .homeScreen .herocard .lk,
+  .homeScreen .herocard .cedit{
+    animation:none!important;
+    transition:none!important;
+    filter:none!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
