@@ -1562,20 +1562,20 @@ body.dark .productview .dimg{box-shadow:0 22px 56px rgba(0,0,0,.42)}
   max-width:none;
   border-radius:18px;
   padding:15px 16px;
-  background:rgba(246,239,228,.58);
-  -webkit-backdrop-filter:blur(18px) saturate(145%);
-  backdrop-filter:blur(18px) saturate(145%);
-  border-color:rgba(199,125,107,.24);
-  color:var(--text);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 12px 30px rgba(94,62,43,.12);
+  background:linear-gradient(135deg,rgba(199,125,107,.76),rgba(166,84,53,.82));
+  -webkit-backdrop-filter:blur(18px) saturate(155%);
+  backdrop-filter:blur(18px) saturate(155%);
+  border-color:rgba(255,238,218,.28);
+  color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 14px 32px rgba(166,84,53,.22);
 }
 body.dark .productview .dbuy .dadd2{
-  background:rgba(50,39,32,.56);
-  border-color:rgba(199,125,107,.26);
-  color:rgba(246,236,220,.96);
-  box-shadow:inset 0 1px 0 rgba(255,240,220,.08),0 16px 34px rgba(0,0,0,.28);
+  background:linear-gradient(135deg,rgba(199,125,107,.68),rgba(166,84,53,.74));
+  border-color:rgba(255,238,218,.18);
+  color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,240,220,.14),0 16px 34px rgba(0,0,0,.30);
 }
-.productview .dbuy .dadd2 svg{stroke:currentColor;filter:none}
+.productview .dbuy .dadd2 svg{stroke:#fff;filter:none}
 
 /* ---- product detail: no secondary hero header; topbar owns navigation ---- */
 .productview--clean{padding-top:10px}
