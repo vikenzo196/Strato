@@ -2045,10 +2045,7 @@ body.dark .tb-btn.bell{
 
 /* Struttura e immagine hero sempre stabili: niente zoom, niente fade, niente blur. */
 .homeview .herocard{
-  animation:none!important;
   opacity:1!important;
-  transform:none!important;
-  will-change:auto!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
 }
@@ -2063,7 +2060,6 @@ body.dark .tb-btn.bell{
 }
 
 /* Gli elementi sotto la hero non devono animarsi mentre l'utente può iniziare a scrollare. */
-.homeview .home-sec-title,
 .homeview .grid,
 .homeview .grid .card{
   animation:none!important;
@@ -2139,6 +2135,73 @@ body.dark .tb-btn.bell{
   .homeview .herocard .herotag,
   .homeview .herocard .lk,
   .homeview .herocard .cedit{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
+
+/* ===================== HOME ANIMATION — light restore =====================
+   Reintroduce movimento senza rianimare container/griglia/card.
+   Scroll-safe: hero card solo translate3d, no fade, no scale, no blur. */
+@keyframes homeHeroCardLightIn{
+  from{transform:translate3d(0,10px,0)}
+  to{transform:translate3d(0,0,0)}
+}
+
+@keyframes homeSectionTitleLightIn{
+  from{
+    opacity:0;
+    transform:translate3d(0,8px,0);
+  }
+  to{
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+.homeview .herocard{
+  animation:homeHeroCardLightIn .82s cubic-bezier(.19,.85,.25,1) .08s both!important;
+  opacity:1!important;
+  will-change:transform;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  transform-origin:center center;
+}
+
+.homeview .herocard img{
+  opacity:1!important;
+  transform:scale(1.08)!important;
+  transition:none!important;
+  will-change:auto!important;
+}
+
+.homeview .home-sec-title{
+  animation:homeSectionTitleLightIn .68s cubic-bezier(.19,.85,.25,1) .22s both!important;
+  will-change:transform, opacity;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+/* La griglia e le card restano ferme: niente cascata pesante durante lo scroll iniziale. */
+.homeview .grid,
+.homeview .grid .card{
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+  will-change:auto!important;
+}
+
+.homeview.motionDone .herocard,
+.homeview.motionDone .home-sec-title{
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview .herocard,
+  .homeview .home-sec-title{
     animation:none!important;
     transform:none!important;
     opacity:1!important;
