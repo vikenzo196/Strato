@@ -2209,6 +2209,107 @@ body.dark .tb-btn.bell{
   }
 }
 
+
+/* ===================== HOME TEXT MOTION — smoother v2 =====================
+   Solo qualità ingresso testi Home. Nessuna animazione nuova su griglia/card. */
+@keyframes homeTextSmoothIn{
+  0%{
+    opacity:.06;
+    transform:translateY(8px);
+  }
+  48%{
+    opacity:.82;
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes homeSmallTextSmoothIn{
+  0%{
+    opacity:.08;
+    transform:translateY(7px);
+  }
+  52%{
+    opacity:.84;
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes homeSectionTitleSmoothIn{
+  0%{
+    opacity:.10;
+    transform:translateY(7px);
+  }
+  100%{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.homeview > .px .hero{
+  animation:homeTextSmoothIn .94s cubic-bezier(.16,.82,.28,1) .08s both!important;
+  will-change:auto!important;
+  backface-visibility:visible!important;
+  -webkit-backface-visibility:visible!important;
+}
+
+.homeview > .px .homekick{
+  animation:homeSmallTextSmoothIn .82s cubic-bezier(.16,.82,.28,1) .17s both!important;
+  will-change:auto!important;
+  backface-visibility:visible!important;
+  -webkit-backface-visibility:visible!important;
+}
+
+.homeview .herocard .herotag{
+  animation:homeSmallTextSmoothIn .84s cubic-bezier(.16,.82,.28,1) .24s both!important;
+  will-change:auto!important;
+  backface-visibility:visible!important;
+  -webkit-backface-visibility:visible!important;
+}
+
+.homeview .herocard .lk,
+.homeview .herocard .cedit{
+  animation:homeSmallTextSmoothIn .76s cubic-bezier(.16,.82,.28,1) .26s both!important;
+  will-change:auto!important;
+  backface-visibility:visible!important;
+  -webkit-backface-visibility:visible!important;
+}
+
+.homeview .home-sec-title{
+  animation:homeSectionTitleSmoothIn .76s cubic-bezier(.16,.82,.28,1) .24s both!important;
+  will-change:auto!important;
+  backface-visibility:visible!important;
+  -webkit-backface-visibility:visible!important;
+}
+
+/* Mantieni esplicitamente ferme griglia e card prodotto. */
+.homeview .grid,
+.homeview .grid .card{
+  animation:none!important;
+  transform:none!important;
+  opacity:1!important;
+  will-change:auto!important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .homeview > .px .hero,
+  .homeview > .px .homekick,
+  .homeview .herocard .herotag,
+  .homeview .herocard .lk,
+  .homeview .herocard .cedit,
+  .homeview .home-sec-title{
+    animation:none!important;
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
+  }
+}
+
 `;
 const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="g_white" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe4e8"/></linearGradient>
 <linearGradient id="g_red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
