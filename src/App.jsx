@@ -1379,8 +1379,9 @@ body.dark .sheetclose{
 .sheetclose:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
 
 /* gdot: più raffinato, indicatore attivo terracotta soft */
-.gdot{width:5px;height:5px;background:rgba(199,125,107,.25);border-radius:50%;transition:background .2s}
+.gdot{width:5px;height:5px;background:rgba(199,125,107,.25);border:0;padding:0;appearance:none;-webkit-appearance:none;border-radius:50%;transition:background .2s,width .2s,border-radius .2s;cursor:pointer}
 .gdot--on{background:rgba(199,125,107,.70);width:14px;border-radius:3px}
+.gdot:focus-visible{outline:none;box-shadow:0 0 0 2px var(--bg),0 0 0 3px rgba(199,125,107,.65)}
 
 /* dkick: categoria leggermente alleggerita */
 .dkick{font-weight:700;letter-spacing:.12em;color:rgba(166,84,53,.85)}
@@ -1555,10 +1556,26 @@ body.dark .productview .dimg{box-shadow:0 22px 56px rgba(0,0,0,.42)}
 .productview .ddesc{font-size:14.5px;line-height:1.68;color:var(--soft)}
 .productview .dlabel{margin-top:22px}
 .productview .dbuy{align-items:stretch;border-top:1px solid rgba(199,125,107,.12);padding-top:18px;margin-top:2px}
-.productview .dbuy .dlabel.dctr{text-align:left;margin-left:2px}
-.productview .dbuy .dqty{justify-content:flex-start}
-.productview .dbuy .dadd2{max-width:none;border-radius:18px;padding:15px 16px;background:linear-gradient(135deg,rgba(199,125,107,.96),rgba(166,84,53,.98));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 14px 32px rgba(166,84,53,.20)}
-.productview .dbuy .dadd2 svg{stroke:#fff;filter:none}
+.productview .dbuy .dlabel.dctr{text-align:center;margin-left:0;width:100%}
+.productview .dbuy .dqty{justify-content:center}
+.productview .dbuy .dadd2{
+  max-width:none;
+  border-radius:18px;
+  padding:15px 16px;
+  background:rgba(246,239,228,.58);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+  backdrop-filter:blur(18px) saturate(145%);
+  border-color:rgba(199,125,107,.24);
+  color:var(--text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 12px 30px rgba(94,62,43,.12);
+}
+body.dark .productview .dbuy .dadd2{
+  background:rgba(50,39,32,.56);
+  border-color:rgba(199,125,107,.26);
+  color:rgba(246,236,220,.96);
+  box-shadow:inset 0 1px 0 rgba(255,240,220,.08),0 16px 34px rgba(0,0,0,.28);
+}
+.productview .dbuy .dadd2 svg{stroke:currentColor;filter:none}
 
 /* ---- product detail: no secondary hero header; topbar owns navigation ---- */
 .productview--clean{padding-top:10px}
@@ -2915,6 +2932,8 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [qty, setQty] = useState(1);
   const [cable, setCable] = useState("Normale");
   const photoInput = useRef(null);
+  const galleryRef = useRef(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const [closing, setClosing] = useState(false);
   const doClose = () => { if (closing) return; setClosing(true); setTimeout(onClose, 340); };
   useEffect(() => { const onKey = (e) => { if (e.key === "Escape") doClose(); }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, []);
@@ -2924,6 +2943,27 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
   const [ad, setAd] = useState(p.addons);
 
   const c = p.cols[ci] || p.cols[0];
+  const photoList = (c.imgs && c.imgs.length ? c.imgs : [colImg(c)]);
+
+  useEffect(() => {
+    setPhotoIndex(0);
+    const node = galleryRef.current;
+    if (node) node.scrollTo({ left: 0, behavior: "auto" });
+  }, [ci, p.id]);
+
+  const onGalleryScroll = (e) => {
+    const el = e.currentTarget;
+    const next = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
+    const clamped = Math.max(0, Math.min(photoList.length - 1, next));
+    if (clamped !== photoIndex) setPhotoIndex(clamped);
+  };
+
+  const goPhoto = (idx) => {
+    setPhotoIndex(idx);
+    const node = galleryRef.current;
+    if (node) node.scrollTo({ left: idx * node.clientWidth, behavior: "smooth" });
+  };
+
   const adds = [];
   if (p.isElectrical) {
     if (cable === "Intrecciato") adds.push({ label: "Cavo in tessuto", amt: Number(ad.braided) || 0 });
@@ -2952,13 +2992,24 @@ function Detail({ p, prints, onClose, onOpen, onAdd, isAdmin, onSaveAddons, onEd
         {isAdmin && onEdit && <button className="dedit detailedit" onClick={() => onEdit(p)} aria-label="Modifica prodotto"><Pencil /></button>}
         <div className="dgrid">
           <div className="dphoto">
-            <div className="dgallery">
-              {(c.imgs && c.imgs.length ? c.imgs : [colImg(c)]).map((src, gi) => (
+            <div className="dgallery" ref={galleryRef} onScroll={onGalleryScroll}>
+              {photoList.map((src, gi) => (
                 <img key={gi} className="dimg" src={src || colImg(c)} alt={p.title} />
               ))}
             </div>
-            {c.imgs && c.imgs.length > 1 && (
-              <div className="gdots" aria-hidden="true">{c.imgs.map((_, gi) => <span key={gi} className={"gdot" + (gi === 0 ? " gdot--on" : "")} />)}</div>
+            {photoList.length > 1 && (
+              <div className="gdots" aria-label="Selettore foto">
+                {photoList.map((_, gi) => (
+                  <button
+                    key={gi}
+                    type="button"
+                    className={"gdot" + (gi === photoIndex ? " gdot--on" : "")}
+                    onClick={() => goPhoto(gi)}
+                    aria-label={"Mostra foto " + (gi + 1)}
+                    aria-current={gi === photoIndex ? "true" : undefined}
+                  />
+                ))}
+              </div>
             )}
             {isAdmin && onColorPhoto && (
               <>
