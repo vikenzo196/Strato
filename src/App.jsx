@@ -860,8 +860,9 @@ body.dark .card:active,body.dark .card:hover{box-shadow:0 6px 16px rgba(0,0,0,.4
 @media(max-width:360px){.dock.dock5 .dnav{width:46px}}
 .dnav.liked.act svg{stroke:var(--accent);fill:none}
 .dnav.cart{position:relative}
-.cartbadge{position:absolute;top:1px;right:1px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:800;line-height:19px;text-align:center;border:2px solid var(--bg);box-shadow:0 2px 5px rgba(0,0,0,.35);z-index:3}
-.cartdot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--accent);border:1.6px solid var(--glassDock)}
+.cartbadge{display:none}
+.cartdot{position:absolute;top:8px;right:calc(50% - 15px);width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,236,212,.95) 0 12%,rgba(199,125,107,.92) 38%,rgba(166,84,53,.88) 100%);border:1px solid rgba(255,238,218,.64);box-shadow:0 2px 6px rgba(92,54,34,.22),inset 0 1px 0 rgba(255,255,255,.46);z-index:3}
+body.dark .cartdot{background:radial-gradient(circle at 35% 30%,rgba(255,218,188,.78) 0 12%,rgba(209,124,86,.88) 42%,rgba(132,78,55,.92) 100%);border-color:rgba(255,226,198,.28);box-shadow:0 2px 7px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,240,220,.20)}
 .dnav.profile svg{stroke:var(--icon)}
 .dnav.profile.act svg{stroke:var(--accent)}
 
@@ -1604,8 +1605,10 @@ body.dark .cartview .crow,
 body.dark .updatesview .notifrow{background:rgba(62,47,38,.46)}
 .cartview .crow:active,
 .updatesview .notifrow:active{transform:scale(.992)}
-.cartview .title.cartPageTitle{margin:10px 4px 4px}
-.cartPageSub{margin:0 4px 16px;color:var(--soft);font-size:13.5px;line-height:1.45}
+/* Carrello: header allineato allo stesso asse di Esplora, Piaciuti e Ordini.
+   La vista carrello mantiene padding interno per le card, ma titolo e sottotitolo compensano quel padding. */
+.cartview .title.cartPageTitle{margin:10px -14px 4px}
+.cartPageSub{margin:0 -14px 16px;color:var(--soft);font-size:13.5px;line-height:1.45}
 .cartview .cartitems{display:grid;gap:14px}
 .cartview .crow.cartrow{
   align-items:flex-start;
@@ -2768,7 +2771,7 @@ export default function App() {
           <button className={"dnav home" + (tab === "home" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("home"); }} aria-label="Home"><HomeI /></button>
           <button className={"dnav search" + (tab === "search" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("search"); }} aria-label="Esplora"><SearchI /></button>
           <button className={"dnav liked" + (tab === "liked" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("liked"); }} aria-label="Piaciuti"><HeartI /></button>
-          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={"Carrello" + (cartCount > 0 ? " (" + cartCount + ")" : "")}><CartIcon />{cartCount > 0 && <span className="cartbadge">{cartCount}</span>}</button>
+          <button className={"dnav cart" + (tab === "cart" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("cart"); }} aria-label={cartCount > 0 ? "Carrello con articoli" : "Carrello"}><CartIcon />{cartCount > 0 && <span className="cartdot" aria-hidden="true" />}</button>
           <button className={"dnav orders" + (tab === "orders" ? " act" : "")} onClick={(e) => { tap("nav", e.currentTarget); open("orders"); }} aria-label="I miei ordini"><OrdersI />{orders.some((o) => o.status === "pending") && isAdmin && <span className="orddot" />}</button>
         </div>
       </div>
