@@ -2969,67 +2969,138 @@ body.dark .cartemptypage .cartEmptyFullArt{
 }
 
 
-/* ===================== v2be cart empty centered scene =====================
-   Non modifica il lock scroll/fullscreen.
-   Corregge solo la composizione: scena più centrale, visual ricentrato e più basso. */
+/* ===================== v2bf cart empty scene stack =====================
+   Ordine richiesto dal basso verso l'alto:
+   testo → immagine → CTA.
+   Non modifica i parametri fullscreen/no-scroll già corretti. */
 
 .cartemptypage .cartEmptyFull{
-  /* Mantiene la pagina non scrollabile, ma usa meglio l'area tra titolo e dock. */
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  padding:0 18px calc(118px + env(safe-area-inset-bottom,0px))!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:0 18px calc(126px + env(safe-area-inset-bottom,0px))!important;
+  overflow:hidden!important;
 }
 
-.cartemptypage .cartEmptyFullContent{
-  /* Porta testo + CTA nel centro visivo della pagina, senza toccare il fullscreen. */
-  transform:translate3d(0,44px,0)!important;
+.cartEmptyScene{
+  position:relative;
+  z-index:2;
+  width:min(100%, 620px);
+  height:min(56vh, 520px);
+  min-height:430px;
+  display:grid;
+  grid-template-rows:auto minmax(150px, 1fr) auto;
+  align-items:center;
+  justify-items:center;
+  gap:18px;
+  margin-top:18px;
+  isolation:isolate;
+}
+
+/* 1. Sopra: CTA */
+.cartEmptyScene .cartEmptyFullCta{
+  grid-row:1;
+  position:relative;
+  z-index:3;
+  min-width:min(78vw, 360px)!important;
+  height:54px!important;
+  font-size:17.5px!important;
+  font-weight:760!important;
+  letter-spacing:-.025em!important;
+  margin:0!important;
+}
+
+/* 2. Centro: immagine, non più fondale dietro al testo */
+.cartEmptyScene .cartEmptyFullArt{
+  grid-row:2;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  top:auto!important;
+  width:min(82vw, 520px)!important;
+  max-width:min(82vw, 520px)!important;
+  height:min(25vh, 230px)!important;
+  max-height:min(25vh, 230px)!important;
+  aspect-ratio:auto!important;
+  transform:none!important;
+  background-position:center center!important;
+  background-size:contain!important;
+  opacity:.24!important;
+  filter:brightness(1.05)!important;
+  mix-blend-mode:normal!important;
+  z-index:1!important;
+  align-self:center;
+  justify-self:center;
+}
+
+/* 3. Sotto: testo */
+.cartEmptyScene .cartEmptyFullContent{
+  grid-row:3;
+  position:relative!important;
+  z-index:2!important;
+  width:min(100%, 560px)!important;
   margin:0 auto!important;
-  padding:0 18px!important;
+  padding:0 10px!important;
+  transform:none!important;
+  text-align:center;
 }
 
-.cartemptypage .cartEmptyFullArt{
-  /* Visual meno alto, più centrale, e non più spinto a destra. */
-  left:50.5%!important;
-  bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;
-  width:min(82vw, 590px)!important;
-  max-width:min(82vw, 590px)!important;
-  height:min(34vh, 360px)!important;
-  max-height:min(34vh, 360px)!important;
-  opacity:.22!important;
+.cartEmptyScene .cartEmptyMini{
+  margin-bottom:9px!important;
 }
 
-/* In dark resta leggermente più sotto-tono per non rubare leggibilità. */
-body.dark .cartemptypage .cartEmptyFullArt{
-  opacity:.18!important;
+.cartEmptyScene .cartEmptyFullContent h3{
+  margin:0 0 11px!important;
+}
+
+.cartEmptyScene .cartEmptyFullContent p{
+  margin:0 auto!important;
+  max-width:430px!important;
+}
+
+body.dark .cartEmptyScene .cartEmptyFullArt{
+  opacity:.20!important;
+  filter:brightness(1.08)!important;
 }
 
 @media(max-width:430px){
   .cartemptypage .cartEmptyFull{
-    padding:0 16px calc(116px + env(safe-area-inset-bottom,0px))!important;
+    padding:0 16px calc(124px + env(safe-area-inset-bottom,0px))!important;
   }
-  .cartemptypage .cartEmptyFullContent{
-    transform:translate3d(0,46px,0)!important;
-    padding:0 12px!important;
+  .cartEmptyScene{
+    width:100%;
+    height:min(58vh, 500px);
+    min-height:420px;
+    gap:16px;
+    margin-top:14px;
   }
-  .cartemptypage .cartEmptyFullArt{
-    left:50.5%!important;
-    bottom:calc(96px + env(safe-area-inset-bottom,0px))!important;
-    width:min(84vw, 540px)!important;
-    max-width:min(84vw, 540px)!important;
-    height:min(32vh, 330px)!important;
-    max-height:min(32vh, 330px)!important;
+  .cartEmptyScene .cartEmptyFullCta{
+    min-width:min(82vw, 340px)!important;
+    height:54px!important;
+    font-size:17px!important;
+  }
+  .cartEmptyScene .cartEmptyFullArt{
+    width:min(84vw, 500px)!important;
+    max-width:min(84vw, 500px)!important;
+    height:min(24vh, 220px)!important;
+    max-height:min(24vh, 220px)!important;
   }
 }
 
 @media(max-width:380px){
-  .cartemptypage .cartEmptyFullContent{
-    transform:translate3d(0,38px,0)!important;
+  .cartEmptyScene{
+    height:min(57vh, 470px);
+    min-height:390px;
+    gap:14px;
   }
-  .cartemptypage .cartEmptyFullArt{
-    bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
-    width:min(86vw, 520px)!important;
-    height:min(31vh, 310px)!important;
+  .cartEmptyScene .cartEmptyFullCta{
+    min-width:min(82vw, 320px)!important;
+    height:52px!important;
+    font-size:16.5px!important;
+  }
+  .cartEmptyScene .cartEmptyFullArt{
+    width:min(84vw, 460px)!important;
+    height:min(22vh, 200px)!important;
   }
 }
 
@@ -4573,12 +4644,14 @@ function CartView({ cart, total, onStep, onConfirm, onGoExplore }) {
       <section className="screen on appview cartview cartemptypage" aria-label="Carrello vuoto">
         <h2 className="title px cartPageTitle"><span className="ticon"><CartIcon /></span>Carrello</h2>
         <div className="cartEmptyFull">
-          <div className="cartEmptyFullArt" aria-hidden="true" />
-          <div className="cartEmptyFullContent">
-            <div className="cartEmptyMini">Ancora nessun oggetto</div>
-            <h3>Il carrello è vuoto.</h3>
-            <p>Quando sceglierai un oggetto, lo ritroverai qui.</p>
+          <div className="cartEmptyScene">
             <button className="cartempty-action cartEmptyFullCta" onClick={onGoExplore}>Esplora</button>
+            <div className="cartEmptyFullArt" aria-hidden="true" />
+            <div className="cartEmptyFullContent">
+              <div className="cartEmptyMini">Ancora nessun oggetto</div>
+              <h3>Il carrello è vuoto.</h3>
+              <p>Quando sceglierai un oggetto, lo ritroverai qui.</p>
+            </div>
           </div>
         </div>
       </section>
