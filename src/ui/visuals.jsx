@@ -84,8 +84,31 @@ const ICONS={
     acc_stand:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 4.8h8v9H8z"/><path d="M6 13.8h12l-1.4 5.2H7.4z"/>`}
 };
 
+const CATEGORY_ICON_ALIASES = {
+  vaso: "v_classico",
+  lampada: "l_tavolo",
+  scatola: "c_scatola",
+  gemma: "altro_geo",
+  stella: "d_stella",
+  fulmine: "altro_geo",
+  regalo: "d_fiocco",
+  fiore: "d_fiore",
+  borsa: "c_cestino",
+  l_comodino: "l_tavolo",
+  v_ampolla: "v_anfora",
+  a_armadio: "a_libreria",
+  c_ciotola: "t_vassoio",
+  stella_decorativa: "d_stella",
+};
+
+export function normalizeCategoryIcon(k) {
+  const key = String(k || "").trim();
+  const mapped = CATEGORY_ICON_ALIASES[key] || key || "v_classico";
+  return ICONS[mapped] ? mapped : "v_classico";
+}
+
 export function glassIcon(k, s = 26) {
-  const ic = ICONS[k] || ICONS.v_classico;
+  const ic = ICONS[normalizeCategoryIcon(k)] || ICONS.v_classico;
   return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
 }
 
