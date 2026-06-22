@@ -4,6 +4,7 @@ import "./styles/app.css";
 import {
   GRADS_SVG,
   glassIcon,
+  normalizeCategoryIcon,
   confetti,
   ICON_GROUPS,
   CartIcon,
@@ -778,8 +779,9 @@ export default function App() {
   };
   const saveCategory = async (data) => {
     try {
-      if (editingCat && editingCat.id) await supabase.from("categories").update(data).eq("id", editingCat.id);
-      else await supabase.from("categories").insert({ ...data, position: cats.length });
+      const payload = { ...data, icon: normalizeCategoryIcon(data.icon) };
+      if (editingCat && editingCat.id) await supabase.from("categories").update(payload).eq("id", editingCat.id);
+      else await supabase.from("categories").insert({ ...payload, position: cats.length });
       await loadCats(); setEditingCat(null); toast("Categoria salvata");
     } catch (e) { toast("Errore categoria"); }
   };
@@ -2280,7 +2282,7 @@ function NotifSheet({ notifs, onClose, onItemClick, onClear }) {
 
 function CategoryEditor({ cat, onClose, onSave, onDelete }) {
   const [name, setName] = useState(cat ? cat.name : "");
-  const [icon, setIcon] = useState(cat ? cat.icon : "vaso");
+  const [icon, setIcon] = useState(normalizeCategoryIcon(cat ? cat.icon : "v_classico"));
   const [busy, setBusy] = useState(false);
   return (
     <div className="ipick on">
