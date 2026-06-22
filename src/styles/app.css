@@ -5697,3 +5697,94 @@ body.dark .herocard .lk{
 }
 body.dark .card .ph > .lk .heart svg,
 body.dark .herocard .lk .heart svg{stroke:rgba(238,205,184,.76)!important}
+
+/* ===================== v2cm product card responsive spacing fix =====================
+   Correzione mirata su tile prodotto dopo v2cl:
+   - le card non si stirano per pareggiare l'altezza della riga grid;
+   - riduce lo spazio tra titolo, divisore e blocco prezzo;
+   - su smartphone mantiene prezzo + CTA nella stessa riga con proporzioni ridotte.
+   Non modifica immagini, scroll, dock, topbar, carrello o #appbg. */
+.grid .card,
+.homeview .grid .card,
+.homeScreen .grid .card,
+.liked-grid-wrap .grid .card{
+  align-self:start!important;
+  height:auto!important;
+}
+.card .cbody{
+  flex:0 0 auto!important;
+  padding:11px 11px 11px!important;
+}
+.cardmeta{
+  margin:0 0 6px!important;
+}
+.card .cbody .ct{
+  font-size:clamp(18px,3.5vw,22px)!important;
+  line-height:1.03!important;
+  letter-spacing:-.032em!important;
+}
+.carddivider{
+  margin:9px 0 8px!important;
+  background:rgba(130,88,64,.13)!important;
+}
+.cardActionRow{
+  gap:7px!important;
+}
+.card .cbody .cp{
+  font-size:clamp(17px,3.5vw,21px)!important;
+  line-height:.98!important;
+}
+.card .cbody .configbtn,
+.card .cbody .liked-configbtn{
+  min-width:80px!important;
+  min-height:34px!important;
+  padding:0 10px!important;
+  gap:5px!important;
+  font-size:9.8px!important;
+  letter-spacing:.145em!important;
+}
+.card .cbody .configbtn .cardCtaArrow,
+.card .cbody .liked-configbtn .cardCtaArrow{
+  font-size:17px!important;
+}
+@media(min-width:680px){
+  .card .cbody{padding:12px 12px 12px!important}
+  .cardmeta{margin-bottom:6px!important}
+  .card .cbody .ct{font-size:clamp(19px,2.2vw,23px)!important}
+  .carddivider{margin:9px 0 8px!important}
+  .card .cbody .cp{font-size:clamp(18px,2vw,21px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{min-width:82px!important;min-height:35px!important;font-size:9.8px!important}
+}
+@media(max-width:430px){
+  .card .cbody{padding:10px 9px 10px!important}
+  .cardmeta{margin-bottom:5px!important}
+  .cardmeta .cardcat,
+  .card .cbody .cardcat{font-size:8.8px!important;letter-spacing:.17em!important;gap:5px!important}
+  .card .cbody .cardcat .gico{width:11px!important;height:11px!important}
+  .card .cbody .ct{font-size:clamp(17px,4.55vw,20px)!important;line-height:1.04!important}
+  .carddivider{margin:8px 0 7px!important}
+  .cardActionRow{grid-template-columns:minmax(0,1fr) auto!important;gap:5px!important;align-items:center!important}
+  .card .cbody .cp{font-size:clamp(16px,4.25vw,18.5px)!important;letter-spacing:-.025em!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{
+    width:auto!important;
+    min-width:68px!important;
+    min-height:31px!important;
+    padding:0 8px!important;
+    font-size:8.8px!important;
+    letter-spacing:.115em!important;
+    gap:4px!important;
+  }
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{font-size:15px!important}
+}
+@media(max-width:350px){
+  .card .cbody{padding:9px 8px 9px!important}
+  .card .cbody .ct{font-size:clamp(16px,4.35vw,18.5px)!important}
+  .card .cbody .cp{font-size:clamp(15px,4.05vw,17.5px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{min-width:62px!important;min-height:29px!important;font-size:8.2px!important;padding:0 7px!important}
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{font-size:14px!important}
+}
