@@ -5993,3 +5993,50 @@ body.dark .herocard .lk .heart svg{stroke:rgba(238,205,184,.76)!important}
     padding:5px!important;
   }
 }
+
+
+/* ===================== v2cq card title balance + selection lock =====================
+   Micro-fix tile prodotto:
+   - se il titolo è su una sola riga, resta centrato nello spazio di due righe;
+   - icona categoria +5%, nome categoria +3%;
+   - blocca selezione testo/immagini nell'app senza rompere input e textarea. */
+.card .cbody .ct{
+  min-height:2.08em!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.cardmeta .cardcat,
+.card .cbody .cardcat{
+  font-size:9.9px!important;
+}
+.card .cbody .cardcat .gico{
+  width:12.6px!important;
+  height:12.6px!important;
+}
+@media(max-width:430px){
+  .cardmeta .cardcat,
+  .card .cbody .cardcat{
+    font-size:9px!important;
+  }
+  .card .cbody .cardcat .gico{
+    width:11.55px!important;
+    height:11.55px!important;
+  }
+}
+html,body,#root,#appbg,.wrap{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none;
+}
+img,svg{
+  -webkit-user-drag:none!important;
+  user-drag:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none;
+}
+input,textarea,[contenteditable="true"]{
+  -webkit-user-select:text!important;
+  user-select:text!important;
+  -webkit-touch-callout:default;
+}
