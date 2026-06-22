@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2bt_shell_canvas_alignment`.
+- Patch corrente: `v2bu_native_scroll_and_static_pages`.
 
 ## File di ingresso effettivo
 
@@ -106,6 +106,13 @@ public/sw.js
 
 Il canvas light ufficiale della shell/PWA è `#F4EEE6`.
 La dark mode mantiene il canvas espresso/cacao caldo già definito nel codice.
+
+## Scroll
+
+- Lo scroll deve restare nativo sulle pagine con contenuto eccedente il viewport.
+- Le pagine corte o vuote vengono bloccate dinamicamente: se la vista attiva rientra nel viewport, non deve esserci scroll verticale fittizio.
+- Il carrello vuoto mantiene il proprio lock dedicato fullscreen/no-scroll.
+- La molla artificiale su input `wheel` desktop è stata rimossa.
 
 ## Regole di manutenzione
 
