@@ -5968,3 +5968,28 @@ body.dark .herocard .lk .heart svg{stroke:rgba(238,205,184,.76)!important}
   .card .cbody .configbtn .cardCtaArrow,
   .card .cbody .liked-configbtn .cardCtaArrow{display:none!important}
 }
+
+
+/* ===================== v2cp mobile card width gain =====================
+   Aumenta di circa il 6% la larghezza percepita delle tile in verticale.
+   Nessuna modifica a contenuti o logica. */
+@media(max-width:430px){
+  .home-grid-wrap,
+  .wrap .grid,
+  .liked-grid-wrap{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .grid,
+  .homeview .home-grid-wrap .grid,
+  .homeScreen .grid,
+  .liked-grid-wrap .grid{
+    gap:6px!important;
+  }
+  .grid .card,
+  .homeview .grid .card,
+  .homeScreen .grid .card,
+  .liked-grid-wrap .grid .card{
+    padding:5px!important;
+  }
+}
