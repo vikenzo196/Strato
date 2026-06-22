@@ -5454,3 +5454,96 @@ body.dark .card .cbody .liked-configbtn{
   .card .cbody .configbtn,
   .card .cbody .liked-configbtn{width:100%!important}
 }
+
+/* ===================== v2ck product card compact guard =====================
+   Correzione regressione v2cj: mantiene la direzione approvata ma rende la
+   tile responsiva e compatta. Niente materiale, niente accavallamenti,
+   miniatura 1:1 invariata, sfondo light #F7F1EB. */
+.card .cbody{
+  padding:15px 14px 14px!important;
+  gap:0!important;
+  overflow:hidden!important;
+}
+.cardmeta{
+  margin:0 0 10px!important;
+}
+.cardmeta .cardcat,
+.card .cbody .cardcat{
+  font-size:10.2px!important;
+  letter-spacing:.22em!important;
+  gap:7px!important;
+  margin:0!important;
+}
+.card .cbody .cardcat .gico{
+  width:13px!important;
+  height:13px!important;
+}
+.card .cbody .ct{
+  font-family:Georgia,'Times New Roman',ui-serif,serif!important;
+  font-size:clamp(24px,5.8vw,31px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.048em!important;
+  max-width:100%!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+  overflow:hidden!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.carddivider{
+  margin:18px 0 14px!important;
+  background:rgba(130,88,64,.16)!important;
+}
+.cardActionRow{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0!important;
+}
+.cardPriceBlock{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+.card .cbody .priceLabel{
+  display:none!important;
+}
+.card .cbody .cp{
+  font-size:clamp(23px,5.8vw,31px)!important;
+  letter-spacing:-.035em!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+.card .cbody .configbtn,
+.card .cbody .liked-configbtn{
+  min-width:120px!important;
+  min-height:46px!important;
+  padding:0 17px!important;
+  gap:11px!important;
+  font-size:12.8px!important;
+  letter-spacing:.18em!important;
+  position:relative!important;
+  z-index:1!important;
+}
+.card .cbody .configbtn .cardCtaArrow,
+.card .cbody .liked-configbtn .cardCtaArrow{
+  font-size:24px!important;
+}
+@media(max-width:380px){
+  .card .cbody{padding:14px 13px 13px!important}
+  .cardmeta{margin-bottom:9px!important}
+  .card .cbody .ct{font-size:clamp(22px,5.6vw,28px)!important}
+  .carddivider{margin:16px 0 13px!important}
+  .cardActionRow{gap:10px!important}
+  .card .cbody .cp{font-size:clamp(21px,5.5vw,27px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{min-width:112px!important;min-height:43px!important;padding:0 15px!important;font-size:12px!important;gap:9px!important}
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{font-size:22px!important}
+}
+@media(max-width:340px){
+  .cardActionRow{grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{width:auto!important;min-width:104px!important;padding:0 13px!important}
+}
