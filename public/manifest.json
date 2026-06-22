@@ -4,8 +4,8 @@
   "description": "Design contemporaneo, plasmato strato dopo strato.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#EAD9C4",
-  "theme_color": "#EAD9C4",
+  "background_color": "#F4EEE6",
+  "theme_color": "#F4EEE6",
   "orientation": "portrait",
   "icons": [
     {
