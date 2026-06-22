@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2bu_native_scroll_and_static_pages`.
+- Patch corrente: `v2cc_code_modules_extract`.
 
 ## File di ingresso effettivo
 
@@ -52,7 +52,52 @@ npm run build
 
 La build produce la cartella `dist/`.
 
-Nota: il bundle può risultare molto grande perché diversi asset sono inline/base64 dentro `src/App.jsx`.
+Nota: gli asset immagine pesanti sono stati estratti dai JSX in `public/assets/inline/`, il CSS globale effettivo vive in `src/styles/app.css` e la patch `v2cc_code_modules_extract` sposta utility, hook PWA e visual/icon helpers in moduli dedicati senza cambiare UI o comportamento.
+
+## Asset immagini
+
+Gli asset immagine che prima erano `data:image` inline dentro i JSX sono stati estratti in:
+
+```text
+public/assets/inline/
+```
+
+Regole:
+
+- non modificare, ricomprimere, ricolorare o sostituire questi file senza richiesta esplicita;
+- le immagini del carrello vuoto devono restare full fidelity, opacity `1`, senza filtri o rielaborazioni;
+- i riferimenti dal CSS embedded usano path assoluti `/assets/inline/...`, compatibili con Vite perché i file sono sotto `public/`;
+- `src/App.jsx` è il file effettivo della build; il duplicato legacy `App.jsx` in root è stato alleggerito allo stesso modo per non mantenere asset base64 obsoleti nello ZIP;
+- i fallback grafici legacy del carrello vuoto sono stati rimossi solo dove erano sovrascritti dalle regole finali light/dark già presenti.
+
+## CSS
+
+Il CSS globale effettivo vive in:
+
+```text
+src/styles/app.css
+```
+
+`src/App.jsx` lo importa con:
+
+```js
+import "./styles/app.css";
+```
+
+Non reintrodurre blocchi `<style>{CSS}</style>` o CSS embedded dentro `App.jsx` senza una ragione tecnica esplicita.
+
+## Moduli codice
+
+La logica non-UI più isolata è separata da `src/App.jsx`:
+
+```text
+src/utils/push.js
+src/utils/product.js
+src/hooks/usePWAInstall.js
+src/ui/visuals.jsx
+```
+
+`src/App.jsx` resta il coordinatore principale dell'app, ma non deve tornare a incorporare asset base64 pesanti, CSS globale o utility isolate senza necessità esplicita.
 
 ## Supabase
 
