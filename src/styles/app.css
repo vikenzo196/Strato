@@ -5547,3 +5547,153 @@ body.dark .card .cbody .liked-configbtn{
   .card .cbody .configbtn,
   .card .cbody .liked-configbtn{width:auto!important;min-width:104px!important;padding:0 13px!important}
 }
+
+/* ===================== v2cl product card proportion fix =====================
+   Correzione mirata della regressione v2cj/v2ck: blocco prezzo/CTA più piccolo,
+   nessun taglio del prezzo su smartphone, card meno ingombrante su desktop e
+   cuore foto riportato a una presenza più morbida/pre-restyling. */
+.card .cbody{
+  padding:12px 12px 12px!important;
+  overflow:hidden!important;
+}
+.cardmeta{
+  margin:0 0 8px!important;
+}
+.cardmeta .cardcat,
+.card .cbody .cardcat{
+  font-size:9.6px!important;
+  letter-spacing:.20em!important;
+  gap:6px!important;
+  opacity:.70!important;
+}
+.card .cbody .cardcat .gico{
+  width:12px!important;
+  height:12px!important;
+}
+.card .cbody .ct{
+  font-family:Georgia,'Times New Roman',ui-serif,serif!important;
+  font-size:clamp(19px,3.8vw,24px)!important;
+  line-height:1.04!important;
+  letter-spacing:-.035em!important;
+  font-weight:700!important;
+  max-width:100%!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+  overflow:hidden!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.carddivider{
+  margin:12px 0 10px!important;
+  background:rgba(130,88,64,.14)!important;
+}
+.cardActionRow{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-width:0!important;
+}
+.cardPriceBlock{
+  min-width:0!important;
+  overflow:visible!important;
+}
+.card .cbody .cp{
+  color:#B26349!important;
+  font-size:clamp(18px,3.9vw,23px)!important;
+  line-height:1!important;
+  font-weight:760!important;
+  letter-spacing:-.03em!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:unset!important;
+}
+.card .cbody .configbtn,
+.card .cbody .liked-configbtn{
+  min-width:86px!important;
+  min-height:38px!important;
+  padding:0 12px!important;
+  gap:7px!important;
+  border-radius:999px!important;
+  font-size:10.8px!important;
+  letter-spacing:.16em!important;
+  font-weight:760!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 7px 15px rgba(166,84,53,.13)!important;
+}
+.card .cbody .configbtn .cardCtaArrow,
+.card .cbody .liked-configbtn .cardCtaArrow{
+  font-size:19px!important;
+  transform:translateY(-.5px)!important;
+}
+.card .ph > .lk,
+.herocard .lk{
+  width:31px!important;
+  height:31px!important;
+  top:10px!important;
+  right:10px!important;
+  background:rgba(247,241,235,.82)!important;
+  border-color:rgba(109,76,58,.14)!important;
+  box-shadow:0 5px 12px rgba(70,44,30,.10),inset 0 1px 0 rgba(255,255,255,.52)!important;
+  -webkit-backdrop-filter:blur(7px) saturate(116%);
+  backdrop-filter:blur(7px) saturate(116%);
+}
+.card .ph > .lk .heart,
+.herocard .lk .heart{
+  width:15px!important;
+  height:15px!important;
+}
+.card .ph > .lk .heart svg,
+.herocard .lk .heart svg{
+  stroke:rgba(70,55,45,.72)!important;
+  fill:transparent!important;
+}
+.card .ph > .lk:has(.heart.liked),
+.card .ph > .lk[aria-pressed="true"],
+.herocard .lk:has(.heart.liked),
+.herocard .lk[aria-pressed="true"]{
+  background:rgba(252,239,231,.88)!important;
+  border-color:rgba(178,99,73,.26)!important;
+  box-shadow:0 6px 14px rgba(117,70,48,.12),inset 0 1px 0 rgba(255,248,243,.58)!important;
+}
+@media(min-width:680px){
+  .grid{gap:14px!important}
+  .card .cbody{padding:13px 13px 13px!important}
+  .card .cbody .ct{font-size:clamp(20px,2.6vw,25px)!important}
+  .card .cbody .cp{font-size:clamp(19px,2.4vw,23px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{min-width:90px!important;min-height:39px!important;font-size:11px!important}
+}
+@media(max-width:430px){
+  .card .cbody{padding:11px 10px 11px!important}
+  .cardmeta{margin-bottom:7px!important}
+  .cardmeta .cardcat,
+  .card .cbody .cardcat{font-size:9.2px!important;letter-spacing:.18em!important}
+  .card .cbody .ct{font-size:clamp(18px,5.0vw,22px)!important;line-height:1.05!important}
+  .carddivider{margin:10px 0 9px!important}
+  .cardActionRow{grid-template-columns:1fr!important;gap:8px!important;align-items:stretch!important}
+  .card .cbody .cp{font-size:clamp(18px,5.0vw,21px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{
+    width:100%!important;
+    min-width:0!important;
+    min-height:36px!important;
+    padding:0 10px!important;
+    font-size:10.4px!important;
+    gap:6px!important;
+  }
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{font-size:18px!important}
+  .card .ph > .lk,
+  .herocard .lk{width:29px!important;height:29px!important;top:9px!important;right:9px!important}
+  .card .ph > .lk .heart,
+  .herocard .lk .heart{width:14px!important;height:14px!important}
+}
+body.dark .card .ph > .lk,
+body.dark .herocard .lk{
+  background:rgba(52,39,34,.82)!important;
+  border-color:rgba(238,205,184,.14)!important;
+  box-shadow:0 6px 14px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,236,218,.05)!important;
+}
+body.dark .card .ph > .lk .heart svg,
+body.dark .herocard .lk .heart svg{stroke:rgba(238,205,184,.76)!important}
