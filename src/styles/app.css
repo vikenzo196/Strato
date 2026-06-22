@@ -5853,3 +5853,118 @@ body.dark .herocard .lk .heart svg{stroke:rgba(238,205,184,.76)!important}
     padding:0 9px!important;
   }
 }
+
+
+/* ===================== v2co product card mobile width alignment =====================
+   Modalità verticale mobile: card più continue con la hero.
+   Recupera larghezza utile riducendo il gutter tra le due tile e il padding interno,
+   così prezzo e CTA tornano affiancati senza accavallarsi.
+   Mantiene miniatura 1:1, fondo #F7F1EB, materiale rimosso e ordine prodotti invariato. */
+@media(max-width:430px){
+  .home-grid-wrap,
+  .wrap .grid,
+  .liked-grid-wrap{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+  .grid,
+  .homeview .home-grid-wrap .grid,
+  .homeScreen .grid,
+  .liked-grid-wrap .grid{
+    gap:9px!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  .grid .card,
+  .homeview .grid .card,
+  .homeScreen .grid .card,
+  .liked-grid-wrap .grid .card{
+    padding:6px!important;
+    border-radius:27px!important;
+  }
+  .card .ph,
+  .card--home .ph,
+  .card--explore .ph,
+  .card--liked .ph{
+    border-radius:22px!important;
+  }
+  .card .cbody{
+    padding:10px 9px 10px!important;
+  }
+  .cardmeta{margin-bottom:5px!important}
+  .cardmeta .cardcat,
+  .card .cbody .cardcat{
+    font-size:8.7px!important;
+    letter-spacing:.165em!important;
+    gap:5px!important;
+  }
+  .card .cbody .ct{
+    font-size:clamp(16px,4.28vw,19px)!important;
+    line-height:1.04!important;
+    letter-spacing:-.028em!important;
+  }
+  .carddivider{margin:8px 0 7px!important}
+  .cardActionRow{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:5px!important;
+  }
+  .cardPriceBlock{min-width:0!important;width:auto!important;overflow:visible!important}
+  .card .cbody .cp{
+    font-size:clamp(15px,3.95vw,17.5px)!important;
+    line-height:1!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+  }
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{
+    width:auto!important;
+    min-width:70px!important;
+    min-height:30px!important;
+    padding:0 8px!important;
+    justify-content:center!important;
+    gap:4px!important;
+    font-size:8.5px!important;
+    letter-spacing:.115em!important;
+  }
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{
+    display:inline-flex!important;
+    font-size:14px!important;
+    transform:translateY(-.5px)!important;
+  }
+}
+@media(max-width:360px){
+  .home-grid-wrap,
+  .wrap .grid,
+  .liked-grid-wrap{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .grid,
+  .homeview .home-grid-wrap .grid,
+  .homeScreen .grid,
+  .liked-grid-wrap .grid{gap:8px!important}
+  .grid .card,
+  .homeview .grid .card,
+  .homeScreen .grid .card,
+  .liked-grid-wrap .grid .card{padding:5px!important;border-radius:25px!important}
+  .card .ph,
+  .card--home .ph,
+  .card--explore .ph,
+  .card--liked .ph{border-radius:20px!important}
+  .card .cbody{padding:9px 8px 9px!important}
+  .card .cbody .ct{font-size:clamp(15px,4.05vw,17.5px)!important}
+  .card .cbody .cp{font-size:clamp(14px,3.75vw,16px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{
+    min-width:62px!important;
+    min-height:28px!important;
+    padding:0 7px!important;
+    font-size:8px!important;
+    letter-spacing:.105em!important;
+  }
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{display:none!important}
+}
