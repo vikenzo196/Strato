@@ -5276,3 +5276,181 @@ body.dark .notifrow.notifrow--dropdown{background:rgba(62,47,38,.50);border-colo
 }
 
 
+
+/* ===================== v2cj product card preview layout =====================
+   Ridisegna solo la parte informativa delle tile prodotto secondo la direzione
+   approvata: foto 1:1 invariata, materiale rimosso, titolo serif design,
+   divisore, prezzo + CTA sulla stessa riga. Light tile bg #F7F1EB.
+   Non modifica sorgenti immagine, scroll, dock, topbar, carrello o #appbg. */
+body:not(.dark) .card,
+body:not(.dark) .card--home,
+body:not(.dark) .card--explore,
+body:not(.dark) .card--liked{
+  background:#F7F1EB!important;
+  background-color:#F7F1EB!important;
+}
+.card .ph,
+.card--home .ph,
+.card--explore .ph,
+.card--liked .ph{
+  aspect-ratio:1 / 1!important;
+  border-radius:26px!important;
+}
+.card .ph img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+}
+.card .cbody{
+  padding:19px 17px 16px!important;
+  background:transparent!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+}
+.cardmeta{
+  display:block!important;
+  min-height:auto!important;
+  margin:0 0 13px!important;
+}
+.cardmeta .cardcat,
+.card .cbody .cardcat{
+  width:100%;
+  margin:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  color:#B26349!important;
+  font-size:11px!important;
+  line-height:1!important;
+  letter-spacing:.24em!important;
+  text-transform:uppercase!important;
+  font-weight:760!important;
+  opacity:.72!important;
+}
+.card .cbody .cardcat .gico{
+  width:15px!important;
+  height:15px!important;
+  opacity:.84!important;
+}
+.card .cbody .ct{
+  font-family:Georgia,'Times New Roman',ui-serif,serif!important;
+  font-weight:700!important;
+  font-size:clamp(31px,8.2vw,40px)!important;
+  line-height:.98!important;
+  letter-spacing:-.055em!important;
+  color:#2D2621!important;
+  margin:0!important;
+  overflow-wrap:anywhere;
+}
+.carddivider{
+  width:100%;
+  height:1px;
+  margin:31px 0 24px;
+  background:rgba(130,88,64,.18);
+}
+.cardActionRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  width:100%;
+}
+.cardPriceBlock{
+  min-width:0;
+  flex:1 1 auto;
+}
+.card .cbody .priceLabel{
+  margin:0 0 8px;
+  color:rgba(76,59,49,.46);
+  font-size:10.5px;
+  line-height:1;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  font-weight:760;
+}
+.card .cbody .cp{
+  margin:0!important;
+  color:#B26349!important;
+  font-size:clamp(27px,7.1vw,36px)!important;
+  line-height:1!important;
+  font-weight:800!important;
+  letter-spacing:-.035em!important;
+  opacity:1!important;
+  white-space:nowrap;
+}
+.card .cbody .mat{
+  display:none!important;
+}
+.card .cbody .configbtn,
+.card .cbody .liked-configbtn{
+  flex:0 0 auto;
+  width:auto!important;
+  min-width:142px!important;
+  min-height:57px!important;
+  padding:0 23px!important;
+  border-radius:999px!important;
+  border:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:15px!important;
+  background:linear-gradient(135deg,#B26349,#A65435)!important;
+  color:#FFF8F1!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),0 10px 22px rgba(166,84,53,.18)!important;
+  font-size:15px!important;
+  line-height:1!important;
+  letter-spacing:.20em!important;
+  text-transform:uppercase!important;
+  font-weight:780!important;
+}
+.card .cbody .configbtn .cardCtaArrow,
+.card .cbody .liked-configbtn .cardCtaArrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  line-height:1;
+  font-weight:300;
+  letter-spacing:0;
+  transform:translateY(-1px);
+}
+.card .cbody .configbtn:active,
+.card .cbody .liked-configbtn:active{
+  transform:scale(.97)!important;
+}
+body.dark .card .cbody .ct{
+  color:rgba(246,226,211,.94)!important;
+}
+body.dark .carddivider{
+  background:rgba(238,205,184,.15);
+}
+body.dark .card .cbody .priceLabel{
+  color:rgba(238,205,184,.46);
+}
+body.dark .card .cbody .cp{
+  color:#D99A78!important;
+}
+body.dark .card .cbody .configbtn,
+body.dark .card .cbody .liked-configbtn{
+  background:linear-gradient(135deg,#9E563E,#7D402F)!important;
+  color:#FFF3EA!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 12px 26px rgba(0,0,0,.28)!important;
+}
+@media(max-width:380px){
+  .card .cbody{padding:17px 15px 15px!important}
+  .cardmeta{margin-bottom:11px!important}
+  .card .cbody .ct{font-size:clamp(29px,8vw,37px)!important}
+  .carddivider{margin:27px 0 21px}
+  .cardActionRow{gap:13px}
+  .card .cbody .cp{font-size:clamp(25px,7vw,33px)!important}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{min-width:128px!important;min-height:52px!important;padding:0 19px!important;font-size:13.6px!important;gap:11px!important}
+  .card .cbody .configbtn .cardCtaArrow,
+  .card .cbody .liked-configbtn .cardCtaArrow{font-size:27px}
+}
+@media(max-width:340px){
+  .cardActionRow{align-items:stretch;flex-direction:column;gap:15px}
+  .card .cbody .configbtn,
+  .card .cbody .liked-configbtn{width:100%!important}
+}
