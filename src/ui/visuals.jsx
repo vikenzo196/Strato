@@ -16,76 +16,76 @@ export const GRADS_SVG = `<svg width="0" height="0" style="position:absolute" ar
 <linearGradient id="g_heartT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A7E"/><stop offset="1" stop-color="#F0231A"/></linearGradient>
 <linearGradient id="g_orders" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6FE9D4"/><stop offset="1" stop-color="#0FA68C"/></linearGradient></defs></svg>`;
 const ICONS={
-    vaso:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M9 3h6l-1 4c1.7 1 2.8 2.8 2.8 5A5.8 5.8 0 1 1 7.2 12c0-2.2 1.1-4 2.8-5z"/>`},
-    lampada:{g:'g_gold',f:'rgba(242,163,16,.18)',d:`<path d="M8 3h8l2.4 7.5H5.6z"/><path d="M12 10.5V17"/><path d="M8.6 21h6.8l-1-4H9.6z"/>`},
-    scatola:{g:'g_blue',f:'rgba(21,147,238,.16)',d:`<path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="m4 7 8 4 8-4"/><path d="M12 11v10"/>`},
-    gemma:{g:'g_violet',f:'rgba(124,77,224,.16)',d:`<path d="M7 3h10l4 6-9 12L3 9z"/><path d="M3 9h18"/>`},
-    stella:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<path d="M12 3.5 14.6 9l6 .6-4.5 4 1.4 6L12 16.6 6.5 19.6l1.4-6L3.4 9.6 9.4 9z"/>`},
-    fulmine:{g:'g_teal',f:'rgba(15,166,140,.16)',d:`<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>`},
-    regalo:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13h14v8H5z"/><path d="M12 9v12"/><path d="M12 9C9.5 9 8 4.5 12 4.5 13.7 4.5 13.7 9 12 9z"/>`},
-    fiore:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<circle cx="12" cy="6.6" r="2.6"/><circle cx="17.4" cy="10.6" r="2.6"/><circle cx="15.3" cy="16.9" r="2.6"/><circle cx="8.7" cy="16.9" r="2.6"/><circle cx="6.6" cy="10.6" r="2.6"/><circle cx="12" cy="12" r="2.1"/>`},
-    tazza:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M5 8h12v5a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/>`},
-    borsa:{g:'g_teal',f:'rgba(15,166,140,.16)',d:`<path d="M6 8h12l-1 12H7z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>`},
-    l_tavolo:{g:'g_gold',f:'rgba(242,163,16,.18)',d:`<path d="M8 3h8l2 7H6z"/><path d="M12 10v7"/><path d="M8.5 21h7l-1-4h-5z"/>`},
-    l_sospensione:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M12 2v3"/><path d="M5 12a7 7 0 0 1 14 0z"/><path d="M9.5 12a2.5 2.5 0 0 0 5 0"/>`},
-    l_piantana:{g:'g_gold',f:'rgba(242,163,16,.18)',d:`<path d="M8 4h8l1 5H7z"/><path d="M9 9 6.5 21M15 9l2.5 12M12 9v12"/>`},
-    l_comodino:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M6.5 11a5.5 5.5 0 0 1 11 0z"/><path d="M9.5 15h5l1 6h-7z"/>`},
-    l_lampadina:{g:'g_gold',f:'rgba(242,163,16,.18)',d:`<path d="M9 17a5.5 5.5 0 1 1 6 0 2.5 2.5 0 0 0-1 2v.5h-4V19a2.5 2.5 0 0 0-1-2z"/><path d="M9.7 21.5h4.6"/>`},
-    v_classico:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M9 3h6l-1 3.5c1.8 1.2 3 3.2 3 5.5a6 6 0 0 1-12 0c0-2.3 1.2-4.3 3-5.5z"/>`},
-    v_ampolla:{g:'g_teal',f:'rgba(15,166,140,.16)',d:`<path d="M10.5 3h3v5a6 6 0 1 1-3 0z"/>`},
-    v_tubo:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<path d="M8 6h8v11.5a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 8 17.5z"/><ellipse cx="12" cy="6" rx="4" ry="1.3"/>`},
-    v_anfora:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M9.5 5h5l-.5 2.2a5.5 5.5 0 1 1-4 0z"/><path d="M9.3 6.2C6 6.2 6 11.4 10 11.8M14.7 6.2c3.3 0 3.3 5.2-.7 5.6"/>`},
-    v_conico:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<path d="M7 5.5h10l-2 13.5h-6z"/><ellipse cx="12" cy="5.5" rx="5" ry="1.2"/>`},
-    a_sedia:{g:'g_blue',f:'rgba(21,147,238,.16)',d:`<rect x="8" y="3" width="8" height="4.5" rx="1"/><path d="M8 7.5v4.5M16 7.5v4.5"/><path d="M7 12h10"/><path d="M8.5 12v8M15.5 12v8"/>`},
-    a_poltrona:{g:'g_violet',f:'rgba(124,77,224,.16)',d:`<path d="M5 11a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5H5z"/><path d="M5 16v3M19 16v3"/><path d="M8 9V7a1.6 1.6 0 0 1 1.6-1.6h4.8A1.6 1.6 0 0 1 16 7v2"/>`},
-    a_tavolo:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M3 7.5h18v2H3z"/><path d="M5.5 9.5V20M18.5 9.5V20"/>`},
-    a_libreria:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<rect x="4.5" y="3" width="15" height="18" rx="1.6"/><path d="M4.5 9h15M4.5 15h15"/><path d="M8 4.6v3.4M10.5 4.6v3.4M15 15.6v3.8"/>`},
-    a_armadio:{g:'g_blue',f:'rgba(21,147,238,.16)',d:`<rect x="5.5" y="3" width="13" height="18" rx="1.4"/><path d="M12 3v18"/><path d="M10 10.5v2.5M14 10.5v2.5"/><path d="M7.5 21v1.4M16.5 21v1.4"/>`},
-    d_stella:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<path d="M12 3.5 14.6 9l6 .6-4.5 4 1.4 6L12 16.6 6.5 19.6l1.4-6L3.4 9.6 9.4 9z"/>`},
-    d_cuore:{g:'g_red',f:'rgba(240,35,26,.16)',d:`<path d="M19 14c1.49-1.46 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>`},
-    d_fiocco:{g:'g_blue',f:'rgba(21,147,238,.16)',d:`<path d="M12 2v20M3.3 7l17.4 10M20.7 7 3.3 17"/><path d="M9.6 4.2 12 6.1l2.4-1.9M9.6 19.8 12 17.9l2.4 1.9M4.3 9.6 6.7 9l-.6-2.5M19.7 9.6 17.3 9l.6-2.5M4.3 14.4 6.7 15l-.6 2.5M19.7 14.4 17.3 15l.6 2.5"/>`},
-    d_fiore:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<circle cx="12" cy="6.6" r="2.6"/><circle cx="17.4" cy="10.6" r="2.6"/><circle cx="15.3" cy="16.9" r="2.6"/><circle cx="8.7" cy="16.9" r="2.6"/><circle cx="6.6" cy="10.6" r="2.6"/><circle cx="12" cy="12" r="2.1"/>`},
-    d_cornice:{g:'g_violet',f:'rgba(124,77,224,.16)',d:`<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="m7 16 3.2-3.6 2.3 2.3 2.3-2.8L18 16z"/><circle cx="9" cy="9" r="1.5"/>`},
-    c_scatola:{g:'g_blue',f:'rgba(21,147,238,.16)',d:`<path d="M4 8h16v11a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 19z"/><path d="M4 8 6.2 4h11.6L20 8"/><path d="M12 8v12.5"/>`},
-    c_cestino:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M4 9h16l-1.5 10.2a2 2 0 0 1-2 1.7H7.5a2 2 0 0 1-2-1.7z"/><path d="M3.3 9h17.4"/><path d="M8 9a4 4 0 0 1 8 0"/>`},
-    c_barattolo:{g:'g_teal',f:'rgba(15,166,140,.16)',d:`<rect x="6" y="8" width="12" height="13" rx="2.5"/><rect x="7.5" y="3.8" width="9" height="4.2" rx="1.3"/><path d="M9 12.5h6"/>`},
-    c_portapenne:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M7.5 9h9l-1 11a1.5 1.5 0 0 1-1.5 1.4h-4A1.5 1.5 0 0 1 8.5 20z"/><path d="M11 9 12 3M14.2 9 15.6 3.4"/>`},
-    c_ciotola:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<path d="M3.5 11h17a8.5 8.5 0 0 1-17 0z"/><path d="M9 21h6"/>`},
+    vaso:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M9.2 3.8h5.6c-.2 1.3-.8 2.2-1.7 2.9v8.1c0 3.4-2.3 5.4-5.1 5.4s-5.1-2-5.1-5.4V6.7c-.9-.7-1.5-1.6-1.7-2.9h5.6" transform="translate(3 0)"/>`},
+    lampada:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5.2 10.8a6.8 6.8 0 0 1 13.6 0H5.2Z"/><path d="M12 10.8v6.2"/><path d="M8.8 19h6.4"/><path d="M10 21h4"/><path d="M15.5 11.5v2.7"/><circle cx="15.5" cy="15.4" r=".7"/>`},
+    scatola:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5 8.2h14v11a1.8 1.8 0 0 1-1.8 1.8H6.8A1.8 1.8 0 0 1 5 19.2z"/><path d="M5 8.2 6.8 5h10.4L19 8.2"/><path d="M12 8.2v12.6"/>`},
+    gemma:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M7 4h10l4 5-9 11L3 9z"/><path d="M3 9h18"/><path d="m7 4 5 16 5-16"/>`},
+    stella:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 3.6 14.7 9l5.9.8-4.3 4 1.2 6-5.5-3.1-5.5 3.1 1.2-6-4.3-4 5.9-.8z"/>`},
+    fulmine:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M13.4 2.8 6.4 13h4.7l-1 8.2 7.5-10.8H13z"/>`},
+    regalo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<rect x="4" y="9.2" width="16" height="3.8" rx="1"/><path d="M5.2 13h13.6v7.5H5.2z"/><path d="M12 9.2v11.3"/><path d="M12 9c-2.5 0-4-3.8-.6-3.8 1.6 0 1.6 2.4.6 3.8z"/><path d="M12 9c2.5 0 4-3.8.6-3.8-1.6 0-1.6 2.4-.6 3.8z"/>`},
+    fiore:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 12c-2.7 0-4.8-2.1-4.8-4.4 0-1.4 1-2.6 2.5-2.6 1.1 0 1.8.4 2.3 1.2.5-.8 1.2-1.2 2.3-1.2 1.5 0 2.5 1.2 2.5 2.6 0 2.3-2.1 4.4-4.8 4.4Z"/><path d="M12 12v8.3"/><path d="M12 15.2c-1.5-.2-3.5.6-4.7 2.4"/><path d="M12 16c1.6-.2 3.5.6 4.7 2.4"/>`},
+    tazza:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6 8.4h9.2v5.1a4.5 4.5 0 0 1-4.5 4.5H10A4 4 0 0 1 6 14z"/><path d="M15.2 9.3h1.6a2.4 2.4 0 1 1 0 4.8h-1.6"/>`},
+    borsa:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6.3 8.5h11.4l-1 11.3H7.3z"/><path d="M8.7 8.5V7.2a3.3 3.3 0 0 1 6.6 0v1.3"/>`},
 
-  /* ── OROLOGI ─────────────────────────────────── */
-  o_parete:  {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.5 2"/>`},
-  o_sveglia: {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<circle cx="12" cy="13" r="7.5"/><path d="M12 10v4l2.5 1.5"/><path d="M6.5 7 5 5.5M17.5 7l1.5-1.5"/><path d="M10 21.5h4"/>`},
-  o_clessidra:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M6 3h12M6 21h12M8 3l4 9-4 9M16 3l-4 9 4 9"/>`},
-  o_quadrante:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<circle cx="12" cy="12" r="9"/><path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2"/><path d="M12 12l2.5-3.5"/>`},
+    l_tavolo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5.2 10.8a6.8 6.8 0 0 1 13.6 0H5.2Z"/><path d="M12 10.8v6.2"/><path d="M8.8 19h6.4"/><path d="M10 21h4"/><path d="M15.5 11.5v2.7"/><circle cx="15.5" cy="15.4" r=".7"/>`},
+    l_sospensione:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 2.8v3.5"/><path d="M6.2 11.1a5.8 5.8 0 0 1 11.6 0H6.2Z"/><path d="M9.4 14.1h5.2"/>`},
+    l_piantana:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8.4 7.2a3.6 3.6 0 0 1 7.2 0H8.4Z"/><path d="M12 7.2V18"/><path d="M9.2 21h5.6"/>`},
+    l_comodino:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M7.2 11.4a4.8 4.8 0 0 1 9.6 0H7.2Z"/><path d="M12 11.4v4.8"/><path d="M9.4 18.6h5.2"/><path d="M10.2 20.8h3.6"/>`},
+    l_lampadina:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 3.6a5.5 5.5 0 0 1 3.9 9.4c-.8.8-1.2 1.6-1.2 2.7h-5.4c0-1.1-.4-1.9-1.2-2.7A5.5 5.5 0 0 1 12 3.6Z"/><path d="M9.7 18.2h4.6"/><path d="M10.2 20.4h3.6"/>`},
 
-  /* ── SCRIVANIA ───────────────────────────────── */
-  s_scrivania:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M2 14h20v3H2z"/><path d="M5 17v5M19 17v5"/><path d="M5 14v-7h7"/>`},
-  s_supporto: {g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M8 4h8a1 1 0 0 1 1 1v11H7V5a1 1 0 0 1 1-1z"/><path d="M7 10h10"/><path d="M9 16v3h6v-3"/>`},
-  s_fermacarte:{g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M5 14l7-11 7 11z"/><path d="M5 14h14"/><path d="M7 14l-1 6h12l-1-6"/>`},
-  s_leggio:   {g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M5 5h14v9l-7 3-7-3z"/><path d="M5 14H3v5h18v-5h-2"/><path d="M9 12v5M15 12v5"/>`},
+    v_classico:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M10 3.8h4c-.2 1-.7 1.8-1.5 2.5v7.9c0 3.5-2 5.8-4.5 5.8s-4.5-2.3-4.5-5.8V6.3C2.7 5.6 2.2 4.8 2 3.8h4" transform="translate(5 0)"/>`},
+    v_ampolla:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M10.5 3.8h3v4.2c0 1.1.4 2 1 2.9 1.1 1.4 1.7 2.9 1.7 4.5 0 2.9-2.1 4.9-4.7 4.9s-4.7-2-4.7-4.9c0-1.6.6-3.1 1.7-4.5.6-.8 1-1.8 1-2.9z"/>`},
+    v_tubo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<rect x="8" y="4.2" width="8" height="16.2" rx="1.5"/><ellipse cx="12" cy="4.2" rx="4" ry="1.1"/>`},
+    v_anfora:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M9.4 4h5.2c-.2 1-.7 1.7-1.3 2.2v8.1c0 3.2-2.1 5.3-4.3 5.3s-4.3-2.1-4.3-5.3V6.2C4 5.7 3.6 5 3.4 4h5.2" transform="translate(3 0)"/><path d="M8.2 7c-2 0-3.1 1.2-3.1 3"/><path d="M15.8 7c2 0 3.1 1.2 3.1 3"/>`},
+    v_conico:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 5h8l-2.2 14H10.2z"/><ellipse cx="12" cy="5" rx="4" ry="1"/>`},
 
-  /* ── PARETE ──────────────────────────────────── */
-  p_mensola:  {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M3 11h18v3H3z"/><path d="M6 14v4M18 14v4"/>`},
-  p_gancio:   {g:'g_amber',f:'rgba(232,128,28,.18)',d:`<path d="M8 4h8"/><path d="M12 4v7a4 4 0 0 1-4 4H6a2 2 0 0 0 0 4h1"/>`},
+    a_sedia:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 5.2h8v6.4H8z"/><path d="M8 11.6h8"/><path d="M9 11.6v7.2"/><path d="M15 11.6v7.2"/><path d="M7 15.2h10"/>`},
+    a_poltrona:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M7.5 10.5a2.6 2.6 0 0 1 2.6-2.6h3.8a2.6 2.6 0 0 1 2.6 2.6v4.8H7.5z"/><path d="M8.6 8V6.9a2.3 2.3 0 0 1 2.3-2.3h2.2a2.3 2.3 0 0 1 2.3 2.3V8"/><path d="M7.5 15.3v2.4"/><path d="M16.5 15.3v2.4"/>`},
+    a_tavolo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<ellipse cx="12" cy="7.8" rx="8" ry="2.3"/><path d="M4 7.8h16"/><path d="M8 10v8"/><path d="M16 10v8"/>`},
+    a_libreria:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M4.5 4.2h15v15.6h-15z"/><path d="M4.5 9.6h15"/><path d="M4.5 15h15"/><path d="M8 5.5v2.6"/><path d="M10.8 5.5v2.6"/><path d="M15.2 15.7v2.5"/>`},
+    a_armadio:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6 4.2h12v15.8H6z"/><path d="M12 4.2v15.8"/><path d="M10 10.5v2.2"/><path d="M14 10.5v2.2"/><path d="M8 20v1.2"/><path d="M16 20v1.2"/>`},
 
-  /* ── TAVOLA ──────────────────────────────────── */
-  t_vassoio:  {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M4 11h16v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M2 13h20"/><path d="M4 13h16v2H4z"/>`},
-  t_sottopiatto:{g:'g_green',f:'rgba(91,163,77,.16)',d:`<ellipse cx="12" cy="15" rx="9" ry="5"/><ellipse cx="12" cy="15" rx="5.5" ry="3"/>`},
+    d_stella:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 3.6 14.7 9l5.9.8-4.3 4 1.2 6-5.5-3.1-5.5 3.1 1.2-6-4.3-4 5.9-.8z"/>`},
+    d_cuore:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 20.5 5.4 14A4.9 4.9 0 0 1 12 7.7 4.9 4.9 0 0 1 18.6 14z"/>`},
+    d_fiocco:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 11.2 9.2 8.6c-1.4-1.2-3.7-.8-4.6.8-.6 1.2-.2 2.7.8 3.4L9.2 15"/><path d="M12 11.2 14.8 8.6c1.4-1.2 3.7-.8 4.6.8.6 1.2.2 2.7-.8 3.4L14.8 15"/><path d="M9.2 15 5.8 18.6"/><path d="M14.8 15 18.2 18.6"/><circle cx="12" cy="12.6" r="1.6"/>`},
+    d_fiore:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 12c-2.7 0-4.8-2.1-4.8-4.4 0-1.4 1-2.6 2.5-2.6 1.1 0 1.8.4 2.3 1.2.5-.8 1.2-1.2 2.3-1.2 1.5 0 2.5 1.2 2.5 2.6 0 2.3-2.1 4.4-4.8 4.4Z"/><path d="M12 12v8.3"/><path d="M12 15.2c-1.5-.2-3.5.6-4.7 2.4"/><path d="M12 16c1.6-.2 3.5.6 4.7 2.4"/>`},
+    d_cornice:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5 4.5h14v15H5z"/><path d="M7.8 7.3h8.4v9.4H7.8z"/>`},
 
-  /* ── STAGIONALI ──────────────────────────────── */
-  st_candela: {g:'g_gold',f:'rgba(242,163,16,.18)',d:`<path d="M10 11h4v11H10z"/><path d="M12 8c-1.5 1.5-2 3-1 4.5"/><path d="M12 8c1.5 1.5 2 3 1 4.5"/>`},
-  st_albero:  {g:'g_green',f:'rgba(91,163,77,.16)',d:`<path d="M12 2 6 11h5L8 19h4v4h0M12 2l6 9h-5l3 8h-4v4h0"/>`},
-  st_ornamento:{g:'g_pink',f:'rgba(224,69,126,.16)',d:`<circle cx="12" cy="16" r="6.5"/><path d="M11 9.5h2v3h-2z"/><path d="M10.5 9.5 Q9 7 12 5 Q15 7 13.5 9.5"/>`},
+    c_scatola:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5.4 9h13.2v9.8a1.8 1.8 0 0 1-1.8 1.8H7.2a1.8 1.8 0 0 1-1.8-1.8z"/><path d="M5.4 9 7 5.8h10L18.6 9"/>`},
+    c_cestino:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5 10.2h14l-1.3 8a2 2 0 0 1-2 1.7H8.3a2 2 0 0 1-2-1.7z"/><path d="M8.2 10.2V8.4a3.8 3.8 0 0 1 7.6 0v1.8"/><path d="M8.1 13h7.8"/><path d="M8.6 15.8h6.8"/>`},
+    c_barattolo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<rect x="7" y="8" width="10" height="12" rx="2"/><rect x="8" y="4.2" width="8" height="3.8" rx="1.1"/><path d="M9.5 12.4h5"/>`},
+    c_portapenne:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 9h8l-.8 10.6H8.8z"/><path d="M10.4 9 11.6 3.8"/><path d="M13.2 9 15.2 4.4"/><path d="M15.2 9 17.2 5.2"/>`},
+    c_ciotola:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M4.2 11h15.6a7.8 7.8 0 0 1-15.6 0z"/><path d="M8.8 20.8h6.4"/>`},
 
-  /* ── ALTRO ───────────────────────────────────── */
-  altro_cubo: {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M4 8.5l8-4.5 8 4.5v9l-8 4.5-8-4.5z"/><path d="M4 8.5l8 4.5 8-4.5"/><path d="M12 13v9"/>`},
-  altro_sfera:{g:'g_violet',f:'rgba(124,77,224,.16)',d:`<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3 Q5.5 12 12 21"/><path d="M12 3 Q18.5 12 12 21"/>`},
-  altro_geo:  {g:'g_teal',f:'rgba(15,166,140,.16)',d:`<path d="M12 3l9 7-3.5 10h-11L3 10z"/>`},
-  acc_portachiavi:{g:'g_amber',f:'rgba(232,128,28,.18)',d:`<circle cx="10" cy="9" r="5.5"/><circle cx="10" cy="9" r="2.5"/><path d="M14.5 12.5l5 5M16.5 16.5l2-2"/>`},
-  acc_stand:  {g:'g_clay',f:'rgba(140,104,86,.16)',d:`<path d="M8 4h8v9H8z"/><path d="M6 13h12l-1.5 5H7.5z"/>`}
+    o_parete:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<circle cx="12" cy="12" r="8.8"/><path d="M12 7.6v4.6l3.5 2"/>`},
+    o_sveglia:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<circle cx="12" cy="13" r="6.9"/><path d="M12 10.1v3.7l2.5 1.5"/><path d="M7.3 5.9 5.6 4.4"/><path d="M16.7 5.9l1.7-1.5"/><path d="M9.8 20.8h4.4"/>`},
+    o_clessidra:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6 4h12"/><path d="M6 20h12"/><path d="M8 4c0 3 2 5.2 4 6.4C10 11.6 8 13.8 8 17"/><path d="M16 4c0 3-2 5.2-4 6.4 2 1.2 4 3.4 4 6.6"/>`},
+    o_quadrante:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M7.2 19.6V10a4.8 4.8 0 0 1 4.8-4.8h0A4.8 4.8 0 0 1 16.8 10v9.6z"/><path d="M12 10.3v3.2l2.2 1.3"/><path d="M12 7.6v1.2"/>`},
+
+    s_scrivania:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M3 8.2h18v2.4H3z"/><path d="M5.2 10.6v9"/><path d="M18.8 10.6v9"/><path d="M14.2 10.6v9"/><path d="M14.2 13.8h4.6"/><path d="M14.2 16.8h4.6"/>`},
+    s_supporto:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6 8h12v8H6z"/><path d="M8 8 10 5h8v8"/><path d="M6 16h12l-1.5 3H7.5z"/>`},
+    s_fermacarte:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M6 15a6 6 0 0 1 12 0v2H6z"/><path d="M8 17.2h8"/>`},
+    s_leggio:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M5 5h14v8l-7 3-7-3z"/><path d="M12 8v8"/><path d="M8.5 16v3.6"/><path d="M15.5 16v3.6"/><path d="M4 19.6h16"/>`},
+
+    p_mensola:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M4 10.4h16v2.8H4z"/><path d="M7 13.2v2.5"/><path d="M17 13.2v2.5"/>`},
+    p_gancio:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M9 4.2h6"/><path d="M12 4.2v8.1a3.8 3.8 0 0 1-3.8 3.8H7a1.8 1.8 0 0 0 0 3.6h1.2"/>`},
+
+    t_vassoio:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<ellipse cx="12" cy="14.8" rx="8.8" ry="4.2"/><ellipse cx="12" cy="14.8" rx="5.9" ry="2.6"/>`},
+    t_sottopiatto:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<ellipse cx="12" cy="14.5" rx="9" ry="5"/><ellipse cx="12" cy="14.5" rx="6.5" ry="3.3"/>`},
+
+    st_candela:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 10h8v10H8z"/><path d="M12 4.2c-1.4 1.6-2 2.8-2 4 0 1.1.8 2 2 2s2-.9 2-2c0-1.2-.6-2.4-2-4Z"/>`},
+    st_albero:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 4 6.2 11h3.2L7 16h3l-2 4h8l-2-4h3l-2.4-5H17.8z"/><path d="M12 20v1.5"/>`},
+    st_ornamento:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<circle cx="12" cy="13.5" r="6.5"/><path d="M11 7h2v2h-2z"/><path d="M10.8 7c-1-1.4-.7-2.8 1.2-4 1.9 1.2 2.2 2.6 1.2 4"/>`},
+
+    altro_cubo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M4 8.2 12 4l8 4.2v8.6L12 21l-8-4.2z"/><path d="M4 8.2 12 12l8-3.8"/><path d="M12 12v9"/>`},
+    altro_sfera:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<circle cx="12" cy="12" r="8.8"/><path d="M3.2 12h17.6"/><path d="M12 3.2c-2.3 2.4-3.8 5.4-3.8 8.8s1.5 6.4 3.8 8.8"/><path d="M12 3.2c2.3 2.4 3.8 5.4 3.8 8.8s-1.5 6.4-3.8 8.8"/>`},
+    altro_geo:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M12 4 5 18h14z"/><path d="M12 4v14"/><path d="M8.5 11h7"/>`},
+    acc_portachiavi:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<circle cx="9.5" cy="8.5" r="4.5"/><circle cx="9.5" cy="8.5" r="1.8"/><path d="M13 11.8 19.5 18.3"/><path d="M17.2 16 20 13.2"/>`},
+    acc_stand:{g:'g_clay',f:'rgba(199,125,107,.10)',d:`<path d="M8 4.8h8v9H8z"/><path d="M6 13.8h12l-1.4 5.2H7.4z"/>`}
 };
+
 export function glassIcon(k, s = 26) {
-  const ic = ICONS[k] || ICONS.vaso;
+  const ic = ICONS[k] || ICONS.v_classico;
   return `<svg class="gico" width="${s}" height="${s}" viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ic.d}</svg>`;
 }
 
@@ -112,17 +112,17 @@ export function confetti(el) {
 }
 
 export const ICON_GROUPS = [
-  { t: "Luce",       keys: ["l_tavolo","l_sospensione","l_piantana","l_comodino","l_lampadina"] },
-  { t: "Forme",      keys: ["v_classico","v_ampolla","v_tubo","v_anfora","v_conico"] },
+  { t: "Luce",       keys: ["l_tavolo","l_sospensione","l_piantana","l_lampadina"] },
+  { t: "Forme",      keys: ["v_classico","v_anfora","v_tubo","v_conico"] },
   { t: "Tempo",      keys: ["o_parete","o_sveglia","o_clessidra","o_quadrante"] },
-  { t: "Arredo",     keys: ["a_sedia","a_poltrona","a_tavolo","a_libreria","a_armadio"] },
-  { t: "Contenere",  keys: ["c_scatola","c_cestino","c_barattolo","c_ciotola","c_portapenne"] },
+  { t: "Arredo",     keys: ["a_sedia","a_poltrona","a_tavolo","a_libreria"] },
+  { t: "Contenere",  keys: ["c_scatola","c_cestino","c_barattolo","c_portapenne"] },
   { t: "Parete",     keys: ["p_mensola","p_gancio","d_cornice","a_libreria"] },
-  { t: "Scrivania",  keys: ["s_scrivania","s_supporto","c_portapenne","s_fermacarte","s_leggio"] },
-  { t: "Tavola",     keys: ["tazza","t_vassoio","c_ciotola","t_sottopiatto","c_barattolo"] },
-  { t: "Decoro",     keys: ["d_fiore","d_cornice","d_stella","d_cuore","d_fiocco"] },
-  { t: "Stagionali", keys: ["st_candela","st_albero","st_ornamento","d_fiocco","d_stella"] },
-  { t: "Altro",      keys: ["altro_cubo","altro_sfera","altro_geo","acc_portachiavi","acc_stand","fulmine","gemma"] },
+  { t: "Scrivania",  keys: ["s_scrivania","s_supporto","s_fermacarte","s_leggio"] },
+  { t: "Tavola",     keys: ["tazza","t_vassoio","c_ciotola","t_sottopiatto"] },
+  { t: "Decoro",     keys: ["d_fiore","d_cornice","d_stella","d_cuore"] },
+  { t: "Stagionali", keys: ["st_candela","st_albero","st_ornamento","d_fiocco"] },
+  { t: "Altro",      keys: ["altro_cubo","altro_sfera","altro_geo","acc_portachiavi"] },
 ];
 
 /* ============================ ICONE LINE (dock/topbar) ================ */
