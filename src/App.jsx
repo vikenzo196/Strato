@@ -219,7 +219,7 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
   const isHome  = context === "home";
   const cardContextClass = isLiked ? " card--liked" : isHome ? " card--home" : " card--explore";
   const quietCnt = isLiked || isHome; // nascondi badge conteggio in Home e Piaciuti
-  const ctaLabel = isLiked ? "Scopri" : isHome ? "Scopri" : "Configura";
+  const ctaLabel = "Scopri";
   const ctaCls   = isLiked ? "liked-configbtn" : "configbtn";
   const handleCardKey = (e) => {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(); }
@@ -255,13 +255,18 @@ function Card({ p, liked, onLike, onOpen, onEdit, context }) {
           <div className="cardcat"><Raw html={glassIcon(p.categoryIcon, 14)} />{p.categoryName}</div>
         </div>
         <div className="ct">{p.title}</div>
-        <div className="mat">{p.material}</div>
-        <div className="cp">{eur(p.price)}</div>
-        <button
-          className={ctaCls}
-          onClick={(e) => { e.stopPropagation(); onOpen(); }}
-          onKeyDown={(e) => e.stopPropagation()}
-        >{ctaLabel}</button>
+        <div className="carddivider" aria-hidden="true" />
+        <div className="cardActionRow">
+          <div className="cardPriceBlock">
+            <div className="priceLabel">Prezzo</div>
+            <div className="cp">{eur(p.price)}</div>
+          </div>
+          <button
+            className={ctaCls}
+            onClick={(e) => { e.stopPropagation(); onOpen(); }}
+            onKeyDown={(e) => e.stopPropagation()}
+          ><span>{ctaLabel}</span><span className="cardCtaArrow" aria-hidden="true">→</span></button>
+        </div>
       </div>
     </div>
   );
