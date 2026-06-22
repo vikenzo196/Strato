@@ -95,7 +95,7 @@
   .catedit{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;border:1px solid var(--strokeSoft);background:var(--glassDock);color:var(--text);display:grid;place-items:center;cursor:pointer;box-shadow:inset 0 1px 0 var(--hi),0 4px 12px rgba(0,0,0,.2)}
   .catedit:active{transform:scale(.92)}
   .catedit svg{width:18px;height:18px}
-  .gico{display:block;overflow:visible;color:#825840;filter:drop-shadow(0 1px 1px rgba(80,45,25,.16))}
+  .gico{display:block;overflow:visible;color:#C77D6B;filter:drop-shadow(0 1px 1px rgba(80,45,25,.16))}
   .cathint{margin:16px 4px 14px;color:var(--soft,#9a8d7d);font-size:13px}
   .ipick{position:fixed;inset:0;z-index:85;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .28s ease, background .28s ease, visibility .28s}
   .ipick.on{visibility:visible;opacity:1;pointer-events:auto;background:rgba(0,0,0,.4)}
@@ -713,15 +713,15 @@ body{
 body.dark .glass{background:rgba(199,125,107,.07);border-color:rgba(199,125,107,.16)}
 
 /* ---- icone monocromatiche (famiglia terracotta) ---- */
-.gico{color:#825840;stroke:none;fill:none}
-.gico .sf{fill:#825840;fill-opacity:.16;stroke:#825840;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
-.gico .sa{fill:#825840;fill-opacity:.32;stroke:#825840;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
-.gico .ol{fill:none;stroke:#825840;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.gico .thin{fill:none;stroke:#825840;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;opacity:.78}
-body.dark .gico{color:#825840}
-body.dark .gico .sf{fill:#825840;fill-opacity:.16;stroke:#825840}
-body.dark .gico .sa{fill:#825840;fill-opacity:.32;stroke:#825840}
-body.dark .gico .ol,body.dark .gico .thin{stroke:#825840}
+.gico{color:#C77D6B;stroke:none;fill:none}
+.gico .sf{fill:#C77D6B;fill-opacity:.16;stroke:#C77D6B;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.gico .sa{fill:#C77D6B;fill-opacity:.32;stroke:#C77D6B;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.gico .ol{fill:none;stroke:#C77D6B;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.gico .thin{fill:none;stroke:#C77D6B;stroke-width:1.15;stroke-linecap:round;stroke-linejoin:round;opacity:.78}
+body.dark .gico{color:#C77D6B}
+body.dark .gico .sf{fill:#C77D6B;fill-opacity:.16;stroke:#C77D6B}
+body.dark .gico .sa{fill:#C77D6B;fill-opacity:.32;stroke:#C77D6B}
+body.dark .gico .ol,body.dark .gico .thin{stroke:#C77D6B}
 .dock .dnav svg{stroke:var(--icon)!important;fill:none}
 .dock .dnav.act svg{stroke:var(--accent)!important}
 .heart.liked svg{stroke:var(--heart)!important;fill:rgba(199,125,107,.16)!important}
