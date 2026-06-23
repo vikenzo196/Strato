@@ -31,9 +31,62 @@
       html, body, #root { height: 100%; margin: 0; }
       html, body { background: #F4EEE6; }
       @media (prefers-color-scheme: dark) { html, body { background: #2D2420; } }
+
+      #strato-intro{
+        position:fixed;
+        inset:0;
+        z-index:9999;
+        display:grid;
+        place-items:center;
+        background:#F4EEE6;
+        overflow:hidden;
+        opacity:1;
+        visibility:visible;
+        transition:opacity .54s cubic-bezier(.22,1,.36,1),visibility .54s linear;
+        pointer-events:auto;
+      }
+      @media (prefers-color-scheme: dark){ #strato-intro{ background:#2D2420; } }
+      #strato-intro.out{ opacity:0; visibility:hidden; pointer-events:none; }
+      #strato-intro video{
+        width:100vw;
+        height:100dvh;
+        object-fit:cover;
+        display:block;
+        background:transparent;
+      }
+      @supports not (height:100dvh){ #strato-intro video{ height:100vh; } }
     </style>
   </head>
   <body>
+    <div id="strato-intro" aria-hidden="true">
+      <video id="strato-intro-video" muted playsinline autoplay preload="auto"></video>
+    </div>
+    <script>
+      (() => {
+        const overlay = document.getElementById("strato-intro");
+        const video = document.getElementById("strato-intro-video");
+        if (!overlay || !video) return;
+        const dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        video.poster = dark ? "/assets/intro/intro-poster-dark.png" : "/assets/intro/intro-poster-light.png";
+        video.src = dark ? "/assets/intro/intro-dark.mp4" : "/assets/intro/intro-light.mp4";
+        const startedAt = performance.now();
+        let closing = false;
+        const close = () => {
+          if (closing) return;
+          closing = true;
+          const elapsed = performance.now() - startedAt;
+          const wait = Math.max(0, 3200 - elapsed);
+          window.setTimeout(() => {
+            overlay.classList.add("out");
+            window.setTimeout(() => overlay.remove(), 620);
+          }, wait);
+        };
+        video.addEventListener("ended", close, { once: true });
+        window.addEventListener("load", close, { once: true });
+        window.setTimeout(close, 5200);
+        try { video.play().catch(() => {}); } catch (e) {}
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
