@@ -6145,3 +6145,24 @@ input,textarea,[contenteditable="true"]{
     height:30px!important;
   }
 }
+
+/* ===================== v2cw product tile thumbnail scale/radius =====================
+   Riduce del 6% le miniature delle tile articolo e allinea il corner radius
+   delle miniature al corner radius della tile. Effetto su Home, Esplora e Piaciuti. */
+.card .ph,
+.card--home .ph,
+.card--explore .ph,
+.card--liked .ph{
+  width:94%!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  aspect-ratio:1 / 1!important;
+  border-radius:inherit!important;
+  overflow:hidden!important;
+}
+.card .ph img,
+.card--home .ph img,
+.card--explore .ph img,
+.card--liked .ph img{
+  border-radius:inherit!important;
+}
