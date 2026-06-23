@@ -6040,3 +6040,26 @@ input,textarea,[contenteditable="true"]{
   user-select:text!important;
   -webkit-touch-callout:default;
 }
+
+/* ===================== v2cs home hero mobile two-line guard =====================
+   Mantiene la headline approvata su due righe reali in smartphone.
+   Intervento limitato alla dimensione mobile, senza cambiare font, peso, copy,
+   hero, griglia, animazioni o layout globale. */
+@media(max-width:430px){
+  .homeview > .px .hero,
+  .homeScreen > .px .hero,
+  .homeview .hero,
+  .homeScreen .hero{
+    font-size:clamp(33px,8.7vw,36px)!important;
+    line-height:1.07!important;
+    letter-spacing:-.055em!important;
+  }
+}
+@media(max-width:370px){
+  .homeview > .px .hero,
+  .homeScreen > .px .hero,
+  .homeview .hero,
+  .homeScreen .hero{
+    font-size:clamp(30px,8.45vw,33px)!important;
+  }
+}
