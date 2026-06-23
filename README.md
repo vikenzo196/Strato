@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2cy_intro_video_opening`.
+- Patch corrente: `v2cz_intro_video_60fps_assets`.
 
 ## File di ingresso effettivo
 
@@ -241,3 +241,17 @@ La patch `v2cu_dock_scale_10_percent` aumenta la dock di circa il 10% in modo pr
 ## v2cv_dock_cart_icon_optical_balance
 
 Micro-correzione ottica della dock: aumenta solo l'SVG dell'icona carrello per allinearne la percezione visiva alle altre icone dopo lo scale del 10%. Non modifica dimensione dock, posizione, tab, badge o altre icone.
+
+
+La patch `v2cz_intro_video_60fps_assets` sostituisce solo gli asset dell’intro di apertura con versioni MP4 H.264 a 60 fps, mantenendo invariata la logica overlay introdotta in `v2cy_intro_video_opening`.
+
+Asset intro correnti:
+
+```text
+public/assets/intro/intro-light.mp4
+public/assets/intro/intro-dark.mp4
+public/assets/intro/intro-poster-light.png
+public/assets/intro/intro-poster-dark.png
+```
+
+Specifiche video correnti: 1080×1920, H.264, 60 fps, 3.5s, senza audio.
