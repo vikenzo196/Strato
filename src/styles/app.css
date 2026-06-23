@@ -6089,3 +6089,43 @@ input,textarea,[contenteditable="true"]{
     letter-spacing:-.05em!important;
   }
 }
+
+/* ===================== v2cu dock scale +10 =====================
+   Aumenta la dock in modo proporzionale: contenitore, tab, icone e indicatori.
+   Non modifica posizione, scroll, safe-area, topbar o contenuti. */
+.dock{
+  gap:5.5px!important;
+  padding:9px 12px!important;
+  border-radius:33px!important;
+}
+.dnav{
+  width:58px!important;
+  height:58px!important;
+  border-radius:19px!important;
+}
+.dnav svg{
+  width:29px!important;
+  height:29px!important;
+}
+.dnav .dot{
+  top:11px!important;
+  right:12px!important;
+  width:10px!important;
+  height:10px!important;
+  border-radius:6px!important;
+}
+.dock.dock4{gap:4.5px!important}
+.dock.dock5{gap:2.5px!important}
+.dock.dock5 .dnav{width:56px!important}
+.dnav.orders .orddot{
+  top:8px!important;
+  right:calc(50% - 18px)!important;
+  width:9px!important;
+  height:9px!important;
+}
+@media(max-width:360px){
+  .dock{padding:8.5px 11px!important;border-radius:32px!important}
+  .dock.dock5 .dnav{width:51px!important}
+  .dnav{height:56px!important;border-radius:18px!important}
+  .dnav svg{width:28px!important;height:28px!important}
+}
