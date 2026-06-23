@@ -6187,3 +6187,16 @@ input,textarea,[contenteditable="true"]{
 .card--liked .ph img{
   border-radius:inherit!important;
 }
+
+/* ===================== v2da search keyboard guard =====================
+   Quando la searchbox è focalizzata su mobile/iOS, impedisce il drag della pagina
+   mentre la tastiera è aperta. Il primo contatto fuori dal campo chiude il focus;
+   poi la pagina torna stabile e la dock resta ancorata. */
+html.search-keyboard-lock,
+body.search-keyboard-lock{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+body.search-keyboard-lock .wrap{
+  overflow:hidden!important;
+}
