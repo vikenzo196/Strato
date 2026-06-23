@@ -603,6 +603,83 @@ export default function App() {
     };
   }, [ready, tab, detailId, invId, editing, cart.length, prints.length, cats.length, likes.length, orders.length, q, selectedCatId, searchFocus, user?.id, isAdmin, orderFocus]);
 
+
+  // v2da: iOS keyboard guard sulla ricerca.
+  // Quando la tastiera è aperta, blocca il drag/scroll della pagina e chiude il focus
+  // al primo contatto fuori dalla searchbox, evitando che la dock si stacchi dal fondo.
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const active = tab === "search" && searchFocus;
+    html.classList.toggle("search-keyboard-lock", active);
+    body.classList.toggle("search-keyboard-lock", active);
+    if (!active) return () => {
+      html.classList.remove("search-keyboard-lock");
+      body.classList.remove("search-keyboard-lock");
+    };
+
+    const startY = window.scrollY || document.documentElement.scrollTop || 0;
+    let closingGesture = false;
+    let releaseTimer = 0;
+
+    const searchInput = () => document.querySelector(".searchbox");
+    const isSearchFocused = () => {
+      const input = searchInput();
+      return !!input && document.activeElement === input;
+    };
+    const restoreScroll = () => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, startY);
+        setTimeout(() => window.scrollTo(0, startY), 90);
+      });
+    };
+    const closeSearchKeyboard = () => {
+      const input = searchInput();
+      if (input && document.activeElement === input) input.blur();
+      setSearchFocus(false);
+      restoreScroll();
+    };
+    const insideSearchInput = (target) => {
+      const input = searchInput();
+      return !!input && (target === input || input.contains(target));
+    };
+    const onTouchStart = (e) => {
+      if (!isSearchFocused()) return;
+      if (insideSearchInput(e.target)) return;
+      closingGesture = true;
+      closeSearchKeyboard();
+    };
+    const onTouchMove = (e) => {
+      if (isSearchFocused() || closingGesture) e.preventDefault();
+    };
+    const onTouchEnd = () => {
+      if (releaseTimer) clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => { closingGesture = false; restoreScroll(); }, 180);
+    };
+    const onMouseDown = (e) => {
+      if (!isSearchFocused()) return;
+      if (insideSearchInput(e.target)) return;
+      closeSearchKeyboard();
+    };
+
+    document.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });
+    document.addEventListener("touchmove", onTouchMove, { capture: true, passive: false });
+    document.addEventListener("touchend", onTouchEnd, { capture: true, passive: true });
+    document.addEventListener("touchcancel", onTouchEnd, { capture: true, passive: true });
+    document.addEventListener("mousedown", onMouseDown, true);
+
+    return () => {
+      if (releaseTimer) clearTimeout(releaseTimer);
+      document.removeEventListener("touchstart", onTouchStart, true);
+      document.removeEventListener("touchmove", onTouchMove, true);
+      document.removeEventListener("touchend", onTouchEnd, true);
+      document.removeEventListener("touchcancel", onTouchEnd, true);
+      document.removeEventListener("mousedown", onMouseDown, true);
+      html.classList.remove("search-keyboard-lock");
+      body.classList.remove("search-keyboard-lock");
+    };
+  }, [tab, searchFocus]);
+
   const changeColorPhoto = async (printId, colorId, file) => {
     if (!file) return;
     try {
