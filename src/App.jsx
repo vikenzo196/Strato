@@ -1059,7 +1059,7 @@ function Home({ prints, liked, onLike, onOpen, onEdit }) {
   return (
     <section ref={homeRef} className="screen on homeview">
       <div className="px">
-        <h1 className="hero">Design contemporaneo, plasmato strato dopo strato.</h1>
+        <h1 className="hero">Il design che cercavi,<br />finalmente prende forma.</h1>
         <div className="kick homekick">A COLPO D'OCCHIO</div>
       </div>
       {hero && (
