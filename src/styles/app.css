@@ -6129,3 +6129,19 @@ input,textarea,[contenteditable="true"]{
   .dnav{height:56px!important;border-radius:18px!important}
   .dnav svg{width:28px!important;height:28px!important}
 }
+
+
+/* ===================== v2cv dock cart icon optical balance =====================
+   Micro-correzione ottica: l’icona carrello nella dock appareva leggermente più piccola
+   rispetto alle altre dopo lo scale dock v2cu. Si aumenta solo il suo SVG, senza toccare
+   dimensione dock, tab, posizione, badge o altre icone. */
+.dnav.cart svg{
+  width:31px!important;
+  height:31px!important;
+}
+@media(max-width:360px){
+  .dnav.cart svg{
+    width:30px!important;
+    height:30px!important;
+  }
+}
