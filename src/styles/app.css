@@ -6166,3 +6166,24 @@ input,textarea,[contenteditable="true"]{
 .card--liked .ph img{
   border-radius:inherit!important;
 }
+
+
+/* ===================== v2cx product tile thumbnail inset balance =====================
+   Aumenta le miniature del 2% rispetto a v2cw e uniforma l'inset visivo
+   della miniatura rispetto ai bordi della tile. Effetto su Home, Esplora e Piaciuti. */
+.card .ph,
+.card--home .ph,
+.card--explore .ph,
+.card--liked .ph{
+  width:96%!important;
+  margin:2% auto 0!important;
+  aspect-ratio:1 / 1!important;
+  border-radius:inherit!important;
+  overflow:hidden!important;
+}
+.card .ph img,
+.card--home .ph img,
+.card--explore .ph img,
+.card--liked .ph img{
+  border-radius:inherit!important;
+}
