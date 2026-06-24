@@ -75,7 +75,7 @@
           if (closing) return;
           closing = true;
           const elapsed = performance.now() - startedAt;
-          const wait = Math.max(0, 3200 - elapsed);
+          const wait = Math.max(0, 4000 - elapsed);
           window.setTimeout(() => {
             overlay.classList.add("out");
             window.setTimeout(() => overlay.remove(), 620);
@@ -83,7 +83,7 @@
         };
         video.addEventListener("ended", close, { once: true });
         window.addEventListener("load", close, { once: true });
-        window.setTimeout(close, 5200);
+        window.setTimeout(close, 6500);
         try { video.play().catch(() => {}); } catch (e) {}
       })();
     </script>

@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2cz_intro_video_60fps_assets`.
+- Patch corrente: `v2dc_intro_video_90fps_4s_assets`.
 
 ## File di ingresso effettivo
 
@@ -255,3 +255,9 @@ public/assets/intro/intro-poster-dark.png
 ```
 
 Specifiche video correnti: 1080×1920, H.264, 60 fps, 3.5s, senza audio.
+
+
+La patch `v2da_search_keyboard_scroll_lock` corregge il bug ricerca/tastiera su iOS: quando la searchbox è focalizzata, il drag/scroll della pagina viene bloccato e il primo contatto fuori dal campo chiude la tastiera, evitando che la dock si stacchi dalla sua posizione. Il guard è limitato alla schermata Esplora con searchbox attiva; input, textarea e strumenti admin fuori da questo caso restano invariati.
+
+
+La patch `v2db_search_focus_color_strato` interviene solo sulla searchbox di Esplora: focus ring, caret e selezione testo usano il tono `#B26349`, rimuovendo il blu nativo dove controllabile via CSS. La logica tastiera/scroll di `v2da_search_keyboard_scroll_lock` resta invariata.

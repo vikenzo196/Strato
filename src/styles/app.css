@@ -6200,3 +6200,28 @@ body.search-keyboard-lock{
 body.search-keyboard-lock .wrap{
   overflow:hidden!important;
 }
+
+
+/* ===================== v2db search focus color Strato =====================
+   Rimuove il blu nativo visibile su iOS/Safari nella searchbox Esplora,
+   sostituendo focus ring e caret con il tono Strato #B26349.
+   Non modifica layout, tastiera o scroll. */
+.searchbox{
+  caret-color:#B26349!important;
+  -webkit-tap-highlight-color:rgba(178,99,73,.14)!important;
+}
+.searchbox:focus,
+.searchbox:focus-visible{
+  outline:none!important;
+  border-color:rgba(178,99,73,.62)!important;
+  box-shadow:0 0 0 3px rgba(178,99,73,.20), inset 0 1px 0 var(--hi)!important;
+}
+body.dark .searchbox:focus,
+body.dark .searchbox:focus-visible{
+  border-color:rgba(178,99,73,.74)!important;
+  box-shadow:0 0 0 3px rgba(178,99,73,.24), inset 0 1px 0 rgba(255,255,255,.06)!important;
+}
+.searchbox::selection{
+  background:rgba(178,99,73,.24);
+  color:var(--text);
+}
