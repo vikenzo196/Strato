@@ -1,23 +1,8 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { colImg, eur } from "../../utils/product.js";
-import { HeartI, Pencil } from "../../ui/visuals.jsx";
+import React from "react";
 
-export default function Home({ prints, liked, onLike, onOpen, onEdit, CardComponent, tap = () => {}, onExplore }) {
-  const homeRef = useRef(null);
-  // Una sola tile in evidenza: articolo casuale, nuovo ad ogni refresh del sito.
-  const hero = useMemo(() => (prints.length ? prints[Math.floor(Math.random() * prints.length)] : null), [prints.length]);
-  const heroLkRef = useRef(null);
-
-  useEffect(() => {
-    const el = homeRef.current;
-    if (!el) return;
-    el.classList.remove("motionDone");
-    const t = window.setTimeout(() => el.classList.add("motionDone"), 1150);
-    return () => window.clearTimeout(t);
-  }, [hero?.id]);
-
+export default function Home({ prints, liked, onLike, onOpen, onEdit, CardComponent, onExplore }) {
   return (
-    <section ref={homeRef} className="screen on homeview">
+    <section className="screen on homeview">
       <div className="homeClaudeBg" aria-hidden="true">
         <svg viewBox="0 0 390 760" preserveAspectRatio="none">
           <defs>
@@ -40,18 +25,7 @@ export default function Home({ prints, liked, onLike, onOpen, onEdit, CardCompon
       </div>
       <div className="px homeIntroBlock">
         <h1 className="hero">Il design<br />che cercavi,<br />finalmente<br />prende forma.</h1>
-        <div className="kick homekick">A COLPO D'OCCHIO</div>
       </div>
-      {hero && (
-        <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
-          <img src={colImg(hero.cols[0])} alt={hero.title} loading="eager" fetchPriority="high" decoding="async" />
-          <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label={liked(hero.id) ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}>
-            <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
-          </button>
-          <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
-          {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
-        </div>
-      )}
       <button type="button" className="homeSearchBridge" onClick={onExplore} aria-label="Vai alla ricerca">
         <svg width="20" height="20" viewBox="0 0 18 18" fill="none" aria-hidden="true">
           <circle cx="7.5" cy="7.5" r="5" stroke="currentColor" strokeWidth="2" />
