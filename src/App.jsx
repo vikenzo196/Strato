@@ -37,6 +37,7 @@ import {
 import { checkPushStatus, enablePushNotifications, disablePushNotifications } from "./utils/push.js";
 import { eur, fmtDate, gimg, avatarURI, colImg, compressImage, mapPrint } from "./utils/product.js";
 import { usePWAInstall } from "./hooks/usePWAInstall.js";
+import Home from "./components/home/Home.jsx";
 
 /* PWA: benefit list */
 const PWA_BENEFITS = [
@@ -930,7 +931,7 @@ export default function App() {
         ) : (
           <>
             {tab === "home" && (
-              <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} />
+              <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} CardComponent={Card} tap={tap} />
             )}
             {tab === "search" && (
               <Screen title="Esplora" icon={<SearchI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
@@ -1119,46 +1120,6 @@ function Screen({ title, icon, children, heart, action }) {
   );
 }
 function Grid({ children }) { return <div className="grid">{children}</div>; }
-
-function Home({ prints, liked, onLike, onOpen, onEdit }) {
-  const homeRef = useRef(null);
-  // Una sola tile in evidenza: articolo casuale, nuovo ad ogni refresh del sito.
-  const hero = useMemo(() => (prints.length ? prints[Math.floor(Math.random() * prints.length)] : null), [prints.length]);
-  const { tap } = useHaptic();
-  const heroLkRef = useRef(null);
-  useEffect(() => {
-    const el = homeRef.current;
-    if (!el) return;
-    el.classList.remove("motionDone");
-    const t = window.setTimeout(() => el.classList.add("motionDone"), 1150);
-    return () => window.clearTimeout(t);
-  }, [hero?.id]);
-  return (
-    <section ref={homeRef} className="screen on homeview">
-      <div className="px">
-        <h1 className="hero">Il design che cercavi,<br />finalmente prende forma.</h1>
-        <div className="kick homekick">A COLPO D'OCCHIO</div>
-      </div>
-      {hero && (
-        <div className="herocard" key={hero.id} onClick={() => onOpen(hero.id)}>
-          <img src={colImg(hero.cols[0])} alt={hero.title} loading="eager" fetchPriority="high" decoding="async" />
-          <button ref={heroLkRef} className="lk" onClick={(e) => { e.stopPropagation(); tap(liked(hero.id) ? "unlike" : "like", heroLkRef.current); onLike(hero.id); }} aria-label={liked(hero.id) ? "Rimuovi dai piaciuti" : "Salva nei piaciuti"}>
-            <span className={"heart" + (liked(hero.id) ? " liked" : "")}><HeartI /></span>
-          </button>
-          <div className="herotag"><div className="ht">{hero.title}</div><div className="hp">{eur(hero.price)}</div></div>
-          {onEdit && <button className="cedit hero" onClick={(e) => { e.stopPropagation(); onEdit(hero); }} aria-label="Modifica"><Pencil /></button>}
-        </div>
-      )}
-      <h2 className="title px home-sec-title">Lasciati ispirare</h2>
-      {prints.length === 0 && <p className="empty">Nessun prodotto ancora.</p>}
-      <div className="home-grid-wrap">
-        <Grid>
-          {prints.map((p) => <Card key={p.id} p={p} liked={liked(p.id)} onLike={onLike} onOpen={() => onOpen(p.id)} onEdit={onEdit} context="home" />)}
-        </Grid>
-      </div>
-    </section>
-  );
-}
 
 /* ---- Hook drag-to-close (touch) per tutti gli sheet ---- */
 // dir: "down" per sheet dal basso (Carrello, Dettaglio, Ordine)

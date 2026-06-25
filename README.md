@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2dc_intro_video_90fps_4s_assets`.
+- Patch corrente: `v2dd_home_component_architecture_lock`.
 
 ## File di ingresso effettivo
 
@@ -261,3 +261,19 @@ La patch `v2da_search_keyboard_scroll_lock` corregge il bug ricerca/tastiera su 
 
 
 La patch `v2db_search_focus_color_strato` interviene solo sulla searchbox di Esplora: focus ring, caret e selezione testo usano il tono `#B26349`, rimuovendo il blu nativo dove controllabile via CSS. La logica tastiera/scroll di `v2da_search_keyboard_scroll_lock` resta invariata.
+
+
+## v2dd_home_component_architecture_lock
+
+Patch architetturale controllata, senza modifiche visive intenzionali.
+
+Modifiche:
+
+- estrae la Home in `src/components/home/Home.jsx`;
+- mantiene `Card` in `App.jsx` per evitare refactor rischiosi del sistema prodotto, haptic e preferiti;
+- aggiunge `src/version.js`;
+- aggiunge `src/config/features.js`;
+- aggiunge `docs/ARCHITECTURE_LOCK.md`;
+- non modifica dock, topbar, scroll, intro, CSS app, carrello, Supabase o `#appbg`.
+
+La componentizzazione è volutamente progressiva: App.jsx resta orchestratore, ma la Home non è più definita inline.
