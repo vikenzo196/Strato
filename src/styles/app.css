@@ -6388,3 +6388,148 @@ body.dark .homeExploreLink{
   .homeSectionBar .home-sec-title{font-size:25px!important}
   .homeExploreLink{font-size:12.5px}
 }
+
+/* ===================== v2df home claude pixel alignment =====================
+   Correzione della v2de: il canvas Claude non prevedeva una hero image nella
+   parte alta della Home. La Home viene riallineata al riferimento: headline,
+   search, section header, griglia. Dock/topbar/scroll/card system invariati. */
+.homeview{
+  padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))!important;
+}
+.homeIntroBlock{
+  padding-top:6px!important;
+  padding-bottom:22px!important;
+}
+.homeview > .px .hero{
+  max-width:min(620px, calc(100vw - 52px))!important;
+  margin:0!important;
+  font-size:clamp(42px, 7.25vw, 72px)!important;
+  line-height:.98!important;
+  letter-spacing:-.055em!important;
+  text-shadow:none!important;
+}
+.homeview > .px .homekick{
+  display:none!important;
+}
+.homeview .herocard{
+  display:none!important;
+}
+.homeSearchBridge{
+  width:calc(100% - 56px)!important;
+  max-width:640px!important;
+  height:64px!important;
+  margin:0 28px 34px!important;
+  padding:0 30px!important;
+  border-radius:999px!important;
+  gap:18px!important;
+  color:#A94F38!important;
+  background:#FDF7F0!important;
+  box-shadow:0 10px 34px rgba(60,43,36,.08)!important;
+  font-size:24px!important;
+}
+.homeSearchBridge svg{
+  width:30px!important;
+  height:30px!important;
+  flex:none!important;
+}
+.homeSearchBridge span{
+  color:#A89070!important;
+  font-size:24px!important;
+  line-height:1!important;
+}
+.homeSectionBar{
+  padding-top:0!important;
+  padding-bottom:24px!important;
+  align-items:flex-end!important;
+}
+.homeSectionBar .home-sec-title{
+  font-size:clamp(34px, 5.1vw, 52px)!important;
+  line-height:1!important;
+  letter-spacing:-.04em!important;
+}
+.homeExploreLink{
+  color:#A94F38!important;
+  font-size:22px!important;
+  line-height:1!important;
+  gap:10px!important;
+  margin-top:0!important;
+  padding-bottom:7px!important;
+}
+.homeExploreLink span{
+  font-size:32px!important;
+  transform:translateY(-1px)!important;
+}
+.homeview .home-grid-wrap{
+  padding-top:0!important;
+}
+@media(max-width:430px){
+  .homeIntroBlock{
+    padding-top:2px!important;
+    padding-bottom:30px!important;
+  }
+  .homeview > .px .hero{
+    max-width:calc(100vw - 52px)!important;
+    font-size:clamp(42px, 13.7vw, 57px)!important;
+    line-height:1.02!important;
+    letter-spacing:-.058em!important;
+  }
+  .homeSearchBridge{
+    width:calc(100% - 52px)!important;
+    height:58px!important;
+    margin:0 26px 32px!important;
+    padding:0 24px!important;
+    gap:16px!important;
+    font-size:22px!important;
+  }
+  .homeSearchBridge svg{
+    width:27px!important;
+    height:27px!important;
+  }
+  .homeSearchBridge span{
+    font-size:22px!important;
+  }
+  .homeSectionBar{
+    padding-left:26px!important;
+    padding-right:26px!important;
+    padding-bottom:22px!important;
+  }
+  .homeSectionBar .home-sec-title{
+    font-size:clamp(36px, 10.7vw, 46px)!important;
+    letter-spacing:-.045em!important;
+  }
+  .homeExploreLink{
+    font-size:20px!important;
+    padding-bottom:6px!important;
+  }
+  .homeExploreLink span{
+    font-size:30px!important;
+  }
+}
+@media(max-width:360px){
+  .homeIntroBlock{
+    padding-bottom:24px!important;
+  }
+  .homeview > .px .hero{
+    max-width:calc(100vw - 44px)!important;
+    font-size:clamp(38px, 13vw, 49px)!important;
+  }
+  .homeSearchBridge{
+    width:calc(100% - 44px)!important;
+    height:54px!important;
+    margin:0 22px 28px!important;
+    padding:0 20px!important;
+  }
+  .homeSearchBridge span{
+    font-size:20px!important;
+  }
+  .homeSectionBar{
+    padding-left:22px!important;
+    padding-right:22px!important;
+  }
+  .homeSectionBar .home-sec-title{
+    font-size:35px!important;
+  }
+  .homeExploreLink{
+    font-size:18px!important;
+  }
+}
