@@ -10,7 +10,7 @@ L’esperienza è editoriale, calda e materica: non marketplace, non e-commerce 
 - PWA installabile con manifest e service worker.
 - Dock stabile a 5 sezioni: Home, Esplora, Piaciuti, Carrello, Ordini.
 - Tema chiaro/scuro automatico con canvas light ufficiale `#F4EEE6`.
-- Patch corrente: `v2dd_home_component_architecture_lock`.
+- Patch corrente: `v2de_home_claude_visual_integration`.
 
 ## File di ingresso effettivo
 

@@ -6225,3 +6225,166 @@ body.dark .searchbox:focus-visible{
   background:rgba(178,99,73,.24);
   color:var(--text);
 }
+
+/* ===================== v2de home Claude visual integration =====================
+   Traduce la grammatica visiva Claude nella Home reale di Strato senza importare
+   il canvas fisso 340x740. Scope: solo Home. Dock, topbar, scroll, intro e card
+   system restano invariati. */
+.homeview{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.homeClaudeBg{
+  position:absolute;
+  inset:0 0 auto 0;
+  height:min(760px, 88vh);
+  color:#A94F38;
+  pointer-events:none;
+  z-index:-1;
+  opacity:1;
+}
+.homeClaudeBg svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+body.dark .homeClaudeBg{
+  color:#B26349;
+  opacity:.54;
+}
+.homeIntroBlock{
+  position:relative;
+  z-index:1;
+  padding-top:2px;
+}
+.homeview > .px .hero{
+  max-width:330px;
+  margin:0 0 12px!important;
+  color:#3C2B24;
+  font-size:clamp(34px, 10.7vw, 43px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.045em!important;
+  font-weight:800!important;
+  text-shadow:0 3px 13px rgba(166,84,53,.12)!important;
+}
+body.dark .homeview > .px .hero{
+  color:rgba(246,236,226,.96);
+  text-shadow:0 3px 16px rgba(0,0,0,.28)!important;
+}
+.homeview > .px .homekick{
+  margin:10px 0 14px!important;
+  color:#A94F38!important;
+  opacity:.86;
+}
+body.dark .homeview > .px .homekick{
+  color:#C77D6B!important;
+  opacity:.82;
+}
+.homeview .herocard{
+  position:relative;
+  z-index:1;
+  margin-bottom:14px!important;
+  border-radius:28px!important;
+  box-shadow:0 8px 40px rgba(60,43,36,.18)!important;
+}
+body.dark .homeview .herocard{
+  box-shadow:0 14px 44px rgba(0,0,0,.38)!important;
+}
+.homeSearchBridge{
+  position:relative;
+  z-index:1;
+  width:calc(100% - 28px);
+  height:44px;
+  margin:0 14px 0;
+  border:0;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 14px;
+  color:#A94F38;
+  background:#FDF7F0;
+  box-shadow:0 1px 6px rgba(60,43,36,.07);
+  font:400 14px/1 'Inter',system-ui,sans-serif;
+  text-align:left;
+  cursor:pointer;
+}
+.homeSearchBridge span{
+  color:#A89070;
+}
+.homeSearchBridge:active{
+  transform:scale(.985);
+}
+body.dark .homeSearchBridge{
+  color:#C77D6B;
+  background:rgba(51,39,35,.72);
+  border:1px solid rgba(199,125,107,.16);
+  box-shadow:0 1px 10px rgba(0,0,0,.20);
+}
+body.dark .homeSearchBridge span{
+  color:rgba(241,226,214,.62);
+}
+.homeSectionBar{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding-top:16px!important;
+  padding-bottom:10px!important;
+}
+.homeSectionBar .home-sec-title{
+  margin:0!important;
+  font-family:'Playfair Display', Georgia, ui-serif, serif!important;
+  font-size:28px!important;
+  line-height:1!important;
+  letter-spacing:-.02em!important;
+  font-weight:700!important;
+  color:#3C2B24!important;
+}
+.homeExploreLink{
+  border:0;
+  background:transparent;
+  color:#A94F38;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin-top:6px;
+  padding:0;
+  font:600 13px/1 'Inter',system-ui,sans-serif;
+  cursor:pointer;
+}
+.homeExploreLink span{
+  font-size:18px;
+  line-height:0;
+  transform:translateY(-.5px);
+}
+body.dark .homeSectionBar .home-sec-title{
+  color:rgba(246,236,226,.96)!important;
+}
+body.dark .homeExploreLink{
+  color:#C77D6B;
+}
+.homeview .home-grid-wrap{
+  position:relative;
+  z-index:1;
+}
+@media(max-width:430px){
+  .homeClaudeBg{height:min(720px, 88vh)}
+  .homeview > .px .hero{
+    max-width:300px;
+    font-size:clamp(32px, 10.2vw, 39px)!important;
+  }
+  .homeSectionBar .home-sec-title{font-size:27px!important}
+}
+@media(max-width:360px){
+  .homeview > .px .hero{
+    max-width:282px;
+    font-size:clamp(30px, 9.7vw, 36px)!important;
+  }
+  .homeSearchBridge{width:calc(100% - 24px);margin-left:12px;margin-right:12px}
+  .homeSectionBar .home-sec-title{font-size:25px!important}
+  .homeExploreLink{font-size:12.5px}
+}

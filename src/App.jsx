@@ -931,7 +931,7 @@ export default function App() {
         ) : (
           <>
             {tab === "home" && (
-              <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} CardComponent={Card} tap={tap} />
+              <Home prints={prints} liked={liked} onLike={toggleLike} onOpen={openDetail} onEdit={adminEdit} CardComponent={Card} tap={tap} onExplore={() => open("search")} />
             )}
             {tab === "search" && (
               <Screen title="Esplora" icon={<SearchI />} action={isAdmin ? <button className="tb-back addnew" onClick={() => setEditingCat({})} aria-label="Nuova categoria"><Plus /></button> : null}>
