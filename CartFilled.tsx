@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="15" fill="#A94F38"></circle><circle cx="15" cy="12" r="4.5" fill="#EDE4D8" opacity="0.9"></circle><path d="M7 24c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="#EDE4D8" opacity="0.9"></path></svg>

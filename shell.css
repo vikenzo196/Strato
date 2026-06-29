@@ -1,0 +1,36 @@
+import { useNavigate, useLocation } from 'react-router-dom';
+import { DOCK_ITEMS } from '../app/routes';
+import { DockHome, DockExplore, Heart, DockCart } from '../components/icons';
+
+const ICONS = {
+  home: DockHome,
+  explore: DockExplore,
+  favorites: Heart,
+  cart: DockCart,
+} as const;
+
+export function Dock() {
+  const nav = useNavigate();
+  const { pathname } = useLocation();
+  return (
+    <nav className="dock" aria-label="Navigazione">
+      <div className="dock__inner">
+        {DOCK_ITEMS.map(item => {
+          const Icon = ICONS[item.key as keyof typeof ICONS];
+          const active = pathname === item.path;
+          return (
+            <button
+              key={item.key}
+              className={'dock__btn' + (active ? ' dock__btn--active' : '')}
+              onClick={() => nav(item.path)}
+              aria-label={item.label}
+              aria-current={active ? 'page' : undefined}
+            >
+              <Icon color={active ? 'var(--accent)' : 'var(--dock-icon)'} />
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}

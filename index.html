@@ -1,93 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
-
-    <!-- PWA -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Strato" />
-    <meta name="application-name" content="Strato" />
-
-    <!-- Theme color -->
-    <meta name="theme-color" content="#F4EEE6" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#2D2420" media="(prefers-color-scheme: dark)" />
-
-    <title>Strato · Design</title>
-
-    <!-- iOS: icona aggiunta alla home -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
-
-    <!-- Favicon browser -->
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-
-    <!-- Android / Chrome PWA manifest -->
-    <link rel="manifest" href="/manifest.json" />
-
-    <style>
-      html, body, #root { height: 100%; margin: 0; }
-      html, body { background: #F4EEE6; }
-      @media (prefers-color-scheme: dark) { html, body { background: #2D2420; } }
-
-      #strato-intro{
-        position:fixed;
-        inset:0;
-        z-index:9999;
-        display:grid;
-        place-items:center;
-        background:#F4EEE6;
-        overflow:hidden;
-        opacity:1;
-        visibility:visible;
-        transition:opacity .54s cubic-bezier(.22,1,.36,1),visibility .54s linear;
-        pointer-events:auto;
-      }
-      @media (prefers-color-scheme: dark){ #strato-intro{ background:#2D2420; } }
-      #strato-intro.out{ opacity:0; visibility:hidden; pointer-events:none; }
-      #strato-intro video{
-        width:100vw;
-        height:100dvh;
-        object-fit:cover;
-        display:block;
-        background:transparent;
-      }
-      @supports not (height:100dvh){ #strato-intro video{ height:100vh; } }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#A94F38" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <title>Strato</title>
   </head>
   <body>
-    <div id="strato-intro" aria-hidden="true">
-      <video id="strato-intro-video" muted playsinline autoplay preload="auto"></video>
-    </div>
-    <script>
-      (() => {
-        const overlay = document.getElementById("strato-intro");
-        const video = document.getElementById("strato-intro-video");
-        if (!overlay || !video) return;
-        const dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        video.poster = dark ? "/assets/intro/intro-poster-dark.png" : "/assets/intro/intro-poster-light.png";
-        video.src = dark ? "/assets/intro/intro-dark.mp4" : "/assets/intro/intro-light.mp4";
-        const startedAt = performance.now();
-        let closing = false;
-        const close = () => {
-          if (closing) return;
-          closing = true;
-          const elapsed = performance.now() - startedAt;
-          const wait = Math.max(0, 4000 - elapsed);
-          window.setTimeout(() => {
-            overlay.classList.add("out");
-            window.setTimeout(() => overlay.remove(), 620);
-          }, wait);
-        };
-        video.addEventListener("ended", close, { once: true });
-        window.addEventListener("load", close, { once: true });
-        window.setTimeout(close, 6500);
-        try { video.play().catch(() => {}); } catch (e) {}
-      })();
-    </script>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

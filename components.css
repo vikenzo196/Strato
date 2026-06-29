@@ -1,0 +1,23 @@
+export type Role = 'guest' | 'cliente' | 'admin';
+
+export interface MockUser {
+  name: string;
+  role: Role;
+  isGuest: boolean;
+  isAdmin: boolean;
+  avatarUrl: string;
+  unreadNotifications: number;
+}
+
+// Change `role` to 'admin' to reveal admin-only controls (camera, pencil,
+// "Aggiungi un oggetto", order accept/reject). Default 'admin' for demo.
+const role: Role = 'admin';
+
+export const mockUser: MockUser = {
+  name: 'Vincenzo Manna',
+  role,
+  isGuest: role === 'guest',
+  isAdmin: role === 'admin',
+  avatarUrl: new URL('../assets/profile/google-placeholder/google_avatar_placeholder.png', import.meta.url).href,
+  unreadNotifications: 0, // badge appears only when > 0
+};

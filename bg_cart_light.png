@@ -1,0 +1,30 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from '../shell/ThemeProvider';
+import { AppShell } from '../shell/AppShell';
+import { HomePage } from '../pages/HomePage';
+import { ExplorePage } from '../pages/ExplorePage';
+import { FavoritesPage } from '../pages/FavoritesPage';
+import { CartPage } from '../pages/CartPage';
+import { ProfilePage } from '../pages/ProfilePage';
+import { OrdersPage } from '../pages/OrdersPage';
+import { ProductDetail } from '../product/ProductDetail';
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppShell>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/esplora" element={<ExplorePage />} />
+            <Route path="/piaciuti" element={<FavoritesPage />} />
+            <Route path="/carrello" element={<CartPage />} />
+            <Route path="/profilo" element={<ProfilePage />} />
+            <Route path="/ordini" element={<OrdersPage />} />
+            <Route path="/articolo/:id" element={<ProductDetail />} />
+          </Routes>
+        </AppShell>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+}

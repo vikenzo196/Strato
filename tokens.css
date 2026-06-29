@@ -1,0 +1,40 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import { LogoMark, Back, Bell } from '../components/icons';
+import { mockUser } from '../data/mockUser';
+
+// Routes that show a back arrow instead of empty left slot.
+const SHOW_BACK = ['/profilo', '/ordini'];
+
+export function TopBar() {
+  const { pathname } = useLocation();
+  const nav = useNavigate();
+  const showBack = SHOW_BACK.includes(pathname) || pathname.startsWith('/articolo');
+  const hasNotifications = mockUser.unreadNotifications > 0;
+
+  return (
+    <header className="topbar">
+      {showBack ? (
+        <button className="topbar__back" onClick={() => nav(-1)} aria-label="Indietro"><Back /></button>
+      ) : (
+        <div style={{ width: 28 }} />
+      )}
+      <div className="topbar__logo">
+        <span className="topbar__logo-mark"><LogoMark /></span>
+        <span className="topbar__logo-text">Strato</span>
+      </div>
+      <div className="topbar__right">
+        <button className="bell" aria-label="Notifiche">
+          <Bell size={22} />
+          {hasNotifications && <span className="bell__badge" />}
+        </button>
+        {mockUser.isGuest ? (
+          <span className="avatar avatar--guest" aria-label="Ospite">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="2.6" fill="#EDE4D8"/><path d="M3.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" fill="#EDE4D8"/></svg>
+          </span>
+        ) : (
+          <img className="avatar" src={mockUser.avatarUrl} alt={mockUser.name} />
+        )}
+      </div>
+    </header>
+  );
+}

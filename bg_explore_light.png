@@ -1,0 +1,16 @@
+export const ROUTES = {
+  home: '/',
+  explore: '/esplora',
+  favorites: '/piaciuti',
+  cart: '/carrello',
+  profile: '/profilo',
+  orders: '/ordini',
+  product: '/articolo/:id',
+} as const;
+
+export const DOCK_ITEMS = [
+  { key: 'home', path: ROUTES.home, label: 'Home' },
+  { key: 'explore', path: ROUTES.explore, label: 'Esplora' },
+  { key: 'favorites', path: ROUTES.favorites, label: 'Piaciuti' },
+  { key: 'cart', path: ROUTES.cart, label: 'Carrello' },
+] as const;

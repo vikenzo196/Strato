@@ -1,0 +1,114 @@
+export interface Accessory { id: string; label: string; price: number; }
+export interface ConfigOption { label: string; price: number; note?: string; }
+export interface ConfigGroup { id: string; label: string; icon: 'cavo' | 'portalampada' | 'lampadina' | 'finitura' | 'incisione'; options: ConfigOption[]; }
+export interface ColorOption { id: string; label: string; hex: string; }
+export interface Product {
+  id: string;
+  name: string;
+  category: string;
+  categoryId: string;
+  basePrice: number;
+  material: string;
+  description: string;
+  thumb: string;
+  hero: string[];
+  colors: ColorOption[];
+  accessories?: Accessory[]; // cart/order read-only breakdown
+  config?: ConfigGroup[];    // present → "con accessori" detail configurator
+}
+
+const img = (folder: string, file: string) =>
+  new URL(`../assets/products/${folder}/${file}`, import.meta.url).href;
+
+export const mockProducts: Product[] = [
+  {
+    id: 'vaso-2',
+    name: 'Vaso 2',
+    category: 'Vasi', categoryId: 'vasi',
+    basePrice: 15, material: 'PLA matte',
+    description: "Un vaso dalle forme morbide, pensato come piccolo gesto scultoreo per la casa.",
+    thumb: img('vaso-essenza', 'thumb.png'),
+    hero: [img('vaso-essenza', 'hero_01.png')],
+    colors: [
+      { id: 'giallo', label: 'Giallo', hex: '#E8B020' },
+      { id: 'bianco', label: 'Bianco', hex: '#FDF7F0' },
+      { id: 'nero', label: 'Nero', hex: '#2A2A2A' },
+    ],
+    accessories: [
+      { id: 'satinata', label: 'Finitura satinata', price: 2 },
+      { id: 'incisione', label: 'Incisione nome', price: 3 },
+    ],
+    config: [
+      { id: 'finitura', label: 'Finitura', icon: 'finitura', options: [
+        { label: 'Standard', price: 0, note: 'inclusa' },
+        { label: 'Satinata', price: 2 },
+      ]},
+      { id: 'incisione', label: 'Incisione', icon: 'incisione', options: [
+        { label: 'Nessuna', price: 0 },
+        { label: 'Nome inciso', price: 3 },
+      ]},
+    ],
+  },
+  {
+    id: 'vaso',
+    name: 'Vaso',
+    category: 'Vasi', categoryId: 'vasi',
+    basePrice: 10, material: 'PLA matte',
+    description: "Essenziale e materico, perfetto per piccoli bouquet o da solo come oggetto.",
+    thumb: img('vaso-essenza', 'thumb.png'),
+    hero: [img('vaso-essenza', 'hero_01.png')],
+    colors: [
+      { id: 'grigio', label: 'Grigio', hex: '#d8dce0' },
+      { id: 'bianco', label: 'Bianco', hex: '#FDF7F0' },
+      { id: 'terracotta', label: 'Terracotta', hex: '#A94F38' },
+    ],
+  },
+  {
+    id: 'lampada-umore',
+    name: "Lampada dell'umore",
+    category: 'Lampade', categoryId: 'lampade',
+    basePrice: 65, material: 'PLA matte',
+    description: "Una lampada dall'atmosfera calda e materica, con luce diffusa per ambienti vissuti con cura.",
+    thumb: img('lampada-e27', 'thumb.png'),
+    hero: [img('lampada-e27', 'hero_01.png')],
+    colors: [
+      { id: 'ambra', label: 'Ambra', hex: '#c8a040' },
+      { id: 'bianco', label: 'Bianco', hex: '#FDF7F0' },
+      { id: 'nero', label: 'Nero', hex: '#2A2A2A' },
+    ],
+    accessories: [
+      { id: 'cavo', label: 'Cavo tessile', price: 6 },
+      { id: 'lampadina', label: 'Lampadina E27 calda', price: 4 },
+    ],
+    config: [
+      { id: 'cavo', label: 'Cavo', icon: 'cavo', options: [
+        { label: 'Standard', price: 0, note: 'incluso' },
+        { label: 'In tessuto', price: 5 },
+      ]},
+      { id: 'portalampada', label: 'Portalampada', icon: 'portalampada', options: [
+        { label: 'Standard', price: 0, note: 'incluso' },
+        { label: 'Acciaio e ceramica', price: 5 },
+      ]},
+      { id: 'lampadina', label: 'Lampadina', icon: 'lampadina', options: [
+        { label: 'Non inclusa', price: 0 },
+        { label: 'Con lampadina', price: 3 },
+      ]},
+    ],
+  },
+  {
+    id: 'porta-card',
+    name: 'Porta Card',
+    category: 'Decor', categoryId: 'decor',
+    basePrice: 8, material: 'PLA matte',
+    description: "Piccolo oggetto da scrivania, ordinato e materico.",
+    thumb: img('decor', 'thumb.png'),
+    hero: [img('decor', 'hero_01.png')],
+    colors: [
+      { id: 'salvia', label: 'Salvia', hex: '#9cae8a' },
+      { id: 'bianco', label: 'Bianco', hex: '#FDF7F0' },
+    ],
+  },
+];
+
+export const getProduct = (id: string) => mockProducts.find(p => p.id === id);
+export const favoriteProducts = mockProducts.slice(0, 2);
